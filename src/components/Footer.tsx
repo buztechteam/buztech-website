@@ -5,7 +5,7 @@ import { Logo } from './Logo';
 
 const linkClass = 'text-light/85 transition-colors hover:text-brand-teal';
 
-export function Footer() {
+export function Footer({ onPrivacy }: { onPrivacy: () => void }) {
   const { t } = useLang();
   const f = t.footer;
   const social = [
@@ -78,6 +78,9 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {site.legalName}. {f.rights}
           </p>
+          <button type="button" onClick={onPrivacy} aria-haspopup="dialog" className="underline underline-offset-4 transition-colors hover:text-brand-teal">
+            {f.privacy}
+          </button>
           {social.length > 0 && (
             <ul aria-label={f.social} className="flex gap-3">
               {social.map(({ label, href, Icon }) => (

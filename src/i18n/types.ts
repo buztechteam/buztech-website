@@ -90,6 +90,8 @@ export interface Dict {
     invalidEmail: string;
     status: { sending: string; success: string; mailto: string; error: string };
     mailSubject: string;
+    privacyNote: string;
+    privacyLink: string;
   };
   footer: {
     overview: string;
@@ -99,5 +101,14 @@ export interface Dict {
     rights: string;
     social: string;
     taxId: string;
+    privacy: string;
+  };
+  privacy: {
+    title: string;
+    intro: string;
+    sections: { heading: string; body: string }[];
+    analyticsOn: string;
+    analyticsOff: string;
+    updated: string;
   };
 }
