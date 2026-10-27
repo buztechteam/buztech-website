@@ -222,6 +222,8 @@ export const en: Dict = {
       error: 'The request was not sent. Try again or write to info-ge@buz-cloud.com.',
     },
     mailSubject: 'Price request',
+    privacyNote: 'We use your details only to reply to this request.',
+    privacyLink: 'Privacy',
   },
   footer: {
     overview:
@@ -232,5 +234,35 @@ export const en: Dict = {
     rights: 'All rights reserved.',
     social: 'Social media',
     taxId: 'Tax ID',
+    privacy: 'Privacy',
+  },
+  privacy: {
+    title: 'Privacy policy',
+    intro: 'This page explains what data the price-request form collects and how we use it.',
+    sections: [
+      {
+        heading: 'What we collect',
+        body: 'In the form you give your company name, email, the product you are interested in and a message. The website asks for no other personal data.',
+      },
+      {
+        heading: 'What we use it for',
+        body: 'We use the data only to process your request and to contact you about a price.',
+      },
+      {
+        heading: 'Who receives it',
+        body: 'The request is delivered to the LLC BUZ Tech Georgia mailbox, info-ge@buz-cloud.com. A form-delivery service may carry it there; it passes the data only to that address.',
+      },
+      {
+        heading: 'Cookies and language choice',
+        body: 'The website does not use cookies. Your language choice (GE or EN) is stored only in your own browser.',
+      },
+      {
+        heading: 'Your rights',
+        body: 'To find out what data we hold about you, or to ask for it to be deleted, write to info-ge@buz-cloud.com.',
+      },
+    ],
+    analyticsOn: 'We count website visits with Cloudflare Web Analytics. It uses no cookies and collects no personal data.',
+    analyticsOff: '',
+    updated: 'Updated: October 2026',
   },
 };

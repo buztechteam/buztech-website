@@ -45,7 +45,20 @@ white text (2.2:1), so a Navy scrim fades across the text column.
 2. **Vendor logos.** The marquee shows typeset names because the vendor logo packs and co-branding rules are still an open item in the brand book. Swap in logos once received (`vendors` in `config/site.ts`).
 3. **ISO certificate details.** Issuer, certificate number, validity and a scan are empty in `certs` (`config/site.ts`). Fill them in and they appear in each dialog automatically.
 4. **Product photos.** Add files to `public/products/` and register them in `productImages`; until then the IdeaHub card shows an illustration.
-5. **Form delivery.** Set `VITE_FORM_ENDPOINT` (see `.env.example`) to POST requests to Formspree or your own API. Without it, the form opens the visitor's email app addressed to info-ge@buz-cloud.com.
+5. **Form delivery.** Create a free Web3Forms key (enter info-ge@buz-cloud.com, the key arrives by email) and set it as `VITE_WEB3FORMS_KEY`. Requests then go only to that inbox. Without a key the form opens the visitor's email app. See `.env.example`.
 6. **Optional footer items.** `site.social.linkedin` and `site.taxId` render only when set.
 7. **Back the "best prices" claim.** The brand tone rule says to show a price comparison before claiming "best". The hero uses the requested wording; consider adding the comparison.
 8. **Confirm the facts in the Services block:** 2018, 5 countries and 3 ISO standards come from the company brief and your request.
+
+## Site settings (build variables, all optional)
+
+Set these in Cloudflare under Settings > Variables and Secrets (build variables), then redeploy.
+
+| Variable | Effect |
+| --- | --- |
+| `VITE_WEB3FORMS_KEY` | form submissions delivered by email through Web3Forms |
+| `VITE_SITE_URL` | canonical link, og:url, og:image, `sitemap.xml`, sitemap line in `robots.txt` (e.g. `https://buztech.ge`) |
+| `VITE_CF_ANALYTICS_TOKEN` | Cloudflare Web Analytics (cookie-free); the privacy text mentions it automatically |
+
+The social preview image is `public/og-image.png` (1200x630). Privacy policy copy lives in `i18n/ge.ts` / `en.ts` under `privacy`;
+it opens from the footer, the form note, or the link `/#privacy`. Have it reviewed before launch.

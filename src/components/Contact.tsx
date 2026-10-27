@@ -41,7 +41,7 @@ function InfoRow({ icon, label, children }: { icon: ReactNode; label: string; ch
 const linkOnDark =
   'underline decoration-brand-teal decoration-2 underline-offset-4 transition-colors hover:text-brand-teal';
 
-export function Contact({ inquiry }: { inquiry: { product: string; nonce: number } }) {
+export function Contact({ inquiry, onPrivacy }: { inquiry: { product: string; nonce: number }; onPrivacy: () => void }) {
   const { t, lang } = useLang();
   const c = t.contact;
   const formRef = useRef<HTMLFormElement>(null);
@@ -85,13 +85,28 @@ export function Contact({ inquiry }: { inquiry: { product: string; nonce: number
       return;
     }
 
-    if (site.formEndpoint) {
+    const endpoint = site.web3formsKey ? 'https://api.web3forms.com/submit' : site.formEndpoint;
+    if (endpoint) {
       setStatus('sending');
       try {
-        const res = await fetch(site.formEndpoint, {
+        const payload = site.web3formsKey
+          ? {
+              access_key: site.web3formsKey,
+              subject: `${c.mailSubject} — ${company}`,
+              from_name: `${site.name} website`,
+              replyto: email,
+              company,
+              email,
+              product: productName || '-',
+              message: message || '-',
+              language: lang,
+              botcheck: '',
+            }
+          : { company, email, product: productName, message, language: lang };
+        const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ company, email, product: productName, message, language: lang }),
+          body: JSON.stringify(payload),
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         formRef.current?.reset();
@@ -230,7 +245,14 @@ export function Contact({ inquiry }: { inquiry: { product: string; nonce: number
             </label>
           </div>
 
-          <div className="mt-7 flex flex-wrap items-center gap-4">
+          <p className="mt-5 text-sm text-navy/80">
+            {c.privacyNote}{' '}
+            <button type="button" onClick={onPrivacy} aria-haspopup="dialog" className="font-extrabold underline decoration-deep-teal decoration-2 underline-offset-4">
+              {c.privacyLink}
+            </button>
+          </p>
+
+          <div className="mt-5 flex flex-wrap items-center gap-4">
             <button
               type="submit"
               disabled={status === 'sending'}

@@ -1,9 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Certifications } from './components/Certifications';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
+import { PrivacyDialog } from './components/PrivacyDialog';
 import { Products } from './components/Products';
 import { Services } from './components/Services';
 import { VendorMarquee } from './components/VendorMarquee';
@@ -17,6 +18,23 @@ export default function App() {
     (product: string) => setInquiry((prev) => ({ product, nonce: prev.nonce + 1 })),
     [],
   );
+
+  const [privacyOpen, setPrivacyOpen] = useState(false);
+  const openPrivacy = useCallback(() => setPrivacyOpen(true), []);
+  const closePrivacy = useCallback(() => {
+    setPrivacyOpen(false);
+    if (window.location.hash === '#privacy') history.replaceState(null, '', window.location.pathname);
+  }, []);
+
+  /* Deep link: https://site/#privacy opens the policy. */
+  useEffect(() => {
+    const check = () => {
+      if (window.location.hash === '#privacy') setPrivacyOpen(true);
+    };
+    check();
+    window.addEventListener('hashchange', check);
+    return () => window.removeEventListener('hashchange', check);
+  }, []);
 
   return (
     <>
@@ -33,9 +51,10 @@ export default function App() {
         <Products onInquire={onInquire} />
         <Services />
         <Certifications />
-        <Contact inquiry={inquiry} />
+        <Contact inquiry={inquiry} onPrivacy={openPrivacy} />
       </main>
-      <Footer />
+      <Footer onPrivacy={openPrivacy} />
+      <PrivacyDialog open={privacyOpen} onClose={closePrivacy} />
     </>
   );
 }

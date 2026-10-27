@@ -21,8 +21,14 @@ export const site = {
   },
   /** Optional: set to show the company ID in the footer compliance block. */
   taxId: undefined as string | undefined,
-  /** Optional: POST target for the price-request form (see .env.example). */
+  /**
+   * Price-request form delivery (see .env.example). Priority:
+   * 1. Web3Forms access key  2. any JSON endpoint  3. fall back to the visitor's email app.
+   */
+  web3formsKey: import.meta.env.VITE_WEB3FORMS_KEY || undefined,
   formEndpoint: import.meta.env.VITE_FORM_ENDPOINT || undefined,
+  /** True when Cloudflare Web Analytics is switched on at build time (changes the privacy wording). */
+  analytics: Boolean(import.meta.env.VITE_CF_ANALYTICS_TOKEN),
 } as const;
 
 /** Order of the links in the header and footer. */
