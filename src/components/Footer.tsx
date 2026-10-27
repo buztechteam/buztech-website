@@ -1,7 +1,7 @@
 import { certs, navOrder, site } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
+import BuzLogo from './BuzLogo';
 import { Facebook, LinkedIn } from './icons';
-import { Logo } from './Logo';
 
 const linkClass = 'text-light/85 transition-colors hover:text-brand-teal';
 
@@ -17,7 +17,7 @@ export function Footer({ onPrivacy }: { onPrivacy: () => void }) {
     <footer className="border-t border-white/10 bg-ink text-light">
       <div className="container-x grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_0.8fr_1fr_1fr]">
         <div>
-          <Logo className="h-10 w-auto" />
+          <BuzLogo className="h-10 w-auto" />
           <p lang="en" className="mt-3 text-[0.6875rem] leading-none tracking-[0.22em] text-brand-teal uppercase">
             {site.tagline}
           </p>

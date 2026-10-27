@@ -3,8 +3,8 @@ import { navOrder, pageOrder, site } from '../config/site';
 import { useActiveSection } from '../hooks/useActiveSection';
 import { useLang } from '../i18n/LanguageContext';
 import type { Lang, SectionId } from '../i18n/types';
+import BuzLogo from './BuzLogo';
 import { Close, Menu } from './icons';
-import { Logo } from './Logo';
 import { btn } from './ui';
 
 const LANGS: { id: Lang; label: string; htmlLang: string }[] = [
@@ -68,7 +68,7 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-white/10 bg-ink/95 backdrop-blur">
       <div className="container-wide flex h-[4.5rem] items-center justify-between gap-4">
         <a href="#home" aria-label={t.a11y.home} className="flex shrink-0 flex-col gap-1.5 py-2">
-          <Logo className="h-9 w-auto" />
+          <BuzLogo className="h-9 w-auto" />
           <span
             lang="en"
             className="text-[0.6875rem] leading-none tracking-[0.16em] whitespace-nowrap text-brand-teal uppercase max-sm:hidden"
