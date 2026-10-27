@@ -1,0 +1,233 @@
+/* Fonts: exactly two families, exactly two weights each (brand rule: never more than two weights). */
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/inter/latin-800.css";
+@import "@fontsource/noto-sans-georgian/georgian-500.css";
+@import "@fontsource/noto-sans-georgian/georgian-800.css";
+@import "tailwindcss";
+
+/*
+  Brand tokens — BUZ Tech Brand Guidelines 2026 v2.
+  The default Tailwind palette and weight scale are reset so that an off-brand
+  colour or weight (e.g. font-bold, bg-blue-500) simply does not exist.
+*/
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-ink: #1c1c1e;
+  --color-navy: #112240;
+  --color-brand-teal: #4bb2bf;
+  --color-deep-teal: #12899b;
+  --color-light: #f3f8fb;
+
+  /* Inter first: Latin and numbers. It has no Georgian glyphs, so Georgian falls through to Noto Sans Georgian. */
+  --font-sans: "Inter", "Noto Sans Georgian", ui-sans-serif, system-ui, sans-serif;
+
+  --font-weight-*: initial;
+  --font-weight-medium: 500;
+  --font-weight-extrabold: 800;
+}
+
+/* Brand gradient: 135deg, #14C0CF -> #0B7FB0 -> #1A3FA6. Hero and covers, with the all-white logo. */
+@utility bg-brand-gradient {
+  background-image: linear-gradient(135deg, #14c0cf 0%, #0b7fb0 50%, #1a3fa6 100%);
+}
+
+@utility container-x {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 76rem;
+  padding-inline: 1.25rem;
+  @media (width >= 40rem) {
+    padding-inline: 2rem;
+  }
+}
+
+/* The header runs wider than the page content so six Georgian nav labels, the language toggle and the CTA fit on one line. */
+@utility container-wide {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 90rem;
+  padding-inline: 1.25rem;
+  @media (width >= 40rem) {
+    padding-inline: 2rem;
+  }
+}
+
+@layer base {
+  :root {
+    --focus-color: var(--color-brand-teal);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    font-synthesis: none;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-ink);
+    color: var(--color-light);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  b,
+  strong,
+  th {
+    font-weight: 800;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    letter-spacing: inherit;
+  }
+
+  /* Browsers default these to 400 / bolder: pin them to the two brand weights. */
+  option {
+    font-weight: 500;
+  }
+  optgroup {
+    font-weight: 800;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--focus-color);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* Light sections use Deep Teal for focus rings (Brand Teal is too pale on #F3F8FB). */
+.surface-light {
+  --focus-color: var(--color-deep-teal);
+}
+
+/* ---------- Vendor marquee ---------- */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  mask-image: linear-gradient(90deg, transparent, black 7%, black 93%, transparent);
+}
+
+.marquee-track {
+  animation: marquee 48s linear infinite;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .marquee {
+    overflow-x: auto;
+    mask-image: none;
+  }
+}
+
+/* ---------- Hero stack: the single orchestrated load moment ---------- */
+@keyframes slab-in {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes wire-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slab {
+    animation: slab-in 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: var(--d, 0ms);
+  }
+  .wire {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: wire-draw 1100ms ease-out forwards;
+    animation-delay: var(--d, 0ms);
+  }
+}
+
+/* ---------- Certificate dialog (native <dialog>: focus trap + Esc for free) ---------- */
+dialog.cert-dialog {
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  width: min(40rem, calc(100vw - 2rem));
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+}
+
+dialog.cert-dialog::backdrop {
+  background: color-mix(in srgb, var(--color-ink) 82%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  dialog.cert-dialog[open] {
+    animation: dialog-in 200ms ease-out;
+  }
+  dialog.cert-dialog[open]::backdrop {
+    animation: backdrop-in 200ms ease-out;
+  }
+}
+
+body:has(dialog[open]) {
+  overflow: hidden;
+}
