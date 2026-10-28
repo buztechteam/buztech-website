@@ -1,6 +1,6 @@
 export type Lang = 'ge' | 'en';
 
-export type SectionId = 'home' | 'partners' | 'products' | 'services' | 'certifications' | 'contact';
+export type SectionId = 'home' | 'partners' | 'products' | 'services' | 'clients' | 'certifications' | 'contact';
 export type CategoryId = 'licensing' | 'servers' | 'networking' | 'workspaces';
 export type ProductId =
   | 'm365'
@@ -63,6 +63,13 @@ export interface Dict {
     stepsHeading: string;
     steps: { title: string; text: string }[];
   };
+  clients: {
+    heading: string;
+    /** Where we work and where the head office is. */
+    lead: string;
+    groups: { country: string; items: { name: string; sector: string }[] }[];
+    more: string;
+  };
   certs: {
     heading: string;
     lead: string;
@@ -80,6 +87,8 @@ export interface Dict {
     lead: string;
     entity: string;
     location: string;
+    /** Office street address, written the local way for each language. */
+    address: string;
     phone: string;
     email: string;
     fields: { company: string; email: string; product: string; message: string };
@@ -101,6 +110,8 @@ export interface Dict {
     rights: string;
     social: string;
     taxId: string;
+    /** Label and date written out: browsers can lack Georgian month names, so no Intl. */
+    founded: string;
     privacy: string;
   };
   privacy: {

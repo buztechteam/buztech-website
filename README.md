@@ -15,10 +15,11 @@ npm run preview    # serve dist/ locally
 ```
 src/
   index.css                  brand tokens (colours, fonts, weights), gradient, marquee/dialog CSS
-  config/site.ts             contact details, vendors, product list, ISO certificates (not translated)
-  i18n/ge.ts, en.ts          all copy; ge.ts is the primary language, types.ts keeps both in sync
-  components/                Header, Hero (+HeroStack), VendorMarquee, Products, Services,
-                             Certifications (+dialog), Contact, Footer, Logo, icons
+  config/site.ts             contact details, tax ID, vendors, product list, ISO certificates (not translated)
+  i18n/ge.ts, en.ts          all copy incl. street address and client list; ge.ts is the primary language,
+                             types.ts keeps both in sync
+  components/                Header, Hero (+HeroStack), VendorMarquee, Products, Services, Clients,
+                             Certifications (+dialog), Contact, Footer, BuzLogo (+buzLogoPaths), icons
 ```
 
 Change a phone number or email in `config/site.ts`; change any wording in `i18n/ge.ts` / `en.ts`.
@@ -41,14 +42,17 @@ white text (2.2:1), so a Navy scrim fades across the text column.
 
 ## Before launch: items only you can supply
 
-1. **Master logo files.** `components/Logo.tsx` is a rebuilt approximation (the brand book says the same of its own wordmark). The book defines primary, icon and vertical lockups; the horizontal lockup in the header is derived from them. Replace the component with the master SVGs.
-2. **Vendor logos.** The marquee shows typeset names because the vendor logo packs and co-branding rules are still an open item in the brand book. Swap in logos once received (`vendors` in `config/site.ts`).
+1. **Vendor logos.** The marquee shows typeset names because the vendor logo packs and co-branding rules are still an open item in the brand book. Swap in logos once received (`vendors` in `config/site.ts`).
+2. **Client logos.** The clients section shows typeset names (`clients` in `i18n/ge.ts` / `en.ts`). Add logos once each client agrees.
 3. **ISO certificate details.** Issuer, certificate number, validity and a scan are empty in `certs` (`config/site.ts`). Fill them in and they appear in each dialog automatically.
 4. **Product photos.** Add files to `public/products/` and register them in `productImages`; until then the IdeaHub card shows an illustration.
 5. **Form delivery.** Create a free Web3Forms key (enter info-ge@buz-cloud.com, the key arrives by email) and set it as `VITE_WEB3FORMS_KEY`. Requests then go only to that inbox. Without a key the form opens the visitor's email app. See `.env.example`.
-6. **Optional footer items.** `site.social.linkedin` and `site.taxId` render only when set.
+6. **LinkedIn.** `site.social.linkedin` renders in the footer only when set.
 7. **Back the "best prices" claim.** The brand tone rule says to show a price comparison before claiming "best". The hero uses the requested wording; consider adding the comparison.
-8. **Confirm the facts in the Services block:** 2018, 5 countries and 3 ISO standards come from the company brief and your request.
+
+The legal name, tax ID, founding date (20 September 2018), street address, the five countries, the Czech head office
+and the client list come from the company profile (*საქმიანობის მოკლე აღწერილობა*). The profile's letterhead still
+carries the retired BUZ Group branding; take facts from it, never branding.
 
 ## Site settings (build variables, all optional)
 

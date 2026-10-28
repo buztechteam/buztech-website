@@ -22,6 +22,7 @@ export const en: Dict = {
     home: 'Home',
     products: 'Products',
     services: 'Services',
+    clients: 'Clients',
     certifications: 'ISO certificates',
     partners: 'Partners',
     contact: 'Contact',
@@ -150,6 +151,32 @@ export const en: Dict = {
       { title: 'Handover and support', text: 'We stay in touch after handover.' },
     ],
   },
+  clients: {
+    heading: 'Our clients',
+    lead: 'BUZ Tech is an international IT integrator headquartered in the Czech Republic. We work in Georgia, Azerbaijan, Turkey, Uzbekistan and Kazakhstan, with both the private and the public sector.',
+    groups: [
+      {
+        country: 'Georgia',
+        items: [
+          { name: 'Telasi', sector: 'Energy' },
+          { name: 'TBC Insurance', sector: 'Insurance' },
+          { name: 'Evex', sector: 'Healthcare' },
+          { name: 'Enterprise Georgia', sector: 'Public sector' },
+          { name: 'Financial Monitoring Service of Georgia', sector: 'Public sector' },
+          { name: 'Borjomi Likani', sector: 'Hospitality' },
+        ],
+      },
+      {
+        country: 'Azerbaijan',
+        items: [
+          { name: 'Azergold', sector: 'Mining' },
+          { name: 'Azerbaijan Airlines (AZAL)', sector: 'Aviation' },
+          { name: 'AgroDairy', sector: 'Agriculture and dairy' },
+        ],
+      },
+    ],
+    more: 'Also: many public bodies on Microsoft solutions, and leading state and private companies in Turkey, Uzbekistan and Kazakhstan.',
+  },
   certs: {
     heading: 'ISO certificates',
     lead: 'Quality, information security and IT service management to international standards.',
@@ -198,6 +225,7 @@ export const en: Dict = {
     lead: 'Tell us your company and the product you need — we will come back with a price.',
     entity: 'Legal entity',
     location: 'Location',
+    address: 'Zakaria Paliashvili St. 83, 0179 Tbilisi, Georgia',
     phone: 'Phone',
     email: 'Email',
     fields: {
@@ -227,13 +255,14 @@ export const en: Dict = {
   },
   footer: {
     overview:
-      'BUZ Tech is an enterprise IT solutions provider based in Tbilisi. We make business technology simple to buy and run: licensing, cloud, infrastructure and workspaces from one trusted local partner.',
+      'BUZ Tech is an enterprise IT solutions provider based in Tbilisi. We make business technology simple to buy and run: licensing, cloud, infrastructure and workspaces from one trusted local partner. Our head office is in the Czech Republic, with branches in Georgia, Azerbaijan, Turkey, Uzbekistan and Kazakhstan.',
     quickLinks: 'Quick links',
     contactTitle: 'Contact',
     complianceTitle: 'Standards and partnership',
     rights: 'All rights reserved.',
     social: 'Social media',
     taxId: 'Tax ID',
+    founded: 'Founded: 20 September 2018',
     privacy: 'Privacy',
   },
   privacy: {

@@ -42,7 +42,9 @@ export function Footer({ onPrivacy }: { onPrivacy: () => void }) {
           <ul className="mt-4 space-y-2.5">
             <li>{site.legalName}</li>
             <li>
-              {site.city}, {site.country}
+              <a href={site.mapsHref} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                {t.contact.address}
+              </a>
             </li>
             <li>
               <a href={site.phoneHref} className={linkClass}>
@@ -69,6 +71,7 @@ export function Footer({ onPrivacy }: { onPrivacy: () => void }) {
                 {f.taxId}: {site.taxId}
               </li>
             )}
+            <li>{f.founded}</li>
           </ul>
         </div>
       </div>

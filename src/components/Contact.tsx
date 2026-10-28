@@ -137,7 +137,9 @@ export function Contact({ inquiry, onPrivacy }: { inquiry: { product: string; no
               {site.legalName}
             </InfoRow>
             <InfoRow icon={<Pin className="size-5" />} label={c.location}>
-              {site.city}, {site.country}
+              <a href={site.mapsHref} target="_blank" rel="noopener noreferrer" className={linkOnDark}>
+                {c.address}
+              </a>
             </InfoRow>
             <InfoRow icon={<Phone className="size-5" />} label={c.phone}>
               <a href={site.phoneHref} className={linkOnDark}>

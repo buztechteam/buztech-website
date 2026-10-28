@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Certifications } from './components/Certifications';
+import { Clients } from './components/Clients';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
@@ -50,6 +51,7 @@ export default function App() {
         <VendorMarquee />
         <Products onInquire={onInquire} />
         <Services />
+        <Clients />
         <Certifications />
         <Contact inquiry={inquiry} onPrivacy={openPrivacy} />
       </main>

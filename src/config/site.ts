@@ -9,8 +9,8 @@ export const site = {
   legalName: 'LLC BUZ Tech Georgia',
   /** Official tagline format from the brand book. */
   tagline: 'Consulting · Cloud · Tech',
-  city: 'Tbilisi',
-  country: 'Georgia',
+  /** The street address itself is translated (contact.address in the dictionaries). */
+  mapsHref: 'https://www.google.com/maps/search/?api=1&query=Zakaria+Paliashvili+St+83+Tbilisi+Georgia',
   phone: '+995 599 13 77 23',
   phoneHref: 'tel:+995599137723',
   email: 'info-ge@buz-cloud.com',
@@ -19,8 +19,8 @@ export const site = {
     /** Add the company LinkedIn URL here; the icon appears in the footer automatically. */
     linkedin: undefined as string | undefined,
   },
-  /** Optional: set to show the company ID in the footer compliance block. */
-  taxId: undefined as string | undefined,
+  /** Company ID, shown in the footer compliance block. */
+  taxId: '405291786' as string | undefined,
   /**
    * Price-request form delivery (see .env.example). Priority:
    * 1. Web3Forms access key  2. any JSON endpoint  3. fall back to the visitor's email app.
@@ -31,11 +31,11 @@ export const site = {
   analytics: Boolean(import.meta.env.VITE_CF_ANALYTICS_TOKEN),
 } as const;
 
-/** Order of the links in the header and footer. */
+/** Order of the links in the header and footer. Clients is left out: a seventh Georgian label overflows the header. */
 export const navOrder: SectionId[] = ['home', 'products', 'services', 'certifications', 'partners', 'contact'];
 
 /** Order of the sections on the page (used for the active-link highlight). */
-export const pageOrder: SectionId[] = ['home', 'partners', 'products', 'services', 'certifications', 'contact'];
+export const pageOrder: SectionId[] = ['home', 'partners', 'products', 'services', 'clients', 'certifications', 'contact'];
 
 export const productMeta: Record<ProductId, { name: string; line?: string }> = {
   m365: { name: 'Microsoft 365' },
