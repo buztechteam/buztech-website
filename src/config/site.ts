@@ -1,4 +1,4 @@
-import type { CategoryId, CertId, ProductId, SectionId } from '../i18n/types';
+import type { CategoryId, CertId, ProductId } from '../i18n/types';
 
 /**
  * Single source of truth for facts that are NOT translated.
@@ -13,11 +13,12 @@ export const site = {
   mapsHref: 'https://www.google.com/maps/search/?api=1&query=Zakaria+Paliashvili+St+83+Tbilisi+Georgia',
   phone: '+995 599 13 77 23',
   phoneHref: 'tel:+995599137723',
+  /** Same number as the phone. */
+  whatsappHref: 'https://wa.me/995599137723',
   email: 'info-ge@buz-cloud.com',
   social: {
     facebook: 'https://www.facebook.com/LLCBUZTechGeorgia',
-    /** Add the company LinkedIn URL here; the icon appears in the footer automatically. */
-    linkedin: undefined as string | undefined,
+    linkedin: 'https://ge.linkedin.com/company/llc-buz-tech-georgia' as string | undefined,
   },
   /** Company ID, shown in the footer compliance block. */
   taxId: '405291786' as string | undefined,
@@ -30,12 +31,6 @@ export const site = {
   /** True when Cloudflare Web Analytics is switched on at build time (changes the privacy wording). */
   analytics: Boolean(import.meta.env.VITE_CF_ANALYTICS_TOKEN),
 } as const;
-
-/** Order of the links in the header and footer. Clients is left out: a seventh Georgian label overflows the header. */
-export const navOrder: SectionId[] = ['home', 'products', 'services', 'certifications', 'partners', 'contact'];
-
-/** Order of the sections on the page (used for the active-link highlight). */
-export const pageOrder: SectionId[] = ['home', 'partners', 'products', 'services', 'clients', 'certifications', 'contact'];
 
 export const productMeta: Record<ProductId, { name: string; line?: string }> = {
   m365: { name: 'Microsoft 365' },

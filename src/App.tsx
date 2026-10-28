@@ -1,42 +1,74 @@
-import { useCallback, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 import { Certifications } from './components/Certifications';
 import { Clients } from './components/Clients';
 import { Contact } from './components/Contact';
+import { ContactBand } from './components/ContactBand';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
-import { PrivacyDialog } from './components/PrivacyDialog';
-import { Products } from './components/Products';
+import { PageIntro } from './components/PageIntro';
+import { Privacy } from './components/Privacy';
+import { ProductCategory, Products } from './components/Products';
 import { Services } from './components/Services';
 import { VendorMarquee } from './components/VendorMarquee';
 import { useLang } from './i18n/LanguageContext';
+import type { Dict, PageId } from './i18n/types';
+import { isProductPage } from './routes';
+
+/** What each page shows. Existing sections are reused; the copy is unchanged. */
+function pageBody(page: PageId, t: Dict): ReactNode {
+  if (isProductPage(page)) {
+    const category = t.products.categories[page];
+    return (
+      <>
+        <PageIntro title={category.label} lead={category.summary} />
+        <ProductCategory id={page} />
+      </>
+    );
+  }
+  switch (page) {
+    case 'home':
+      return (
+        <>
+          <Hero />
+          <VendorMarquee />
+          <Products />
+        </>
+      );
+    case 'services':
+      return (
+        <>
+          <PageIntro title={t.services.heading} lead={t.services.lead} />
+          <Services intro={false} />
+        </>
+      );
+    case 'about':
+      return (
+        <>
+          <PageIntro title={t.nav.about} lead={t.footer.overview} />
+          <Clients />
+          <Certifications />
+        </>
+      );
+    case 'contact':
+      return (
+        <>
+          <PageIntro title={t.contact.heading} lead={t.contact.lead} />
+          <Contact intro={false} />
+        </>
+      );
+    case 'privacy':
+      return (
+        <>
+          <PageIntro title={t.privacy.title} lead={t.privacy.intro} />
+          <Privacy />
+        </>
+      );
+  }
+}
 
 export default function App() {
-  const { t } = useLang();
-  /* nonce lets the same product be chosen twice in a row and still re-select it in the form */
-  const [inquiry, setInquiry] = useState({ product: '', nonce: 0 });
-  const onInquire = useCallback(
-    (product: string) => setInquiry((prev) => ({ product, nonce: prev.nonce + 1 })),
-    [],
-  );
-
-  const [privacyOpen, setPrivacyOpen] = useState(false);
-  const openPrivacy = useCallback(() => setPrivacyOpen(true), []);
-  const closePrivacy = useCallback(() => {
-    setPrivacyOpen(false);
-    if (window.location.hash === '#privacy') history.replaceState(null, '', window.location.pathname);
-  }, []);
-
-  /* Deep link: https://site/#privacy opens the policy. */
-  useEffect(() => {
-    const check = () => {
-      if (window.location.hash === '#privacy') setPrivacyOpen(true);
-    };
-    check();
-    window.addEventListener('hashchange', check);
-    return () => window.removeEventListener('hashchange', check);
-  }, []);
-
+  const { page, t } = useLang();
   return (
     <>
       <a
@@ -47,16 +79,10 @@ export default function App() {
       </a>
       <Header />
       <main id="main">
-        <Hero />
-        <VendorMarquee />
-        <Products onInquire={onInquire} />
-        <Services />
-        <Clients />
-        <Certifications />
-        <Contact inquiry={inquiry} onPrivacy={openPrivacy} />
+        {pageBody(page, t)}
+        {page !== 'contact' && <ContactBand />}
       </main>
-      <Footer onPrivacy={openPrivacy} />
-      <PrivacyDialog open={privacyOpen} onClose={closePrivacy} />
+      <Footer />
     </>
   );
 }

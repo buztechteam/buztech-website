@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { categories, productMeta, site } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
-import { Building, Mail, Phone, Pin } from './icons';
+import { pagePath } from '../routes';
+import { Building, Mail, Phone, Pin, WhatsApp } from './icons';
 import { btn, h2Class, leadClass } from './ui';
 
 type Status = 'idle' | 'sending' | 'success' | 'mailto' | 'error';
@@ -41,7 +42,8 @@ function InfoRow({ icon, label, children }: { icon: ReactNode; label: string; ch
 const linkOnDark =
   'underline decoration-brand-teal decoration-2 underline-offset-4 transition-colors hover:text-brand-teal';
 
-export function Contact({ inquiry, onPrivacy }: { inquiry: { product: string; nonce: number }; onPrivacy: () => void }) {
+/** `intro={false}` when the page's PageIntro already shows the heading and lead. */
+export function Contact({ intro = true }: { intro?: boolean }) {
   const { t, lang } = useLang();
   const c = t.contact;
   const formRef = useRef<HTMLFormElement>(null);
@@ -51,10 +53,11 @@ export function Contact({ inquiry, onPrivacy }: { inquiry: { product: string; no
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>('idle');
 
-  /* A product card's button pre-selects that product here. */
+  /* A product card links here with ?product=<name>; pre-select it when it is a known option. */
   useEffect(() => {
-    if (inquiry.product) setProduct(inquiry.product);
-  }, [inquiry]);
+    const requested = new URLSearchParams(window.location.search).get('product');
+    if (requested && Object.values(productMeta).some((meta) => meta.name === requested)) setProduct(requested);
+  }, []);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -129,10 +132,14 @@ export function Contact({ inquiry, onPrivacy }: { inquiry: { product: string; no
     <section id="contact" className="bg-navy py-20 text-light lg:py-28">
       <div className="container-x grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div>
-          <h2 className={`${h2Class} text-white`}>{c.heading}</h2>
-          <p className={`${leadClass} text-light/85`}>{c.lead}</p>
+          {intro && (
+            <>
+              <h2 className={`${h2Class} text-white`}>{c.heading}</h2>
+              <p className={`${leadClass} text-light/85`}>{c.lead}</p>
+            </>
+          )}
 
-          <dl className="mt-10 space-y-6">
+          <dl className={`${intro ? 'mt-10' : ''} space-y-6`}>
             <InfoRow icon={<Building className="size-5" />} label={c.entity}>
               {site.legalName}
             </InfoRow>
@@ -144,6 +151,11 @@ export function Contact({ inquiry, onPrivacy }: { inquiry: { product: string; no
             <InfoRow icon={<Phone className="size-5" />} label={c.phone}>
               <a href={site.phoneHref} className={linkOnDark}>
                 {site.phone}
+              </a>
+            </InfoRow>
+            <InfoRow icon={<WhatsApp className="size-5" />} label="WhatsApp">
+              <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer" className={linkOnDark}>
+                {c.whatsapp}
               </a>
             </InfoRow>
             <InfoRow icon={<Mail className="size-5" />} label={c.email}>
@@ -249,9 +261,9 @@ export function Contact({ inquiry, onPrivacy }: { inquiry: { product: string; no
 
           <p className="mt-5 text-sm text-navy/80">
             {c.privacyNote}{' '}
-            <button type="button" onClick={onPrivacy} aria-haspopup="dialog" className="font-extrabold underline decoration-deep-teal decoration-2 underline-offset-4">
+            <a href={pagePath('privacy', lang)} className="font-extrabold underline decoration-deep-teal decoration-2 underline-offset-4">
               {c.privacyLink}
-            </button>
+            </a>
           </p>
 
           <div className="mt-5 flex flex-wrap items-center gap-4">

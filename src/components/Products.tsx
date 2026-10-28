@@ -2,13 +2,10 @@ import { useRef, useState, type KeyboardEvent } from 'react';
 import { categories, m365Apps, productImages, productMeta } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import type { CategoryId, ProductId } from '../i18n/types';
+import { inquireHref } from '../routes';
 import { BoardIllustration } from './BoardIllustration';
 import { categoryIcons, Check } from './icons';
 import { btn, h2Class, leadClass } from './ui';
-
-interface InquireProps {
-  onInquire: (product: string) => void;
-}
 
 function SpecList({ specs, iconClass }: { specs: string[]; iconClass: string }) {
   return (
@@ -24,8 +21,8 @@ function SpecList({ specs, iconClass }: { specs: string[]; iconClass: string }) 
 }
 
 /** Flagship: Microsoft 365 leads the mix, so it gets its own dark panel. */
-function FlagshipM365({ onInquire }: InquireProps) {
-  const { t } = useLang();
+function FlagshipM365() {
+  const { lang, t } = useLang();
   const copy = t.products.items.m365;
   return (
     <article className="grid gap-8 rounded-[1.25rem] bg-navy p-6 text-light sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:p-10">
@@ -47,7 +44,7 @@ function FlagshipM365({ onInquire }: InquireProps) {
         </ul>
         <p className="mt-3 max-w-[30rem] text-sm text-light/75">{t.products.planNote}</p>
 
-        <a href="#contact" onClick={() => onInquire(productMeta.m365.name)} className={`${btn('primary')} mt-8`}>
+        <a href={inquireHref(productMeta.m365.name, lang)} className={`${btn('primary')} mt-8`}>
           {t.cta}
         </a>
       </div>
@@ -66,8 +63,8 @@ function FlagshipM365({ onInquire }: InquireProps) {
   );
 }
 
-function ProductCard({ id, onInquire }: { id: ProductId } & InquireProps) {
-  const { t } = useLang();
+function ProductCard({ id }: { id: ProductId }) {
+  const { lang, t } = useLang();
   const meta = productMeta[id];
   const copy = t.products.items[id];
   return (
@@ -77,7 +74,7 @@ function ProductCard({ id, onInquire }: { id: ProductId } & InquireProps) {
       <p className="mt-3 text-navy/85">{copy.tagline}</p>
       <SpecList specs={copy.specs} iconClass="text-deep-teal" />
       <div className="mt-auto pt-7">
-        <a href="#contact" onClick={() => onInquire(meta.name)} className={btn('outlineOnLight', 'sm')}>
+        <a href={inquireHref(meta.name, lang)} className={btn('outlineOnLight', 'sm')}>
           {t.cta}
         </a>
       </div>
@@ -86,8 +83,8 @@ function ProductCard({ id, onInquire }: { id: ProductId } & InquireProps) {
 }
 
 /** Wide card for a category with a single product. */
-function FeaturedProduct({ id, onInquire }: { id: ProductId } & InquireProps) {
-  const { t } = useLang();
+function FeaturedProduct({ id }: { id: ProductId }) {
+  const { lang, t } = useLang();
   const meta = productMeta[id];
   const copy = t.products.items[id];
   const image = productImages[id];
@@ -97,7 +94,7 @@ function FeaturedProduct({ id, onInquire }: { id: ProductId } & InquireProps) {
         <h3 className="text-3xl leading-tight font-extrabold text-navy sm:text-4xl">{meta.name}</h3>
         <p className="mt-3 max-w-[28rem] text-lg text-navy/85">{copy.tagline}</p>
         <SpecList specs={copy.specs} iconClass="text-deep-teal" />
-        <a href="#contact" onClick={() => onInquire(meta.name)} className={`${btn('primaryOnLight')} mt-8`}>
+        <a href={inquireHref(meta.name, lang)} className={`${btn('primaryOnLight')} mt-8`}>
           {t.cta}
         </a>
       </div>
@@ -119,12 +116,53 @@ const gridClass: Record<CategoryId, string> = {
   workspaces: 'grid gap-5',
 };
 
-export function Products({ onInquire }: InquireProps) {
+/** The products of one category: used by the home tabs and by each category page. */
+function CategoryPanel({ id }: { id: CategoryId }) {
+  const { t } = useLang();
+  const category = categories.find((c) => c.id === id) ?? categories[0];
+  return (
+    <>
+      {id === 'licensing' && <FlagshipM365 />}
+
+      <div className={gridClass[id]}>
+        {category.products
+          .filter((product) => !(id === 'licensing' && product === 'm365'))
+          .map((product) =>
+            id === 'workspaces' ? <FeaturedProduct key={product} id={product} /> : <ProductCard key={product} id={product} />,
+          )}
+      </div>
+
+      {id === 'servers' && (
+        <ul className="mt-5 flex flex-wrap gap-x-8 gap-y-3 rounded-xl border border-navy/12 bg-white px-6 py-4 font-extrabold">
+          {t.products.serversNote.map((note) => (
+            <li key={note} className="flex items-center gap-2.5">
+              <Check className="size-4 shrink-0 text-deep-teal" strokeWidth={3} />
+              {note}
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
+  );
+}
+
+/** Body of a category page; its title and summary sit in the page's PageIntro. */
+export function ProductCategory({ id }: { id: CategoryId }) {
+  return (
+    <section className="surface-light bg-light py-16 text-navy lg:py-20">
+      <div className="container-x">
+        <CategoryPanel id={id} />
+      </div>
+    </section>
+  );
+}
+
+/** Home page overview with category tabs. */
+export function Products() {
   const { t } = useLang();
   const [active, setActive] = useState<CategoryId>('licensing');
   const tabRefs = useRef<Partial<Record<CategoryId, HTMLButtonElement | null>>>({});
   const ids = categories.map((c) => c.id);
-  const current = categories.find((c) => c.id === active) ?? categories[0];
 
   const onTabKey = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
     let next = -1;
@@ -145,11 +183,7 @@ export function Products({ onInquire }: InquireProps) {
         <h2 className={h2Class}>{t.products.heading}</h2>
         <p className={`${leadClass} text-navy/85`}>{t.products.lead}</p>
 
-        <div
-          role="tablist"
-          aria-label={t.a11y.tabs}
-          className="mt-10 flex flex-wrap gap-2"
-        >
+        <div role="tablist" aria-label={t.a11y.tabs} className="mt-10 flex flex-wrap gap-2">
           {categories.map((cat, index) => {
             const Icon = categoryIcons[cat.id];
             const selected = cat.id === active;
@@ -182,37 +216,8 @@ export function Products({ onInquire }: InquireProps) {
 
         <p className="mt-4 text-navy/85">{t.products.categories[active].summary}</p>
 
-        <div
-          role="tabpanel"
-          id={`panel-${active}`}
-          aria-labelledby={`tab-${active}`}
-          tabIndex={0}
-          className="mt-8"
-        >
-          {active === 'licensing' && <FlagshipM365 onInquire={onInquire} />}
-
-          <div className={gridClass[active]}>
-            {current.products
-              .filter((id) => !(active === 'licensing' && id === 'm365'))
-              .map((id) =>
-                active === 'workspaces' ? (
-                  <FeaturedProduct key={id} id={id} onInquire={onInquire} />
-                ) : (
-                  <ProductCard key={id} id={id} onInquire={onInquire} />
-                ),
-              )}
-          </div>
-
-          {active === 'servers' && (
-            <ul className="mt-5 flex flex-wrap gap-x-8 gap-y-3 rounded-xl border border-navy/12 bg-white px-6 py-4 font-extrabold">
-              {t.products.serversNote.map((note) => (
-                <li key={note} className="flex items-center gap-2.5">
-                  <Check className="size-4 shrink-0 text-deep-teal" strokeWidth={3} />
-                  {note}
-                </li>
-              ))}
-            </ul>
-          )}
+        <div role="tabpanel" id={`panel-${active}`} aria-labelledby={`tab-${active}`} tabIndex={0} className="mt-8">
+          <CategoryPanel id={active} />
         </div>
       </div>
     </section>

@@ -17,14 +17,13 @@ export const en: Dict = {
     home: 'BUZ Tech — home',
     partnerList: 'Official partners',
     tabs: 'Product categories',
+    breadcrumb: 'Breadcrumb',
   },
   nav: {
     home: 'Home',
     products: 'Products',
     services: 'Services',
-    clients: 'Clients',
-    certifications: 'ISO certificates',
-    partners: 'Partners',
+    about: 'About us',
     contact: 'Contact',
   },
   cta: 'Get a price today',
@@ -227,6 +226,7 @@ export const en: Dict = {
     location: 'Location',
     address: 'Zakaria Paliashvili St. 83, 0179 Tbilisi, Georgia',
     phone: 'Phone',
+    whatsapp: 'Message us on WhatsApp',
     email: 'Email',
     fields: {
       company: 'Company name',
@@ -282,8 +282,8 @@ export const en: Dict = {
         body: 'The request is delivered to the LLC BUZ Tech Georgia mailbox, info-ge@buz-cloud.com. A form-delivery service may carry it there; it passes the data only to that address.',
       },
       {
-        heading: 'Cookies and language choice',
-        body: 'The website does not use cookies. Your language choice (GE or EN) is stored only in your own browser.',
+        heading: 'Cookies and language',
+        body: 'The website uses no cookies and stores nothing in your browser. The language (GE or EN) is part of the page address.',
       },
       {
         heading: 'Your rights',

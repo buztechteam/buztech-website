@@ -1,50 +1,30 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useMemo, type ReactNode } from 'react';
+import { pageMeta } from '../routes';
 import { ge } from './ge';
 import { en } from './en';
-import type { Dict, Lang } from './types';
+import type { Dict, Lang, PageId } from './types';
 
-const dictionaries: Record<Lang, Dict> = { ge, en };
-const STORAGE_KEY = 'buz-lang';
+export const dictionaries: Record<Lang, Dict> = { ge, en };
 
 interface LanguageValue {
   lang: Lang;
-  setLang: (lang: Lang) => void;
   t: Dict;
+  /** The page being shown: language and page both come from the address (see routes.ts). */
+  page: PageId;
 }
 
 const LanguageContext = createContext<LanguageValue | null>(null);
 
-/** Georgian first: it is the default no matter what the browser language is. */
-function readInitialLang(): Lang {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === 'ge' || stored === 'en') return stored;
-  } catch {
-    /* storage unavailable: fall through to the default */
-  }
-  return 'ge';
-}
+export function LanguageProvider({ lang, page, children }: { lang: Lang; page: PageId; children: ReactNode }) {
+  const value = useMemo<LanguageValue>(() => ({ lang, t: dictionaries[lang], page }), [lang, page]);
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(readInitialLang);
-
-  const setLang = useCallback((next: Lang) => {
-    setLangState(next);
-    try {
-      localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      /* ignore */
-    }
-  }, []);
-
+  /* Pre-rendered pages already carry these; this keeps the dev server in step. */
   useEffect(() => {
-    const dict = dictionaries[lang];
+    const meta = pageMeta(page, dictionaries[lang]);
     document.documentElement.lang = lang === 'ge' ? 'ka' : 'en';
-    document.title = dict.meta.title;
-    document.querySelector('meta[name="description"]')?.setAttribute('content', dict.meta.description);
-  }, [lang]);
-
-  const value = useMemo<LanguageValue>(() => ({ lang, setLang, t: dictionaries[lang] }), [lang, setLang]);
+    document.title = meta.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
+  }, [lang, page]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

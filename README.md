@@ -18,11 +18,30 @@ src/
   config/site.ts             contact details, tax ID, vendors, product list, ISO certificates (not translated)
   i18n/ge.ts, en.ts          all copy incl. street address and client list; ge.ts is the primary language,
                              types.ts keeps both in sync
-  components/                Header, Hero (+HeroStack), VendorMarquee, Products, Services, Clients,
-                             Certifications (+dialog), Contact, Footer, BuzLogo (+buzLogoPaths), icons
+  routes.ts                  the page list, addresses per language, page titles/descriptions
+  App.tsx                    which sections each page shows
+  components/                Header (+Products menu), PageIntro, ContactBand, Hero (+HeroStack), VendorMarquee,
+                             Products, Services, Clients, Certifications (+dialog), Contact, Privacy, Footer,
+                             BuzLogo (+buzLogoPaths), icons
+  entry-server.tsx           renders one page to HTML at build time
+scripts/prerender.mjs        writes dist/<page>/index.html for every page in both languages
 ```
 
 Change a phone number or email in `config/site.ts`; change any wording in `i18n/ge.ts` / `en.ts`.
+
+## Pages
+
+Nine pages, each in Georgian at the root and in English under `/en/`:
+`/`, `/licensing/`, `/servers/`, `/networking/`, `/workspaces/`, `/services/`, `/about/`, `/contact/`, `/privacy/`.
+The language comes from the address (no browser storage), and the GE/EN switch links to the same page in the other language.
+
+`npm run build` runs three steps: the normal client build, a server build of `entry-server.tsx`, then
+`scripts/prerender.mjs`, which writes a complete HTML file per page and language (content, title, description,
+`lang`), so every page loads with its content in place and search engines can read both languages.
+To add a page: add its id to `PageId` (`i18n/types.ts`) and `pages` (`routes.ts`), give it a title in `pageMeta`,
+and its body in `App.tsx`.
+
+`npm run preview` serves the built site, which is the closest local check of what Cloudflare will serve.
 
 ## How the brand rules are enforced
 
@@ -61,8 +80,8 @@ Set these in Cloudflare under Settings > Variables and Secrets (build variables)
 | Variable | Effect |
 | --- | --- |
 | `VITE_WEB3FORMS_KEY` | form submissions delivered by email through Web3Forms |
-| `VITE_SITE_URL` | canonical link, og:url, og:image, `sitemap.xml`, sitemap line in `robots.txt` (e.g. `https://buztech.ge`) |
+| `VITE_SITE_URL` | per-page canonical and hreflang links, og:url, og:image, `sitemap.xml` with all 18 addresses, sitemap line in `robots.txt` (e.g. `https://buztech.ge`) |
 | `VITE_CF_ANALYTICS_TOKEN` | Cloudflare Web Analytics (cookie-free); the privacy text mentions it automatically |
 
 The social preview image is `public/og-image.png` (1200x630). Privacy policy copy lives in `i18n/ge.ts` / `en.ts` under `privacy`;
-it opens from the footer, the form note, or the link `/#privacy`. Have it reviewed before launch.
+it is its own page (`/privacy/`, `/en/privacy/`), linked from the footer and the form note. Have it reviewed before launch.

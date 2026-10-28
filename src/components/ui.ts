@@ -3,7 +3,7 @@
  * Brand Teal / Deep Teal for interactive elements; Navy text on light sections.
  * Brand Teal buttons carry Ink text (6.8:1), which keeps them readable on every surface.
  */
-type Variant = 'primary' | 'primaryOnLight' | 'ghostOnDark' | 'outlineOnLight';
+type Variant = 'primary' | 'primaryOnLight' | 'ghostOnDark' | 'outlineOnLight' | 'navyOnTeal' | 'outlineOnTeal';
 type Size = 'md' | 'sm';
 
 const base =
@@ -21,6 +21,9 @@ const variants: Record<Variant, string> = {
   ghostOnDark: 'border border-white/35 text-white hover:bg-white/10',
   outlineOnLight:
     'border border-deep-teal text-navy hover:border-navy hover:bg-navy hover:text-white',
+  /* On the Brand Teal contact band, where a teal button would vanish. */
+  navyOnTeal: 'bg-navy text-white hover:bg-ink',
+  outlineOnTeal: 'border border-ink/50 text-ink hover:border-ink hover:bg-ink hover:text-white',
 };
 
 export const btn = (variant: Variant, size: Size = 'md') => `${base} ${sizes[size]} ${variants[variant]}`;

@@ -1,10 +1,11 @@
 import { useLang } from '../i18n/LanguageContext';
+import { pagePath } from '../routes';
 import { Check } from './icons';
 import { HeroStack } from './HeroStack';
 import { btn } from './ui';
 
 export function Hero() {
-  const { t } = useLang();
+  const { lang, t } = useLang();
   return (
     <section id="home" className="relative isolate overflow-hidden bg-brand-gradient text-white">
       {/*
@@ -34,7 +35,7 @@ export function Hero() {
           </ul>
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
-            <a href="#contact" className={btn('primary')}>
+            <a href={pagePath('contact', lang)} className={btn('primary')}>
               {t.cta}
             </a>
             <a href="#products" className={btn('ghostOnDark')}>

@@ -1,16 +1,24 @@
-import { certs, navOrder, site } from '../config/site';
+import { certs, site } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
+import { isProductPage, pagePath, pages } from '../routes';
 import BuzLogo from './BuzLogo';
-import { Facebook, LinkedIn } from './icons';
+import { Facebook, LinkedIn, WhatsApp } from './icons';
 
 const linkClass = 'text-light/85 transition-colors hover:text-brand-teal';
 
-export function Footer({ onPrivacy }: { onPrivacy: () => void }) {
-  const { t } = useLang();
+export function Footer() {
+  const { lang, t } = useLang();
   const f = t.footer;
+  const quickLinks = pages
+    .filter((page) => page !== 'privacy')
+    .map((page) => ({
+      page,
+      label: isProductPage(page) ? t.products.categories[page].label : t.nav[page as 'home' | 'services' | 'about' | 'contact'],
+    }));
   const social = [
     { label: 'Facebook', href: site.social.facebook, Icon: Facebook },
     { label: 'LinkedIn', href: site.social.linkedin, Icon: LinkedIn },
+    { label: 'WhatsApp', href: site.whatsappHref, Icon: WhatsApp },
   ].filter((s): s is { label: string; href: string; Icon: typeof Facebook } => Boolean(s.href));
 
   return (
@@ -27,10 +35,10 @@ export function Footer({ onPrivacy }: { onPrivacy: () => void }) {
         <nav aria-label={f.quickLinks}>
           <h2 className="text-lg text-white">{f.quickLinks}</h2>
           <ul className="mt-4 space-y-2.5">
-            {navOrder.map((id) => (
-              <li key={id}>
-                <a href={`#${id}`} className={linkClass}>
-                  {t.nav[id]}
+            {quickLinks.map(({ page, label }) => (
+              <li key={page}>
+                <a href={pagePath(page, lang)} className={linkClass}>
+                  {label}
                 </a>
               </li>
             ))}
@@ -81,9 +89,9 @@ export function Footer({ onPrivacy }: { onPrivacy: () => void }) {
           <p>
             © {new Date().getFullYear()} {site.legalName}. {f.rights}
           </p>
-          <button type="button" onClick={onPrivacy} aria-haspopup="dialog" className="underline underline-offset-4 transition-colors hover:text-brand-teal">
+          <a href={pagePath('privacy', lang)} className="underline underline-offset-4 transition-colors hover:text-brand-teal">
             {f.privacy}
-          </button>
+          </a>
           {social.length > 0 && (
             <ul aria-label={f.social} className="flex gap-3">
               {social.map(({ label, href, Icon }) => (

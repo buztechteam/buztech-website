@@ -1,7 +1,10 @@
 export type Lang = 'ge' | 'en';
 
-export type SectionId = 'home' | 'partners' | 'products' | 'services' | 'clients' | 'certifications' | 'contact';
 export type CategoryId = 'licensing' | 'servers' | 'networking' | 'workspaces';
+/** One page per product category, plus the company pages. */
+export type PageId = 'home' | CategoryId | 'services' | 'about' | 'contact' | 'privacy';
+/** Header menu entries; "products" opens the category list. */
+export type NavId = 'home' | 'products' | 'services' | 'about' | 'contact';
 export type ProductId =
   | 'm365'
   | 'azure'
@@ -31,8 +34,9 @@ export interface Dict {
     home: string;
     partnerList: string;
     tabs: string;
+    breadcrumb: string;
   };
-  nav: Record<SectionId, string>;
+  nav: Record<NavId, string>;
   /** Primary call to action. One wording, used everywhere. */
   cta: string;
   hero: {
@@ -90,6 +94,8 @@ export interface Dict {
     /** Office street address, written the local way for each language. */
     address: string;
     phone: string;
+    /** Link text for the WhatsApp row. */
+    whatsapp: string;
     email: string;
     fields: { company: string; email: string; product: string; message: string };
     placeholders: { company: string; email: string; message: string };

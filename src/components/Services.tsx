@@ -1,17 +1,22 @@
 import { useLang } from '../i18n/LanguageContext';
 import { h2Class, leadClass } from './ui';
 
-export function Services() {
+/** `intro={false}` when the page's PageIntro already shows the heading and lead. */
+export function Services({ intro = true }: { intro?: boolean }) {
   const { t } = useLang();
   const s = t.services;
   return (
     <section id="services" className="bg-navy py-20 text-light lg:py-28">
       <div className="container-x grid gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:sticky lg:top-28 lg:col-span-4 lg:self-start">
-          <h2 className={`${h2Class} text-white`}>{s.heading}</h2>
-          <p className={`${leadClass} text-light/85`}>{s.lead}</p>
+          {intro && (
+            <>
+              <h2 className={`${h2Class} text-white`}>{s.heading}</h2>
+              <p className={`${leadClass} text-light/85`}>{s.lead}</p>
+            </>
+          )}
 
-          <dl className="mt-10 border-b border-white/15">
+          <dl className={`${intro ? 'mt-10' : ''} border-b border-white/15`}>
             {s.facts.map((fact) => (
               <div key={fact.label} className="flex items-baseline gap-5 border-t border-white/15 py-4">
                 <dd className="order-1 w-24 shrink-0 text-4xl leading-none font-extrabold text-white">{fact.value}</dd>

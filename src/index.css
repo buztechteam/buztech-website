@@ -42,7 +42,7 @@
   }
 }
 
-/* The header runs wider than the page content so six Georgian nav labels, the language toggle and the CTA fit on one line. */
+/* The header runs wider than the page content so the logo, menu, language toggle and CTA fit on one line. */
 @utility container-wide {
   margin-inline: auto;
   width: 100%;
@@ -118,6 +118,11 @@
 /* Light sections use Deep Teal for focus rings (Brand Teal is too pale on #F3F8FB). */
 .surface-light {
   --focus-color: var(--color-deep-teal);
+}
+
+/* The Brand Teal contact band: a teal ring would be invisible, so Navy. */
+.surface-teal {
+  --focus-color: var(--color-navy);
 }
 
 /* ---------- Vendor marquee ---------- */

@@ -40,6 +40,12 @@ export const Close = (p: IconProps) => (
   </Stroke>
 );
 
+export const ChevronDown = (p: IconProps) => (
+  <Stroke {...p}>
+    <path d="M6 9l6 6 6-6" />
+  </Stroke>
+);
+
 export const Phone = (p: IconProps) => (
   <Stroke {...p}>
     <path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" />
@@ -127,6 +133,14 @@ export const LinkedIn = (p: IconProps) => (
   <Solid {...p}>
     <path d="M5 9h3v10H5zM6.5 4.6a1.8 1.8 0 110 3.6 1.8 1.8 0 010-3.6zM10 9h2.9v1.4c.5-.9 1.6-1.6 3.1-1.6 3 0 3.5 2 3.5 4.5V19h-3v-5c0-1.2 0-2.6-1.6-2.6S13 12.7 13 14v5h-3z" />
   </Solid>
+);
+
+/** Speech bubble with a handset: reads as WhatsApp without copying its logo. */
+export const WhatsApp = (p: IconProps) => (
+  <Stroke {...p}>
+    <path d="M3.5 20.5l1.3-4.3a8.5 8.5 0 113.4 3.2z" />
+    <path d="M9.2 8.6c-.3 2.9 3.2 6.4 6.2 6.2l.9-1.4-2-1.1-.9.7a4.3 4.3 0 01-2.4-2.4l.7-.9-1.1-2z" strokeWidth={1.5} />
+  </Stroke>
 );
 
 export const categoryIcons: Record<CategoryId, (p: IconProps) => React.JSX.Element> = {

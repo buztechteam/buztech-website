@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
-import { navOrder, pageOrder, site } from '../config/site';
-import { useActiveSection } from '../hooks/useActiveSection';
+import { useEffect, useRef, useState } from 'react';
 import { useLang } from '../i18n/LanguageContext';
-import type { Lang, SectionId } from '../i18n/types';
+import type { Lang, PageId } from '../i18n/types';
+import { isProductPage, pagePath, productPages } from '../routes';
 import BuzLogo from './BuzLogo';
-import { Close, Menu } from './icons';
+import { categoryIcons, ChevronDown, Close, Menu } from './icons';
 import { btn } from './ui';
 
 const LANGS: { id: Lang; label: string; htmlLang: string }[] = [
@@ -12,36 +11,114 @@ const LANGS: { id: Lang; label: string; htmlLang: string }[] = [
   { id: 'en', label: 'EN', htmlLang: 'en' },
 ];
 
+/** Pages linked directly from the header (products sit in their own menu). */
+const DIRECT = ['services', 'about', 'contact'] as const satisfies readonly PageId[];
+
+/** Links to the same page in the other language. */
 function LangToggle() {
-  const { lang, setLang, t } = useLang();
+  const { lang, page, t } = useLang();
   return (
-    <div
-      role="group"
-      aria-label={t.a11y.language}
-      className="flex rounded-lg border border-white/25 p-0.5 text-sm"
-    >
+    <div role="group" aria-label={t.a11y.language} className="flex rounded-lg border border-white/25 p-0.5 text-sm">
       {LANGS.map((l) => (
-        <button
+        <a
           key={l.id}
-          type="button"
+          href={pagePath(page, l.id)}
+          hrefLang={l.htmlLang}
           lang={l.htmlLang}
-          aria-pressed={lang === l.id}
-          onClick={() => setLang(l.id)}
-          className={`rounded-md px-3 py-1.5 font-extrabold transition-colors ${
-            lang === l.id ? 'bg-brand-teal text-ink' : 'text-light/80 hover:text-white'
-          }`}
+          aria-current={lang === l.id ? 'true' : undefined}
+          className="rounded-md px-3 py-1.5 font-extrabold text-light/80 transition-colors hover:text-white aria-[current=true]:bg-brand-teal aria-[current=true]:text-ink"
         >
           {l.label}
-        </button>
+        </a>
       ))}
     </div>
   );
 }
 
-export function Header() {
-  const { t } = useLang();
+const navLink =
+  'relative px-3 py-2 text-[0.95rem] font-extrabold whitespace-nowrap text-light/80 transition-colors hover:text-white aria-[current=page]:text-white data-[active=true]:text-white after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:bg-brand-teal after:opacity-0 aria-[current=page]:after:opacity-100 data-[active=true]:after:opacity-100';
+
+/** Disclosure menu with the four product categories. Esc or a click outside closes it. */
+function ProductsMenu() {
+  const { lang, page, t } = useLang();
   const [open, setOpen] = useState(false);
-  const active = useActiveSection(pageOrder);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointer = (e: PointerEvent) => {
+      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        buttonRef.current?.focus();
+      }
+    };
+    document.addEventListener('pointerdown', onPointer);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('pointerdown', onPointer);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  return (
+    <div
+      ref={wrapRef}
+      className="relative"
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOpen(false);
+      }}
+    >
+      <button
+        ref={buttonRef}
+        type="button"
+        aria-expanded={open}
+        aria-controls="products-menu"
+        data-active={isProductPage(page)}
+        onClick={() => setOpen((v) => !v)}
+        className={`${navLink} flex items-center gap-1.5`}
+      >
+        {t.nav.products}
+        <ChevronDown className={`size-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      <div
+        id="products-menu"
+        hidden={!open}
+        className="absolute top-full left-0 mt-3 w-[36rem] rounded-xl border border-white/12 bg-ink p-2 shadow-2xl"
+      >
+        <ul className="grid grid-cols-2 gap-1">
+          {productPages.map((id) => {
+            const Icon = categoryIcons[id];
+            const cat = t.products.categories[id];
+            return (
+              <li key={id}>
+                <a
+                  href={pagePath(id, lang)}
+                  aria-current={page === id ? 'page' : undefined}
+                  className="flex h-full gap-3 rounded-lg p-3 transition-colors hover:bg-white/8 aria-[current=page]:bg-white/8"
+                >
+                  <Icon className="mt-0.5 size-5 shrink-0 text-brand-teal" />
+                  <span>
+                    <span className="block font-extrabold text-white">{cat.label}</span>
+                    <span className="mt-0.5 block text-sm leading-snug text-light/75">{cat.summary}</span>
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+export function Header() {
+  const { lang, page, t } = useLang();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -52,49 +129,38 @@ export function Header() {
     return () => document.removeEventListener('keydown', onKey);
   }, [open]);
 
-  const renderLink = (id: SectionId, className: string) => (
-    <a
-      key={id}
-      href={`#${id}`}
-      onClick={() => setOpen(false)}
-      aria-current={active === id ? 'location' : undefined}
-      className={className}
-    >
-      {t.nav[id]}
-    </a>
-  );
+  const mobileLink =
+    'block border-b border-white/10 py-3.5 text-lg font-extrabold text-light/85 hover:text-white aria-[current=page]:text-brand-teal';
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-ink/95 backdrop-blur">
       <div className="container-wide flex h-[4.5rem] items-center justify-between gap-4">
-        <a href="#home" aria-label={t.a11y.home} className="flex shrink-0 flex-col gap-1.5 py-2">
-          <BuzLogo className="h-9 w-auto" />
-          <span
-            lang="en"
-            className="text-[0.6875rem] leading-none tracking-[0.16em] whitespace-nowrap text-brand-teal uppercase max-sm:hidden"
-          >
-            {site.tagline}
-          </span>
+        <a
+          href={pagePath('home', lang)}
+          aria-label={t.a11y.home}
+          aria-current={page === 'home' ? 'page' : undefined}
+          className="shrink-0"
+        >
+          <BuzLogo className="h-11 w-auto" />
         </a>
 
-        {/* Six Georgian labels need ~1300px of header: the full nav starts at 1360px, the menu button covers everything below. */}
-        <nav aria-label={t.a11y.mainNav} className="hidden items-center min-[1360px]:flex">
-          {navOrder.map((id) =>
-            renderLink(
-              id,
-              'relative px-2.5 py-2 text-[0.9rem] font-extrabold whitespace-nowrap text-light/80 transition-colors hover:text-white aria-[current=location]:text-white after:absolute after:inset-x-2.5 after:-bottom-0.5 after:h-0.5 after:bg-brand-teal after:opacity-0 aria-[current=location]:after:opacity-100',
-            ),
-          )}
+        <nav aria-label={t.a11y.mainNav} className="hidden items-center gap-1 lg:flex">
+          <ProductsMenu />
+          {DIRECT.map((id) => (
+            <a key={id} href={pagePath(id, lang)} aria-current={page === id ? 'page' : undefined} className={navLink}>
+              {t.nav[id]}
+            </a>
+          ))}
         </nav>
 
         <div className="flex shrink-0 items-center gap-3">
           <LangToggle />
-          <a href="#contact" className={`${btn('primary', 'sm')} max-md:hidden`}>
+          <a href={pagePath('contact', lang)} className={`${btn('primary', 'sm')} max-md:hidden`}>
             {t.cta}
           </a>
           <button
             type="button"
-            className="grid size-11 place-items-center rounded-lg border border-white/25 text-white min-[1360px]:hidden"
+            className="grid size-11 place-items-center rounded-lg border border-white/25 text-white lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? t.a11y.closeMenu : t.a11y.openMenu}
@@ -105,18 +171,26 @@ export function Header() {
         </div>
       </div>
 
-      <div
-        id="mobile-nav"
-        className={`border-t border-white/10 bg-ink min-[1360px]:hidden ${open ? 'block' : 'hidden'}`}
-      >
-        <nav aria-label={t.a11y.mainNav} className="container-x flex flex-col py-3">
-          {navOrder.map((id) =>
-            renderLink(
-              id,
-              'border-b border-white/10 py-3.5 text-lg font-extrabold text-light/85 hover:text-white aria-[current=location]:text-brand-teal',
-            ),
-          )}
-          <a href="#contact" onClick={() => setOpen(false)} className={`${btn('primary')} mt-4`}>
+      <div id="mobile-nav" className={`border-t border-white/10 bg-ink lg:hidden ${open ? 'block' : 'hidden'}`}>
+        <nav aria-label={t.a11y.mainNav} className="container-x py-3">
+          <p className="pt-3 pb-1 text-sm tracking-[0.14em] text-light/60 uppercase">{t.nav.products}</p>
+          <ul>
+            {productPages.map((id) => (
+              <li key={id}>
+                <a href={pagePath(id, lang)} aria-current={page === id ? 'page' : undefined} className={`${mobileLink} pl-4`}>
+                  {t.products.categories[id].label}
+                </a>
+              </li>
+            ))}
+            {DIRECT.map((id) => (
+              <li key={id}>
+                <a href={pagePath(id, lang)} aria-current={page === id ? 'page' : undefined} className={mobileLink}>
+                  {t.nav[id]}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a href={pagePath('contact', lang)} className={`${btn('primary')} mt-4 w-full`}>
             {t.cta}
           </a>
         </nav>
