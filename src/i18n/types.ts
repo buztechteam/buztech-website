@@ -1,8 +1,8 @@
 export type Lang = 'ge' | 'en';
 
 export type CategoryId = 'licensing' | 'servers' | 'networking' | 'workspaces';
-/** One page per product category, plus the company pages. */
-export type PageId = 'home' | CategoryId | 'services' | 'about' | 'contact' | 'privacy';
+/** One page per product category, plus the company pages. notFound is built as 404.html, not as an address. */
+export type PageId = 'home' | CategoryId | 'services' | 'about' | 'contact' | 'privacy' | 'notFound';
 /** Header menu entries; "products" opens the category list. */
 export type NavId = 'home' | 'products' | 'services' | 'about' | 'contact';
 export type ProductId =
@@ -36,7 +36,10 @@ export interface Dict {
     home: string;
     partnerList: string;
     breadcrumb: string;
+    /** Phone bar with call / WhatsApp / price request. */
+    quickContact: string;
   };
+  notFound: { title: string; lead: string };
   nav: Record<NavId, string>;
   /** Primary call to action. One wording, used everywhere. */
   cta: string;

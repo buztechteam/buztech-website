@@ -17,6 +17,11 @@ export const en: Dict = {
     home: 'BUZ Tech — home',
     partnerList: 'Official partners',
     breadcrumb: 'Breadcrumb',
+    quickContact: 'Quick contact',
+  },
+  notFound: {
+    title: 'Page not found',
+    lead: 'The address may be mistyped, or the page has moved. Pick a section below.',
   },
   nav: {
     home: 'Home',

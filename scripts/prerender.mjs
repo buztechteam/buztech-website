@@ -4,6 +4,8 @@
  *   dist/index.html            Georgian home      dist/en/index.html            English home
  *   dist/servers/index.html    Georgian servers   dist/en/servers/index.html    English servers ...
  * With VITE_SITE_URL set it also adds canonical / hreflang links, og:url and sitemap.xml.
+ * It also writes dist/404.html and dist/en/404.html ("page not found", noindex), which Cloudflare
+ * serves with a 404 status for unknown addresses (not_found_handling: "404-page" in wrangler.jsonc).
  */
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -28,19 +30,35 @@ if (!HEAD_BLOCK.test(template) || !template.includes('<div id="root"></div>')) {
   throw new Error('prerender: index.html is missing the page-head block or the empty #root');
 }
 
+/** Fills the template for one page; `extraHead` lines go into the page-head block. */
+function pageHtml(page, lang, extraHead) {
+  const { html, meta } = render(page, lang);
+  const head = [
+    `<title>${esc(meta.title)}</title>`,
+    `<meta name="description" content="${esc(meta.description)}" />`,
+    `<meta property="og:locale" content="${OG_LOCALE[lang]}" />`,
+    `<meta property="og:title" content="${esc(meta.title)}" />`,
+    `<meta property="og:description" content="${esc(meta.description)}" />`,
+    ...extraHead,
+  ];
+  return template
+    .replace(/<html lang="[^"]*">/, `<html lang="${HTML_LANG[lang]}">`)
+    .replace(HEAD_BLOCK, head.join('\n    '))
+    .replace('<div id="root"></div>', `<div id="root">${html}</div>`);
+}
+
+async function write(relPath, content) {
+  const file = path.join(dist, ...relPath.split('/').filter(Boolean));
+  await mkdir(path.dirname(file), { recursive: true });
+  await writeFile(file, content);
+  console.log(`prerendered /${relPath.replace(/^\/+/, '').replace(/index\.html$/, '')}`);
+}
+
 const urls = [];
 for (const lang of langs) {
   for (const page of pages) {
-    const { html, meta } = render(page, lang);
     const route = pagePath(page, lang);
-
-    const head = [
-      `<title>${esc(meta.title)}</title>`,
-      `<meta name="description" content="${esc(meta.description)}" />`,
-      `<meta property="og:locale" content="${OG_LOCALE[lang]}" />`,
-      `<meta property="og:title" content="${esc(meta.title)}" />`,
-      `<meta property="og:description" content="${esc(meta.description)}" />`,
-    ];
+    const head = [];
     if (siteUrl) {
       head.push(
         `<link rel="canonical" href="${siteUrl}${route}" />`,
@@ -50,17 +68,10 @@ for (const lang of langs) {
       );
       urls.push(`${siteUrl}${route}`);
     }
-
-    const out = template
-      .replace(/<html lang="[^"]*">/, `<html lang="${HTML_LANG[lang]}">`)
-      .replace(HEAD_BLOCK, head.join('\n    '))
-      .replace('<div id="root"></div>', `<div id="root">${html}</div>`);
-
-    const file = path.join(dist, ...route.split('/').filter(Boolean), 'index.html');
-    await mkdir(path.dirname(file), { recursive: true });
-    await writeFile(file, out);
-    console.log(`prerendered ${route}`);
+    await write(`${route}index.html`, pageHtml(page, lang, head));
   }
+  /* Cloudflare serves the nearest 404.html: /en/anything gets the English one. */
+  await write(`${pagePath('home', lang)}404.html`, pageHtml('notFound', lang, ['<meta name="robots" content="noindex" />']));
 }
 
 if (siteUrl) {

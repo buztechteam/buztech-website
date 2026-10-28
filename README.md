@@ -41,7 +41,14 @@ The language comes from the address (no browser storage), and the GE/EN switch l
 To add a page: add its id to `PageId` (`i18n/types.ts`) and `pages` (`routes.ts`), give it a title in `pageMeta`,
 and its body in `App.tsx`.
 
-`npm run preview` serves the built site, which is the closest local check of what Cloudflare will serve.
+Unknown addresses get a "page not found" page: the build also writes `dist/404.html` and `dist/en/404.html`
+(`noindex`, not in the sitemap), and `wrangler.jsonc` tells Cloudflare to serve the nearest one with a 404 status.
+
+On phones a quick-contact bar (call, WhatsApp, price request) stays at the bottom of every page except Contact
+(`QuickContactBar.tsx`).
+
+`npm run preview` serves the built site, which is the closest local check of what Cloudflare will serve
+(it does not imitate the 404 handling; open `/404.html` or `/en/404.html` directly to see those pages).
 
 ## Deploying
 

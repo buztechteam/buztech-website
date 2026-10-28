@@ -11,16 +11,18 @@ import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { PageIntro } from './components/PageIntro';
 import { Privacy } from './components/Privacy';
+import { QUICK_BAR_SPACE, QuickContactBar } from './components/QuickContactBar';
 import { ProductCategory } from './components/Products';
 import { Services, StepsSection } from './components/Services';
 import { Facts, TrustStrip } from './components/TrustStrip';
 import { PartnerGrid, VendorMarquee } from './components/VendorMarquee';
 import { useLang } from './i18n/LanguageContext';
-import type { Dict, PageId } from './i18n/types';
-import { isProductPage } from './routes';
+import type { Dict, Lang, PageId } from './i18n/types';
+import { btn } from './components/ui';
+import { isProductPage, pagePath } from './routes';
 
 /** What each page shows. Existing sections are reused; the copy is unchanged. */
-function pageBody(page: PageId, t: Dict): ReactNode {
+function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
   if (isProductPage(page)) {
     const category = t.products.categories[page];
     return (
@@ -76,11 +78,23 @@ function pageBody(page: PageId, t: Dict): ReactNode {
           <Privacy />
         </>
       );
+    case 'notFound':
+      return (
+        <>
+          <PageIntro title={t.notFound.title} lead={t.notFound.lead}>
+            <a href={pagePath('home', lang)} className={`${btn('primary')} mt-8`}>
+              {t.nav.home}
+            </a>
+          </PageIntro>
+          <OtherCategories />
+        </>
+      );
   }
 }
 
 export default function App() {
-  const { page, t } = useLang();
+  const { lang, page, t } = useLang();
+  const quickBar = page !== 'contact';
   return (
     <>
       <a
@@ -91,10 +105,17 @@ export default function App() {
       </a>
       <Header />
       <main id="main">
-        {pageBody(page, t)}
+        {pageBody(page, t, lang)}
         {page !== 'contact' && <ContactBand />}
       </main>
       <Footer />
+      {quickBar && (
+        <>
+          {/* Keeps the end of the footer clear of the fixed phone bar. */}
+          <div aria-hidden="true" className={`${QUICK_BAR_SPACE} md:hidden`} />
+          <QuickContactBar />
+        </>
+      )}
     </>
   );
 }

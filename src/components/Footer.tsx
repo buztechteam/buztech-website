@@ -23,18 +23,19 @@ export function Footer() {
 
   return (
     <footer className="border-t border-white/10 bg-ink text-light">
-      <div className="container-x grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_0.8fr_1fr_1fr]">
-        <div>
+      {/* Phone: two columns throughout, the overview hidden (About carries it), smaller lists. */}
+      <div className="container-x grid grid-cols-2 gap-x-6 gap-y-10 py-12 max-sm:text-sm sm:gap-12 sm:py-16 lg:grid-cols-[1.4fr_0.8fr_1fr_1fr]">
+        <div className="col-span-2 lg:col-span-1">
           <BuzLogo className="h-10 w-auto" />
           <p lang="en" className="mt-3 text-[0.6875rem] leading-none tracking-[0.22em] text-brand-teal uppercase">
             {site.tagline}
           </p>
-          <p className="mt-6 max-w-[26rem] text-light/85">{f.overview}</p>
+          <p className="mt-6 max-w-[26rem] text-light/85 max-sm:hidden">{f.overview}</p>
         </div>
 
-        <nav aria-label={f.quickLinks}>
+        <nav aria-label={f.quickLinks} className="col-span-2 sm:col-span-1">
           <h2 className="text-lg text-white">{f.quickLinks}</h2>
-          <ul className="mt-4 space-y-2.5">
+          <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5 sm:grid-cols-1">
             {quickLinks.map(({ page, label }) => (
               <li key={page}>
                 <a href={pagePath(page, lang)} className={linkClass}>
@@ -45,7 +46,7 @@ export function Footer() {
           </ul>
         </nav>
 
-        <div>
+        <div className="min-w-0">
           <h2 className="text-lg text-white">{f.contactTitle}</h2>
           <ul className="mt-4 space-y-2.5">
             <li>{site.legalName}</li>
@@ -67,7 +68,7 @@ export function Footer() {
           </ul>
         </div>
 
-        <div>
+        <div className="min-w-0">
           <h2 className="text-lg text-white">{f.complianceTitle}</h2>
           <ul className="mt-4 space-y-2.5">
             {certs.map((cert) => (
@@ -85,7 +86,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container-x flex flex-wrap items-center justify-between gap-4 py-6 text-sm text-light/75">
+        <div className="container-x flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-6 text-sm text-light/75">
           <p>
             © {new Date().getFullYear()} {site.legalName}. {f.rights}
           </p>
