@@ -1,5 +1,5 @@
 import type { SVGProps } from 'react';
-import type { CategoryId, CertId } from '../i18n/types';
+import type { CategoryId, CertId, ServiceId } from '../i18n/types';
 
 type IconProps = SVGProps<SVGSVGElement>;
 
@@ -148,6 +148,38 @@ export const WhatsApp = (p: IconProps) => (
     <path d="M9.2 8.6c-.3 2.9 3.2 6.4 6.2 6.2l.9-1.4-2-1.1-.9.7a4.3 4.3 0 01-2.4-2.4l.7-.9-1.1-2z" strokeWidth={1.5} />
   </Stroke>
 );
+
+export const Key = (p: IconProps) => (
+  <Stroke {...p}>
+    <circle cx="8" cy="15" r="4" />
+    <path d="M11 12l8.5-8.5M16.5 6.5l3 3M14 9l2 2" />
+  </Stroke>
+);
+
+export const ClipboardCheck = (p: IconProps) => (
+  <Stroke {...p}>
+    <rect x="5" y="4" width="14" height="17" rx="2" />
+    <path d="M9 4V3h6v1M9 13l2 2 4-4" />
+  </Stroke>
+);
+
+export const Sliders = (p: IconProps) => (
+  <Stroke {...p}>
+    <path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12" />
+    <circle cx="16" cy="6" r="2" />
+    <circle cx="10" cy="12" r="2" />
+    <circle cx="18" cy="18" r="2" />
+  </Stroke>
+);
+
+export const serviceIcons: Record<ServiceId, (p: IconProps) => React.JSX.Element> = {
+  licensing: Key,
+  cloud: ShieldCheck,
+  audit: ClipboardCheck,
+  infrastructure: Server,
+  sizing: Sliders,
+  workspaces: Board,
+};
 
 export const categoryIcons: Record<CategoryId, (p: IconProps) => React.JSX.Element> = {
   licensing: Cloud,

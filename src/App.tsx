@@ -12,9 +12,9 @@ import { Hero } from './components/Hero';
 import { PageIntro } from './components/PageIntro';
 import { Privacy } from './components/Privacy';
 import { ProductCategory } from './components/Products';
-import { Services } from './components/Services';
-import { TrustStrip } from './components/TrustStrip';
-import { VendorMarquee } from './components/VendorMarquee';
+import { Services, StepsSection } from './components/Services';
+import { Facts, TrustStrip } from './components/TrustStrip';
+import { PartnerGrid, VendorMarquee } from './components/VendorMarquee';
 import { useLang } from './i18n/LanguageContext';
 import type { Dict, PageId } from './i18n/types';
 import { isProductPage } from './routes';
@@ -46,14 +46,19 @@ function pageBody(page: PageId, t: Dict): ReactNode {
       return (
         <>
           <PageIntro title={t.services.heading} lead={t.services.lead} />
-          <Services intro={false} />
+          <Services />
+          <StepsSection />
+          <OtherCategories />
         </>
       );
     case 'about':
       return (
         <>
-          <PageIntro title={t.nav.about} lead={t.footer.overview} />
+          <PageIntro title={t.nav.about} lead={t.footer.overview}>
+            <Facts className="mt-10" />
+          </PageIntro>
           <Clients />
+          <PartnerGrid />
           <Certifications />
         </>
       );

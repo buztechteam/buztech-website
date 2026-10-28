@@ -33,14 +33,14 @@ export function CategoryServices({ id }: { id: CategoryId }) {
   );
 }
 
-/** Category page: the other three categories, so a visitor can keep browsing. */
-export function OtherCategories({ current }: { current: CategoryId }) {
+/** Links to the product categories: the other three on a category page, all four elsewhere (Services). */
+export function OtherCategories({ current }: { current?: CategoryId }) {
   const { lang, t } = useLang();
   return (
     <section className="surface-light bg-white py-16 text-navy lg:py-20">
       <div className="container-x">
         <h2 className="text-2xl leading-tight font-extrabold">{t.products.heading}</h2>
-        <ul className="mt-6 grid gap-4 md:grid-cols-3">
+        <ul className={`mt-6 grid gap-4 ${current ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4'}`}>
           {productPages
             .filter((id) => id !== current)
             .map((id) => {

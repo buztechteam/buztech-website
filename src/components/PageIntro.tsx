@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { useLang } from '../i18n/LanguageContext';
 import { isProductPage, pagePath } from '../routes';
 
@@ -5,7 +6,18 @@ import { isProductPage, pagePath } from '../routes';
  * Top band of every inner page: breadcrumb, the page's one h1 and its lead.
  * Same gradient and Navy scrim as the home hero, so the pages read as one site.
  */
-export function PageIntro({ title, lead, chips }: { title: string; lead?: string; chips?: string[] }) {
+export function PageIntro({
+  title,
+  lead,
+  chips,
+  children,
+}: {
+  title: string;
+  lead?: string;
+  chips?: string[];
+  /** Extra content at the foot of the band, e.g. the facts on About. */
+  children?: ReactNode;
+}) {
   const { lang, page, t } = useLang();
   const trail = [t.nav.home, ...(isProductPage(page) ? [t.nav.products] : [])];
 
@@ -48,6 +60,7 @@ export function PageIntro({ title, lead, chips }: { title: string; lead?: string
             ))}
           </ul>
         )}
+        {children}
       </div>
     </section>
   );

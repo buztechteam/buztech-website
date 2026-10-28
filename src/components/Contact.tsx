@@ -3,6 +3,7 @@ import { categories, productMeta, site } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import { pagePath } from '../routes';
 import { Building, Mail, Phone, Pin, WhatsApp } from './icons';
+import { Steps } from './Services';
 import { btn, h2Class, leadClass } from './ui';
 
 type Status = 'idle' | 'sending' | 'success' | 'mailto' | 'error';
@@ -281,6 +282,11 @@ export function Contact({ intro = true }: { intro?: boolean }) {
             </p>
           </div>
         </form>
+      </div>
+
+      {/* What happens after the request is sent. */}
+      <div className="container-x mt-16 border-t border-white/12 pt-12 lg:mt-20">
+        <Steps level={intro ? 3 : 2} />
       </div>
     </section>
   );
