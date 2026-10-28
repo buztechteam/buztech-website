@@ -33,7 +33,6 @@ export interface Dict {
     mainNav: string;
     home: string;
     partnerList: string;
-    tabs: string;
     breadcrumb: string;
   };
   nav: Record<NavId, string>;

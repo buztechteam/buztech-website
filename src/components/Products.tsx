@@ -1,11 +1,10 @@
-import { useRef, useState, type KeyboardEvent } from 'react';
 import { categories, m365Apps, productImages, productMeta } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import type { CategoryId, ProductId } from '../i18n/types';
 import { inquireHref } from '../routes';
 import { BoardIllustration } from './BoardIllustration';
-import { categoryIcons, Check } from './icons';
-import { btn, h2Class, leadClass } from './ui';
+import { Check } from './icons';
+import { btn } from './ui';
 
 function SpecList({ specs, iconClass }: { specs: string[]; iconClass: string }) {
   return (
@@ -116,7 +115,7 @@ const gridClass: Record<CategoryId, string> = {
   workspaces: 'grid gap-5',
 };
 
-/** The products of one category: used by the home tabs and by each category page. */
+/** The products of one category. */
 function CategoryPanel({ id }: { id: CategoryId }) {
   const { t } = useLang();
   const category = categories.find((c) => c.id === id) ?? categories[0];
@@ -152,73 +151,6 @@ export function ProductCategory({ id }: { id: CategoryId }) {
     <section className="surface-light bg-light py-16 text-navy lg:py-20">
       <div className="container-x">
         <CategoryPanel id={id} />
-      </div>
-    </section>
-  );
-}
-
-/** Home page overview with category tabs. */
-export function Products() {
-  const { t } = useLang();
-  const [active, setActive] = useState<CategoryId>('licensing');
-  const tabRefs = useRef<Partial<Record<CategoryId, HTMLButtonElement | null>>>({});
-  const ids = categories.map((c) => c.id);
-
-  const onTabKey = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    let next = -1;
-    if (e.key === 'ArrowRight') next = (index + 1) % ids.length;
-    else if (e.key === 'ArrowLeft') next = (index - 1 + ids.length) % ids.length;
-    else if (e.key === 'Home') next = 0;
-    else if (e.key === 'End') next = ids.length - 1;
-    if (next < 0) return;
-    e.preventDefault();
-    const nextId = ids[next];
-    setActive(nextId);
-    tabRefs.current[nextId]?.focus();
-  };
-
-  return (
-    <section id="products" className="surface-light bg-light py-20 text-navy lg:py-28">
-      <div className="container-x">
-        <h2 className={h2Class}>{t.products.heading}</h2>
-        <p className={`${leadClass} text-navy/85`}>{t.products.lead}</p>
-
-        <div role="tablist" aria-label={t.a11y.tabs} className="mt-10 flex flex-wrap gap-2">
-          {categories.map((cat, index) => {
-            const Icon = categoryIcons[cat.id];
-            const selected = cat.id === active;
-            return (
-              <button
-                key={cat.id}
-                ref={(el) => {
-                  tabRefs.current[cat.id] = el;
-                }}
-                id={`tab-${cat.id}`}
-                role="tab"
-                type="button"
-                aria-selected={selected}
-                aria-controls={`panel-${cat.id}`}
-                tabIndex={selected ? 0 : -1}
-                onClick={() => setActive(cat.id)}
-                onKeyDown={(e) => onTabKey(e, index)}
-                className={`flex items-center gap-2.5 rounded-lg border px-4 py-3 text-left font-extrabold transition-colors ${
-                  selected
-                    ? 'border-navy bg-navy text-white'
-                    : 'border-navy/20 bg-white text-navy hover:border-deep-teal'
-                }`}
-              >
-                <Icon className={`size-5 ${selected ? 'text-brand-teal' : 'text-deep-teal'}`} />
-                {t.products.categories[cat.id].label}
-              </button>
-            );
-          })}
-        </div>
-
-        <p className="mt-4 text-navy/85">{t.products.categories[active].summary}</p>
-
-        <div role="tabpanel" id={`panel-${active}`} aria-labelledby={`tab-${active}`} tabIndex={0} className="mt-8">
-          <CategoryPanel id={active} />
-        </div>
       </div>
     </section>
   );

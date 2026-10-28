@@ -16,7 +16,6 @@ export const ge: Dict = {
     mainNav: 'ძირითადი ნავიგაცია',
     home: 'BUZ Tech — მთავარი გვერდი',
     partnerList: 'ოფიციალური პარტნიორები',
-    tabs: 'პროდუქტების კატეგორიები',
     breadcrumb: 'ნავიგაციის ბილიკი',
   },
   nav: {

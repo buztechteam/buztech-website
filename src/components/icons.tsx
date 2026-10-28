@@ -40,6 +40,12 @@ export const Close = (p: IconProps) => (
   </Stroke>
 );
 
+export const ArrowRight = (p: IconProps) => (
+  <Stroke {...p}>
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </Stroke>
+);
+
 export const ChevronDown = (p: IconProps) => (
   <Stroke {...p}>
     <path d="M6 9l6 6 6-6" />

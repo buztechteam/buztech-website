@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { CategoryCards } from './components/CategoryCards';
 import { Certifications } from './components/Certifications';
 import { Clients } from './components/Clients';
 import { Contact } from './components/Contact';
@@ -8,8 +9,9 @@ import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { PageIntro } from './components/PageIntro';
 import { Privacy } from './components/Privacy';
-import { ProductCategory, Products } from './components/Products';
+import { ProductCategory } from './components/Products';
 import { Services } from './components/Services';
+import { TrustStrip } from './components/TrustStrip';
 import { VendorMarquee } from './components/VendorMarquee';
 import { useLang } from './i18n/LanguageContext';
 import type { Dict, PageId } from './i18n/types';
@@ -32,7 +34,8 @@ function pageBody(page: PageId, t: Dict): ReactNode {
         <>
           <Hero />
           <VendorMarquee />
-          <Products />
+          <CategoryCards />
+          <TrustStrip />
         </>
       );
     case 'services':

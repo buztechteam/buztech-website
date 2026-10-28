@@ -16,7 +16,6 @@ export const en: Dict = {
     mainNav: 'Main navigation',
     home: 'BUZ Tech — home',
     partnerList: 'Official partners',
-    tabs: 'Product categories',
     breadcrumb: 'Breadcrumb',
   },
   nav: {
