@@ -43,6 +43,12 @@ and its body in `App.tsx`.
 
 `npm run preview` serves the built site, which is the closest local check of what Cloudflare will serve.
 
+## Deploying
+
+Cloudflare Workers Builds runs `npm run build`, then `npx wrangler deploy`, which uploads `dist/` as static assets
+using `wrangler.jsonc`. Keep that file: without it Wrangler auto-configures the project, adds the Cloudflare Vite
+plugin and rebuilds, and the pre-render step then fails (`Cannot find module .../dist-ssr/entry-server.js`).
+
 ## How the brand rules are enforced
 
 | Rule | Where |

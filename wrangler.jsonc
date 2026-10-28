@@ -1,0 +1,16 @@
+// Cloudflare Workers deploy settings for the buztech-website Worker.
+// The site is static: `npm run build` writes every page into dist/, and `npx wrangler deploy`
+// uploads that folder as-is. Keep this file: without it Wrangler "auto-configures" the project,
+// adds the Cloudflare Vite plugin and rebuilds, which breaks the pre-render step (scripts/prerender.mjs).
+{
+  "name": "buztech-website",
+  "compatibility_date": "2026-10-23",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "./dist",
+    // Unknown addresses get the home page, as before. A proper "page not found" page is planned.
+    "not_found_handling": "single-page-application"
+  }
+}
