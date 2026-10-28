@@ -16,6 +16,8 @@ export type ProductId =
   | 'tplink'
   | 'ideahub';
 export type CertId = 'iso9001' | 'iso27001' | 'iso20000';
+/** Lets product pages pick their related services (categoryServices in config/site.ts). */
+export type ServiceId = 'licensing' | 'cloud' | 'audit' | 'infrastructure' | 'sizing' | 'workspaces';
 
 export interface ProductCopy {
   tagline: string;
@@ -61,7 +63,7 @@ export interface Dict {
   services: {
     heading: string;
     lead: string;
-    items: { title: string; text: string }[];
+    items: { id: ServiceId; title: string; text: string }[];
     facts: { value: string; label: string }[];
     stepsHeading: string;
     steps: { title: string; text: string }[];

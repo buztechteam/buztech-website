@@ -1,4 +1,4 @@
-import type { CategoryId, CertId, ProductId } from '../i18n/types';
+import type { CategoryId, CertId, ProductId, ServiceId } from '../i18n/types';
 
 /**
  * Single source of truth for facts that are NOT translated.
@@ -51,6 +51,18 @@ export const categories: { id: CategoryId; products: ProductId[] }[] = [
   { id: 'networking', products: ['zyxel', 'tplink'] },
   { id: 'workspaces', products: ['ideahub'] },
 ];
+
+/** Brand names in a category, e.g. Dell · HPE · Lenovo (home cards and the category page intro). */
+export const brandNames = (id: CategoryId): string[] =>
+  (categories.find((c) => c.id === id)?.products ?? []).map((p) => productMeta[p].name);
+
+/** Services shown on each category page, by id (services.items in the dictionaries). */
+export const categoryServices: Record<CategoryId, ServiceId[]> = {
+  licensing: ['licensing', 'cloud', 'audit'],
+  servers: ['infrastructure', 'sizing'],
+  networking: ['infrastructure', 'sizing'],
+  workspaces: ['workspaces', 'sizing'],
+};
 
 /** Microsoft 365 apps shown on the flagship panel (names only, no vendor logos). */
 export const m365Apps = ['Teams', 'Outlook', 'OneDrive', 'Word', 'Excel', 'PowerPoint'] as const;

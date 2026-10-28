@@ -5,7 +5,7 @@ import { isProductPage, pagePath } from '../routes';
  * Top band of every inner page: breadcrumb, the page's one h1 and its lead.
  * Same gradient and Navy scrim as the home hero, so the pages read as one site.
  */
-export function PageIntro({ title, lead }: { title: string; lead?: string }) {
+export function PageIntro({ title, lead, chips }: { title: string; lead?: string; chips?: string[] }) {
   const { lang, page, t } = useLang();
   const trail = [t.nav.home, ...(isProductPage(page) ? [t.nav.products] : [])];
 
@@ -39,6 +39,15 @@ export function PageIntro({ title, lead }: { title: string; lead?: string }) {
           {title}
         </h1>
         {lead && <p className="mt-4 max-w-[40rem] text-lg leading-relaxed text-light">{lead}</p>}
+        {chips && chips.length > 0 && (
+          <ul className="mt-6 flex flex-wrap gap-2">
+            {chips.map((chip) => (
+              <li key={chip} className="rounded-md border border-white/40 bg-navy/30 px-3 py-1.5 text-sm font-extrabold text-white">
+                {chip}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </section>
   );

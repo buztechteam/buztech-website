@@ -112,26 +112,32 @@ export const en: Dict = {
     lead: 'From buying the licence to handing over the hardware — one partner.',
     items: [
       {
+        id: 'licensing',
         title: 'Licensing',
         text: 'Microsoft 365 and Azure licences at the best price, with local support.',
       },
       {
+        id: 'cloud',
         title: 'Cloud and security',
         text: 'Azure and Entra ID setup, with MFA on every account.',
       },
       {
+        id: 'audit',
         title: 'Licence audit',
         text: 'A free review: unused licences, wrong plans and duplicates.',
       },
       {
+        id: 'infrastructure',
         title: 'Infrastructure supply',
         text: 'Servers and networking equipment with the manufacturer’s official warranty.',
       },
       {
+        id: 'sizing',
         title: 'Sizing and consultation',
         text: 'Equipment sized to your company, free of charge.',
       },
       {
+        id: 'workspaces',
         title: 'Interactive workspaces',
         text: 'Meeting rooms equipped with Huawei IdeaHub.',
       },

@@ -1,4 +1,4 @@
-import { categories, productMeta } from '../config/site';
+import { brandNames, categories } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import type { CategoryId } from '../i18n/types';
 import { pagePath } from '../routes';
@@ -14,7 +14,7 @@ function CategoryCard({ id }: { id: CategoryId }) {
   const { lang, t } = useLang();
   const Icon = categoryIcons[id];
   const cat = t.products.categories[id];
-  const names = categories.find((c) => c.id === id)?.products.map((p) => productMeta[p].name) ?? [];
+  const names = brandNames(id);
   const flagship = id === 'licensing';
 
   return (

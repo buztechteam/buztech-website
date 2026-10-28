@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
+import { brandNames } from './config/site';
 import { CategoryCards } from './components/CategoryCards';
+import { CategoryServices, OtherCategories } from './components/CategoryExtras';
 import { Certifications } from './components/Certifications';
 import { Clients } from './components/Clients';
 import { Contact } from './components/Contact';
@@ -23,8 +25,10 @@ function pageBody(page: PageId, t: Dict): ReactNode {
     const category = t.products.categories[page];
     return (
       <>
-        <PageIntro title={category.label} lead={category.summary} />
+        <PageIntro title={category.label} lead={category.summary} chips={brandNames(page)} />
         <ProductCategory id={page} />
+        <CategoryServices id={page} />
+        <OtherCategories current={page} />
       </>
     );
   }
