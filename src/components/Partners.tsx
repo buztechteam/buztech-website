@@ -3,23 +3,33 @@ import { useLang } from '../i18n/LanguageContext';
 import { revealProps } from '../motion/reveal';
 import { cardStaticDark } from './ui';
 
-function VendorSet({ hidden }: { hidden?: boolean }) {
+/** Home page: the vendors as one still row of typeset names (nothing loops; logos once the packs arrive). */
+export function PartnerStrip() {
+  const { t } = useLang();
   return (
-    <ul aria-hidden={hidden || undefined} className="flex shrink-0 items-center">
-      {vendors.map((vendor) => (
-        <li
-          key={vendor.name}
-          className="flex items-center border-r border-white/12 px-8 whitespace-nowrap sm:px-12"
+    <section id="partners" className="border-y border-white/10 bg-ink py-10 sm:py-12">
+      <div className="container-x">
+        <h2 className="text-xl leading-tight font-extrabold tracking-tight sm:text-2xl">{t.partners.heading}</h2>
+        <p className="mt-2 max-w-[38rem] text-light/75">{t.partners.lead}</p>
+
+        {/* one row spread edge to edge from 1280px; below that the names wrap */}
+        <ul
+          aria-label={t.a11y.partnerList}
+          className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-4 sm:gap-x-14 xl:justify-between xl:gap-x-8"
         >
-          <span className="text-2xl font-extrabold text-light/85 sm:text-3xl">{vendor.name}</span>
-          {vendor.note && (
-            <span lang="en" className="ml-3 rounded-md border border-brand-teal/70 px-2 py-0.5 text-xs text-brand-teal">
-              {vendor.note}
-            </span>
-          )}
-        </li>
-      ))}
-    </ul>
+          {vendors.map((vendor) => (
+            <li key={vendor.name} className="flex items-center whitespace-nowrap">
+              <span className="text-2xl font-extrabold text-light/85 sm:text-3xl">{vendor.name}</span>
+              {vendor.note && (
+                <span lang="en" className="ml-3 rounded-md border border-brand-teal/70 px-2 py-0.5 text-xs text-brand-teal">
+                  {vendor.note}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 }
 
@@ -49,31 +59,6 @@ export function PartnerGrid() {
             </li>
           ))}
         </ul>
-      </div>
-    </section>
-  );
-}
-
-/** Each half of the track holds three copies, so it is always wider than the screen. */
-const COPIES = [0, 1, 2];
-
-export function VendorMarquee() {
-  const { t } = useLang();
-  return (
-    <section id="partners" className="border-y border-white/10 bg-ink py-10 sm:py-12">
-      <div className="container-x">
-        <h2 className="text-xl leading-tight font-extrabold tracking-tight sm:text-2xl">{t.partners.heading}</h2>
-        <p className="mt-2 max-w-[38rem] text-light/75">{t.partners.lead}</p>
-      </div>
-
-      <div className="marquee mt-8 overflow-hidden" role="group" aria-label={t.a11y.partnerList}>
-        <div className="marquee-track flex w-max">
-          {[0, 1].flatMap((half) =>
-            COPIES.map((copy) => (
-              <VendorSet key={`${half}-${copy}`} hidden={half !== 0 || copy !== 0} />
-            )),
-          )}
-        </div>
       </div>
     </section>
   );

@@ -15,7 +15,7 @@ import { QUICK_BAR_SPACE, QuickContactBar } from './components/QuickContactBar';
 import { ProductCategory } from './components/Products';
 import { Services, StepsSection } from './components/Services';
 import { Facts, TrustStrip } from './components/TrustStrip';
-import { PartnerGrid, VendorMarquee } from './components/VendorMarquee';
+import { PartnerGrid, PartnerStrip } from './components/Partners';
 import { useLang } from './i18n/LanguageContext';
 import { initReveal } from './motion/reveal';
 import type { Dict, Lang, PageId } from './i18n/types';
@@ -40,7 +40,7 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
       return (
         <>
           <Hero />
-          <VendorMarquee />
+          <PartnerStrip />
           <CategoryCards />
           <TrustStrip />
         </>

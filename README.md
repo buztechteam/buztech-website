@@ -14,13 +14,13 @@ npm run preview    # serve dist/ locally
 
 ```
 src/
-  index.css                  brand tokens (colours, fonts, weights), gradient, marquee/dialog CSS
+  index.css                  brand tokens (colours, fonts, weights), gradient, motion, dialog CSS
   config/site.ts             contact details, tax ID, vendors, product list, ISO certificates (not translated)
   i18n/ge.ts, en.ts          all copy incl. street address and client list; ge.ts is the primary language,
                              types.ts keeps both in sync
   routes.ts                  the page list, addresses per language, page titles/descriptions
   App.tsx                    which sections each page shows
-  components/                Header (+Products menu), PageIntro, ContactBand, Hero (+HeroStack), VendorMarquee,
+  components/                Header (+Products menu), PageIntro, ContactBand, Hero (+HeroStack), Partners,
                              Products, Services, Clients, Certifications (+dialog), Contact, Privacy, Footer,
                              BuzLogo (+buzLogoPaths), icons
   entry-server.tsx           renders one page to HTML at build time
@@ -90,7 +90,7 @@ white text (2.2:1), so a Navy scrim fades across the text column.
 
 ## Before launch: items only you can supply
 
-1. **Vendor logos.** The marquee shows typeset names because the vendor logo packs and co-branding rules are still an open item in the brand book. Swap in logos once received (`vendors` in `config/site.ts`).
+1. **Vendor logos.** The partner strip and tiles show typeset names because the vendor logo packs and co-branding rules are still an open item in the brand book. Swap in logos once received (`vendors` in `config/site.ts`).
 2. **Client logos.** The clients section shows typeset names (`clients` in `i18n/ge.ts` / `en.ts`). Add logos once each client agrees.
 3. **ISO certificate details.** Issuer, certificate number, validity and a scan are empty in `certs` (`config/site.ts`). Fill them in and they appear in each dialog automatically.
 4. **Product photos.** Add files to `public/products/` and register them in `productImages`; until then the IdeaHub card shows an illustration.

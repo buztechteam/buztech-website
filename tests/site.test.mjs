@@ -113,6 +113,13 @@ test('reveal hidden state is gated', () => {
   assert.ok(css().includes('.reveal-ready [data-reveal]:not([data-in])'))
 })
 
+test('nothing loops', () => {
+  assert.doesNotMatch(css(), /\binfinite\b/)
+  const home = html('index.html')
+  const partners = home.slice(home.indexOf('id="partners"'), home.indexOf('</section>', home.indexOf('id="partners"')))
+  assert.equal(count(partners, /<li[\s>]/g), count(html('about/index.html'), /<li[^>]*min-h-28/g), 'home lists each partner once')
+})
+
 test('printing never hides unrevealed content', () => {
   const c = css()
   const at = c.indexOf('.reveal-ready [data-reveal]:not([data-in])')

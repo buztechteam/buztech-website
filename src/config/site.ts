@@ -74,7 +74,7 @@ export const m365Apps = ['Teams', 'Outlook', 'OneDrive', 'Word', 'Excel', 'Power
 export const productImages: Partial<Record<ProductId, string>> = {};
 
 /**
- * Vendor marquee. Typeset names, NOT logos: the brand book lists the vendor logo packs
+ * Vendors (home strip and About tiles). Typeset names, NOT logos: the brand book lists the vendor logo packs
  * (with each vendor's co-branding rules) as an open item. Swap in logos once received.
  */
 export const vendors: { name: string; note?: string }[] = [
