@@ -125,6 +125,23 @@ test('lift effects only apply on hover-capable devices and with motion allowed',
   }
 })
 
+test('menus are always rendered, closed by visibility', () => {
+  for (const file of pages()) {
+    const page = readFileSync(file, 'utf8')
+    for (const id of ['products-menu', 'mobile-nav']) {
+      const tag = page.match(new RegExp(`<[a-z]+[^>]*\\sid="${id}"[^>]*>`))?.[0]
+      assert.ok(tag, `${rel(file)}: #${id} missing`)
+      assert.match(tag, /\sdata-open="false"/, `${rel(file)}: #${id} not data-open="false"`)
+      // neither the hidden attribute nor a bare `hidden` class (display:none cannot fade)
+      assert.doesNotMatch(tag, /[\s"]hidden[\s>="]/, `${rel(file)}: #${id} is display:none`)
+    }
+  }
+})
+
+test('header can show a shadow', () => {
+  assert.match(css(), /\[data-scrolled=true\][^{]*\{[^}]*box-shadow/)
+})
+
 test('internal links resolve', () => {
   const broken = []
   for (const file of pages()) {

@@ -35,8 +35,30 @@ function LangToggle() {
   );
 }
 
+/* A Brand Teal underline slides in from the left on hover and stays for the current page. */
 const navLink =
-  'relative px-3 py-2 text-[0.95rem] font-extrabold whitespace-nowrap text-light/80 transition-colors hover:text-white aria-[current=page]:text-white data-[active=true]:text-white after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:bg-brand-teal after:opacity-0 aria-[current=page]:after:opacity-100 data-[active=true]:after:opacity-100';
+  'relative px-3 py-2 text-[0.95rem] font-extrabold whitespace-nowrap text-light/80 transition-colors duration-(--dur-hover) ease-soft hover:text-white aria-[current=page]:text-white data-[active=true]:text-white after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-brand-teal after:transition-transform after:duration-(--dur-hover) after:ease-soft motion-reduce:after:transition-none hover:after:scale-x-100 aria-[current=page]:after:scale-x-100 data-[active=true]:after:scale-x-100';
+
+/*
+  Menus stay in the DOM and close by visibility, so they can fade and slide (about 6px) instead of
+  snapping. `invisible` also takes the closed menu's links out of the tab order. Visibility only
+  transitions on close (it stays visible while fading out); on open it flips at once, so a Tab
+  pressed right after Enter already lands inside the menu.
+*/
+const menuMotion =
+  'transition-[opacity,translate,visibility] data-[open=true]:transition-[opacity,translate] duration-(--dur-menu) ease-soft data-[open=false]:invisible data-[open=false]:opacity-0 motion-safe:data-[open=false]:-translate-y-1.5';
+
+/** True once the page is scrolled past `threshold` px. Starts false on server and client alike. */
+function useScrolled(threshold = 8): boolean {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > threshold);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    return () => window.removeEventListener('scroll', update);
+  }, [threshold]);
+  return scrolled;
+}
 
 /** Disclosure menu with the four product categories. Esc or a click outside closes it. */
 function ProductsMenu() {
@@ -82,13 +104,15 @@ function ProductsMenu() {
         className={`${navLink} flex items-center gap-1.5`}
       >
         {t.nav.products}
-        <ChevronDown className={`size-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown
+          className={`size-4 transition-transform duration-(--dur-menu) ease-soft ${open ? 'rotate-180' : ''}`}
+        />
       </button>
 
       <div
         id="products-menu"
-        hidden={!open}
-        className="absolute top-full left-0 mt-3 w-[36rem] rounded-xl border border-white/12 bg-ink p-2 shadow-2xl"
+        data-open={open}
+        className={`absolute top-full left-0 mt-3 w-[36rem] rounded-xl border border-white/12 bg-ink p-2 shadow-2xl ${menuMotion}`}
       >
         <ul className="grid grid-cols-2 gap-1">
           {productPages.map((id) => {
@@ -119,6 +143,7 @@ function ProductsMenu() {
 export function Header() {
   const { lang, page, t } = useLang();
   const [open, setOpen] = useState(false);
+  const scrolled = useScrolled();
 
   useEffect(() => {
     if (!open) return;
@@ -133,7 +158,10 @@ export function Header() {
     'block border-b border-white/10 py-3.5 text-lg font-extrabold text-light/85 hover:text-white aria-[current=page]:text-brand-teal';
 
   return (
-    <header className="sticky top-0 z-40 [view-transition-name:site-header] border-b border-white/10 bg-ink/95 backdrop-blur">
+    <header
+      data-scrolled={scrolled}
+      className="sticky top-0 z-40 [view-transition-name:site-header] border-b border-white/10 bg-ink/95 backdrop-blur transition-shadow duration-(--dur-menu) ease-soft data-[scrolled=true]:shadow-lg data-[scrolled=true]:shadow-ink/30"
+    >
       <div className="container-wide flex h-[4.5rem] items-center justify-between gap-4">
         <a
           href={pagePath('home', lang)}
@@ -171,7 +199,12 @@ export function Header() {
         </div>
       </div>
 
-      <div id="mobile-nav" className={`border-t border-white/10 bg-ink lg:hidden ${open ? 'block' : 'hidden'}`}>
+      {/* Overlays the page under the header; scrolls on its own on short screens. */}
+      <div
+        id="mobile-nav"
+        data-open={open}
+        className={`absolute inset-x-0 top-full max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-y border-white/10 bg-ink lg:hidden ${menuMotion}`}
+      >
         <nav aria-label={t.a11y.mainNav} className="container-x py-3">
           <p className="pt-3 pb-1 text-sm tracking-[0.14em] text-light/60 uppercase">{t.nav.products}</p>
           <ul>
