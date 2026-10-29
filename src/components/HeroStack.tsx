@@ -5,7 +5,8 @@ import { useLang } from '../i18n/LanguageContext';
  * The hero's one memorable moment: Microsoft 365 sits on Entra ID, which sits on Azure.
  * That is the headline claim ("backed by Azure and Entra ID") drawn as a stack of three
  * isometric layers, wired together with the three "wings" from the logo.
- * On load the layers drop into place once, then the wires draw in (CSS only, reduced-motion safe).
+ * On load the layers drop into place once, then the wires draw in (CSS only, gated by the `motion` class in index.css,
+ * so without it the layers simply render in place).
  */
 const W = 200; // half width of a slab's top face
 const H = 100; // half height

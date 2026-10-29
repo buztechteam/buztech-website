@@ -25,6 +25,57 @@
   --font-weight-*: initial;
   --font-weight-medium: 500;
   --font-weight-extrabold: 800;
+
+  /* One easing for every motion on the site: a quick start with a soft settle, no overshoot. */
+  --ease-soft: cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+/*
+  Motion ("B+"): everything responds, content eases in once, nothing loops.
+  Arrivals only run when <html> has the `motion` class, which the inline script in
+  index.html adds before first paint (visible tab, motion allowed). Pre-rendered HTML
+  never has it, so the page is fully visible without JavaScript.
+*/
+:root {
+  --dur-hover: 250ms;
+  --dur-menu: 200ms;
+  --dur-arrive: 750ms;
+  --stagger: 90ms;
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .motion [data-arrive] {
+    animation: arrive var(--dur-arrive) var(--ease-soft) both;
+    animation-delay: calc(var(--i, 0) * var(--stagger));
+  }
+}
+
+/* Page changes cross-fade; the header and the phone bar keep their place. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 300ms;
+  animation-timing-function: var(--ease-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
 }
 
 /* Brand gradient: 135deg, #14C0CF -> #0B7FB0 -> #1A3FA6. Hero and covers, with the all-white logo. */
@@ -173,15 +224,16 @@
   }
 }
 
+/* Gated by .motion: without it the layers and wires render in their final, visible state. */
 @media (prefers-reduced-motion: no-preference) {
-  .slab {
-    animation: slab-in 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  .motion .slab {
+    animation: slab-in 900ms var(--ease-soft) both;
     animation-delay: var(--d, 0ms);
   }
-  .wire {
+  .motion .wire {
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
-    animation: wire-draw 1100ms ease-out forwards;
+    animation: wire-draw 1100ms var(--ease-soft) forwards;
     animation-delay: var(--d, 0ms);
   }
 }

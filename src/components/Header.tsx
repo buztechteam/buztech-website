@@ -133,7 +133,7 @@ export function Header() {
     'block border-b border-white/10 py-3.5 text-lg font-extrabold text-light/85 hover:text-white aria-[current=page]:text-brand-teal';
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-ink/95 backdrop-blur">
+    <header className="sticky top-0 z-40 [view-transition-name:site-header] border-b border-white/10 bg-ink/95 backdrop-blur">
       <div className="container-wide flex h-[4.5rem] items-center justify-between gap-4">
         <a
           href={pagePath('home', lang)}

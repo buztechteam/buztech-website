@@ -52,6 +52,38 @@ test('every built page has exactly one h1', () => {
   }
 })
 
+const GATE =
+  "<script>if(document.visibilityState==='visible'&&matchMedia('(prefers-reduced-motion: no-preference)').matches)document.documentElement.classList.add('motion')</script>"
+
+test('pre-rendered pages carry the motion gate but never the motion class', () => {
+  for (const file of pages()) {
+    const page = readFileSync(file, 'utf8')
+    const head = page.slice(page.indexOf('<head>'), page.indexOf('</head>'))
+    assert.ok(head.includes(GATE), `${rel(file)}: gate script missing from <head>`)
+    assert.doesNotMatch(page, /<html[^>]*class="[^"]*\bmotion\b/, `${rel(file)}: <html> has the motion class`)
+  }
+})
+
+test('arrivals only run under .motion', () => {
+  const c = css()
+  assert.match(c, /\.motion \[data-arrive\]/)
+  assert.match(c, /@keyframes arrive/)
+  for (const cls of ['slab', 'wire']) {
+    assert.match(c, new RegExp(`\\.motion \\.${cls}\\s*\\{[^}]*animation`), `.${cls} animation not under .motion`)
+    // a selector that starts with .slab / .wire (not ".motion .slab") carrying an animation
+    assert.doesNotMatch(c, new RegExp(`(^|[{},;])\\s*\\.${cls}\\s*\\{[^}]*animation`), `un-gated .${cls} animation`)
+  }
+})
+
+test('reduced motion and page transitions are declared', () => {
+  const c = css()
+  assert.match(c, /@view-transition\s*\{\s*navigation:\s*auto/)
+  const reduced = [...c.matchAll(/@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{/g)].map((m) =>
+    c.slice(m.index, m.index + 400),
+  )
+  assert.ok(reduced.some((block) => /navigation:\s*none/.test(block)), 'no navigation:none under reduced motion')
+})
+
 test('internal links resolve', () => {
   const broken = []
   for (const file of pages()) {

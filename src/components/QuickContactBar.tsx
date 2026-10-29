@@ -20,7 +20,7 @@ export function QuickContactBar() {
   return (
     <nav
       aria-label={t.a11y.quickContact}
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-white/12 bg-ink/95 backdrop-blur md:hidden"
+      className="fixed inset-x-0 bottom-0 z-30 [view-transition-name:quick-bar] border-t border-white/12 bg-ink/95 backdrop-blur md:hidden"
     >
       <div className="container-x flex items-center gap-2 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <a href={site.phoneHref} aria-label={`${t.contact.phone}: ${site.phone}`} className={iconButton}>
