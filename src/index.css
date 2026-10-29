@@ -65,8 +65,9 @@
   Scroll reveals: hidden only under .reveal-ready, which src/motion/reveal.ts adds after
   marking everything already on screen as [data-in]. Without it nothing is hidden.
   An animation, not a transition, so it never fights a card's own hover transitions.
+  Screen only: a printout or PDF shows every section, scrolled to or not.
 */
-@media (prefers-reduced-motion: no-preference) {
+@media screen and (prefers-reduced-motion: no-preference) {
   .reveal-ready [data-reveal]:not([data-in]) {
     opacity: 0;
     transform: translateY(22px) scale(0.98);

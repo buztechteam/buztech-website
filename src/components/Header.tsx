@@ -144,14 +144,35 @@ export function Header() {
   const { lang, page, t } = useLang();
   const [open, setOpen] = useState(false);
   const scrolled = useScrolled();
+  const headerRef = useRef<HTMLElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
+  /*
+    The phone menu overlays the page, so it must not stay open behind the visitor's back:
+    Esc closes it and returns focus to its button; a tap or keyboard focus outside the header closes it.
+  */
   useEffect(() => {
     if (!open) return;
+    const outside = (target: EventTarget | null) => !headerRef.current?.contains(target as Node | null);
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key !== 'Escape') return;
+      setOpen(false);
+      toggleRef.current?.focus();
+    };
+    const onPointer = (e: PointerEvent) => {
+      if (outside(e.target)) setOpen(false);
+    };
+    const onFocus = (e: FocusEvent) => {
+      if (outside(e.target)) setOpen(false);
     };
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onPointer);
+    document.addEventListener('focusin', onFocus);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onPointer);
+      document.removeEventListener('focusin', onFocus);
+    };
   }, [open]);
 
   const mobileLink =
@@ -159,6 +180,7 @@ export function Header() {
 
   return (
     <header
+      ref={headerRef}
       data-scrolled={scrolled}
       className="sticky top-0 z-40 [view-transition-name:site-header] border-b border-white/10 bg-ink/95 backdrop-blur transition-shadow duration-(--dur-menu) ease-soft data-[scrolled=true]:shadow-lg data-[scrolled=true]:shadow-ink/30"
     >
@@ -187,6 +209,7 @@ export function Header() {
             {t.cta}
           </a>
           <button
+            ref={toggleRef}
             type="button"
             className="grid size-11 place-items-center rounded-lg border border-white/25 text-white lg:hidden"
             aria-expanded={open}

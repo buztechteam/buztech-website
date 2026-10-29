@@ -31,7 +31,6 @@ export function initReveal(): () => void {
 
   const root = document.documentElement;
   // data-in="" just stays visible; data-in="reveal" plays the arrive animation (index.css)
-  const show = (el: Element) => el.setAttribute('data-in', 'reveal');
   const pending: Element[] = [];
 
   // Whatever is on screen now (or above it, after a jump to #section) stays visible, unanimated.
@@ -41,23 +40,36 @@ export function initReveal(): () => void {
   }
   root.classList.add('reveal-ready');
 
-  // threshold 0, so elements taller than the screen still reveal. When one reveals, everything
-  // before it in the page does too: a jump (restored scroll on Back, a #link) skips past them.
+  // When one element reveals, everything before it in the page does too: a jump (restored
+  // scroll on Back, a #link) skips past them.
   let next = 0;
+  const revealUpTo = (target: Element, state: 'reveal' | '') => {
+    const upTo = pending.indexOf(target);
+    for (; next <= upTo; next++) {
+      pending[next].setAttribute('data-in', state);
+      io.unobserve(pending[next]);
+    }
+  };
+
+  // threshold 0, so elements taller than the screen still reveal
   const io = new IntersectionObserver(
     (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        const upTo = pending.indexOf(entry.target);
-        for (; next <= upTo; next++) {
-          show(pending[next]);
-          io.unobserve(pending[next]);
-        }
-      }
+      for (const entry of entries) if (entry.isIntersecting) revealUpTo(entry.target, 'reveal');
     },
     { rootMargin: '0px 0px -15% 0px', threshold: 0 },
   );
   for (const el of pending) io.observe(el);
 
-  return () => io.disconnect();
+  // Keyboard focus can land on a block still waiting near the bottom edge: show it at once,
+  // so a focused control is never invisible.
+  const onFocus = (e: FocusEvent) => {
+    const el = (e.target as Element).closest?.('[data-reveal]:not([data-in])');
+    if (el) revealUpTo(el, '');
+  };
+  document.addEventListener('focusin', onFocus);
+
+  return () => {
+    io.disconnect();
+    document.removeEventListener('focusin', onFocus);
+  };
 }

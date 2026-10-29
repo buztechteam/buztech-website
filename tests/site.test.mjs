@@ -113,6 +113,13 @@ test('reveal hidden state is gated', () => {
   assert.ok(css().includes('.reveal-ready [data-reveal]:not([data-in])'))
 })
 
+test('printing never hides unrevealed content', () => {
+  const c = css()
+  const at = c.indexOf('.reveal-ready [data-reveal]:not([data-in])')
+  const media = c.slice(c.lastIndexOf('@media', at), at)
+  assert.match(media, /^@media screen and/, `hidden state not screen-only: ${media}`)
+})
+
 test('lift effects only apply on hover-capable devices and with motion allowed', () => {
   const c = css()
   // rules that set --tw-translate-y on :hover (also group-hover's ":hover *)")
