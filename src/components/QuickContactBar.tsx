@@ -9,7 +9,7 @@ export const QUICK_BAR_SPACE = 'h-[calc(4.5rem+env(safe-area-inset-bottom))]';
 
 /* 44px icon buttons and a small CTA keep "მიიღეთ ფასი დღესვე" whole on a 375px phone. */
 const iconButton =
-  'grid size-11 shrink-0 place-items-center rounded-lg border border-white/25 text-white transition-colors hover:border-brand-teal hover:text-brand-teal';
+  'grid size-11 shrink-0 place-items-center rounded-lg border border-white/25 text-white transition-colors duration-(--dur-hover) ease-soft hover:border-brand-teal hover:text-brand-teal';
 
 /**
  * Phones only: call, WhatsApp and the price request, fixed to the bottom edge.

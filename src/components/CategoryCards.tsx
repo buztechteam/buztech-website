@@ -4,11 +4,11 @@ import type { CategoryId } from '../i18n/types';
 import { pagePath } from '../routes';
 import { revealProps } from '../motion/reveal';
 import { ArrowRight, categoryIcons } from './icons';
-import { h2Class, leadClass } from './ui';
+import { cardArrow, cardIcon, cardLink, h2Class, leadClass } from './ui';
 
 /** The whole card is clickable through its title link (stretched with ::after), so the link name stays short. */
 const cardBase =
-  'group relative flex flex-col rounded-[1.25rem] border p-6 transition-colors sm:p-8 has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-3 has-[a:focus-visible]:outline-deep-teal';
+  `group relative flex flex-col rounded-[1.25rem] border p-6 ${cardLink} sm:p-8 has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-3 has-[a:focus-visible]:outline-deep-teal`;
 const stretchedLink = 'after:absolute after:inset-0 after:rounded-[1.25rem] focus-visible:outline-none';
 
 function CategoryCard({ id, index }: { id: CategoryId; index: number }) {
@@ -30,7 +30,7 @@ function CategoryCard({ id, index }: { id: CategoryId; index: number }) {
       <div>
         <div className="flex items-center gap-3">
           <span
-            className={`grid size-12 place-items-center rounded-lg ${flagship ? 'bg-white/8 text-brand-teal' : 'bg-navy text-brand-teal'}`}
+            className={`grid size-12 place-items-center rounded-lg ${cardIcon} ${flagship ? 'bg-white/8 text-brand-teal' : 'bg-navy text-brand-teal'}`}
           >
             <Icon className="size-6" />
           </span>
@@ -62,7 +62,7 @@ function CategoryCard({ id, index }: { id: CategoryId; index: number }) {
           ))}
         </ul>
         <ArrowRight
-          className={`size-6 shrink-0 transition-transform group-hover:translate-x-1 ${flagship ? 'text-brand-teal' : 'text-deep-teal'}`}
+          className={`size-6 shrink-0 ${cardArrow} ${flagship ? 'text-brand-teal' : 'text-deep-teal'}`}
         />
       </div>
     </li>

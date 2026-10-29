@@ -1,7 +1,7 @@
 import { useLang } from '../i18n/LanguageContext';
 import { revealProps } from '../motion/reveal';
 import { Pin } from './icons';
-import { h2Class, leadClass } from './ui';
+import { cardStatic, h2Class, leadClass } from './ui';
 
 /**
  * Named clients, typeset (no logos yet). White instead of Light so it reads as a pair
@@ -25,7 +25,7 @@ export function Clients() {
               </h3>
               <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {group.items.map((item, i) => (
-                  <li key={item.name} {...revealProps(i)} className="rounded-xl border border-navy/12 bg-light p-5">
+                  <li key={item.name} {...revealProps(i)} className={`rounded-xl border border-navy/12 bg-light p-5 ${cardStatic}`}>
                     <p className="text-lg leading-snug font-extrabold">{item.name}</p>
                     <p className="mt-1 text-sm text-navy/75">{item.sector}</p>
                   </li>

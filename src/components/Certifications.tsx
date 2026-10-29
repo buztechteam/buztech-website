@@ -4,7 +4,7 @@ import { useLang } from '../i18n/LanguageContext';
 import type { CertId } from '../i18n/types';
 import { revealProps } from '../motion/reveal';
 import { certIcons, Check, Close } from './icons';
-import { btn, h2Class, leadClass } from './ui';
+import { btn, cardStatic, h2Class, leadClass } from './ui';
 
 function CertDialog({ certId, onClose }: { certId: CertId | null; onClose: () => void }) {
   const { t } = useLang();
@@ -115,7 +115,7 @@ export function Certifications() {
             const copy = t.certs.items[cert.id];
             return (
               <li key={cert.id} {...revealProps(i)}>
-                <article className="flex h-full flex-col rounded-xl border border-navy/12 bg-white p-6">
+                <article className={`flex h-full flex-col rounded-xl border border-navy/12 bg-white p-6 ${cardStatic}`}>
                   <span className="grid size-12 place-items-center rounded-lg bg-navy text-brand-teal">
                     <Icon className="size-6" />
                   </span>

@@ -1,6 +1,7 @@
 import { vendors } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import { revealProps } from '../motion/reveal';
+import { cardStaticDark } from './ui';
 
 function VendorSet({ hidden }: { hidden?: boolean }) {
   return (
@@ -37,7 +38,7 @@ export function PartnerGrid() {
             <li
               key={vendor.name}
               {...revealProps(i)}
-              className="flex min-h-28 flex-col justify-center gap-2 rounded-xl border border-white/12 bg-white/5 px-5 py-6"
+              className={`flex min-h-28 flex-col justify-center gap-2 rounded-xl border border-white/12 bg-white/5 px-5 py-6 ${cardStaticDark}`}
             >
               <span className="text-xl leading-tight font-extrabold text-white sm:text-2xl">{vendor.name}</span>
               {vendor.note && (

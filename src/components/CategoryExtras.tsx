@@ -5,7 +5,7 @@ import { pagePath, productPages } from '../routes';
 import { revealProps } from '../motion/reveal';
 import { ArrowRight, categoryIcons } from './icons';
 import { Steps } from './Services';
-import { h2Class } from './ui';
+import { cardArrow, cardIcon, cardLink, cardStaticDark, h2Class } from './ui';
 
 /** Category page: the services that come with these products, then how we work. */
 export function CategoryServices({ id }: { id: CategoryId }) {
@@ -19,7 +19,7 @@ export function CategoryServices({ id }: { id: CategoryId }) {
         <h2 {...revealProps(0)} className={`${h2Class} text-white`}>{t.services.heading}</h2>
         <ul className={`mt-8 grid gap-4 ${items.length > 2 ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
           {items.map((item, i) => (
-            <li key={item.id} {...revealProps(i)} className="rounded-xl border border-white/12 bg-white/5 p-6">
+            <li key={item.id} {...revealProps(i)} className={`rounded-xl border border-white/12 bg-white/5 p-6 ${cardStaticDark}`}>
               <h3 className="text-xl leading-snug font-extrabold text-white">{item.title}</h3>
               <p className="mt-2 text-light/85">{item.text}</p>
             </li>
@@ -51,9 +51,9 @@ export function OtherCategories({ current }: { current?: CategoryId }) {
                 <li
                   key={id}
                   {...revealProps(i)}
-                  className="group relative flex items-start gap-4 rounded-xl border border-navy/12 bg-light p-5 transition-colors hover:border-deep-teal has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-3 has-[a:focus-visible]:outline-deep-teal"
+                  className={`group relative flex items-start gap-4 rounded-xl border border-navy/12 bg-light p-5 ${cardLink} hover:border-deep-teal has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-3 has-[a:focus-visible]:outline-deep-teal`}
                 >
-                  <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-navy text-brand-teal">
+                  <span className={`grid size-11 shrink-0 place-items-center rounded-lg bg-navy text-brand-teal ${cardIcon}`}>
                     <Icon className="size-5" />
                   </span>
                   <div className="min-w-0 flex-1">
@@ -67,7 +67,7 @@ export function OtherCategories({ current }: { current?: CategoryId }) {
                     </h3>
                     <p className="mt-1 text-sm text-navy/80">{cat.summary}</p>
                   </div>
-                  <ArrowRight className="mt-1 size-5 shrink-0 text-deep-teal transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className={`mt-1 size-5 shrink-0 text-deep-teal ${cardArrow}`} />
                 </li>
               );
             })}

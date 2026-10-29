@@ -4,7 +4,7 @@ import { isProductPage, pagePath, pages } from '../routes';
 import BuzLogo from './BuzLogo';
 import { Facebook, LinkedIn, WhatsApp } from './icons';
 
-const linkClass = 'text-light/85 transition-colors hover:text-brand-teal';
+const linkClass = 'text-light/85 transition-colors duration-(--dur-hover) ease-soft hover:text-brand-teal';
 
 export function Footer() {
   const { lang, t } = useLang();
@@ -90,7 +90,7 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {site.legalName}. {f.rights}
           </p>
-          <a href={pagePath('privacy', lang)} className="underline underline-offset-4 transition-colors hover:text-brand-teal">
+          <a href={pagePath('privacy', lang)} className="underline underline-offset-4 transition-colors duration-(--dur-hover) ease-soft hover:text-brand-teal">
             {f.privacy}
           </a>
           {social.length > 0 && (
@@ -102,7 +102,7 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="grid size-11 place-items-center rounded-lg border border-white/25 text-light transition-colors hover:border-brand-teal hover:text-brand-teal"
+                    className="grid size-11 place-items-center rounded-lg border border-white/25 text-light transition-colors duration-(--dur-hover) ease-soft hover:border-brand-teal hover:text-brand-teal"
                   >
                     <Icon className="size-5" />
                   </a>

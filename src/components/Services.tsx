@@ -1,6 +1,7 @@
 import { useLang } from '../i18n/LanguageContext';
 import { revealProps } from '../motion/reveal';
 import { serviceIcons } from './icons';
+import { cardStatic } from './ui';
 
 /** Services page: all six services as cards; the title and lead sit in the page's PageIntro. */
 export function Services() {
@@ -12,7 +13,7 @@ export function Services() {
           {t.services.items.map((item, i) => {
             const Icon = serviceIcons[item.id];
             return (
-              <li key={item.id} {...revealProps(i)} className="flex flex-col rounded-xl border border-navy/12 bg-white p-6 sm:p-7">
+              <li key={item.id} {...revealProps(i)} className={`flex flex-col rounded-xl border border-navy/12 bg-white p-6 sm:p-7 ${cardStatic}`}>
                 <span className="grid size-12 place-items-center rounded-lg bg-navy text-brand-teal">
                   <Icon className="size-6" />
                 </span>

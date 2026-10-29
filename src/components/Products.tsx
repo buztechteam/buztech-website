@@ -5,7 +5,7 @@ import { inquireHref } from '../routes';
 import { BoardIllustration } from './BoardIllustration';
 import { revealProps } from '../motion/reveal';
 import { Check } from './icons';
-import { btn } from './ui';
+import { btn, cardStatic } from './ui';
 
 function SpecList({ specs, iconClass }: { specs: string[]; iconClass: string }) {
   return (
@@ -68,7 +68,7 @@ function ProductCard({ id, index }: { id: ProductId; index: number }) {
   const meta = productMeta[id];
   const copy = t.products.items[id];
   return (
-    <article {...revealProps(index)} className="flex flex-col rounded-xl border border-navy/12 bg-white p-6 transition-colors hover:border-deep-teal">
+    <article {...revealProps(index)} className={`flex flex-col rounded-xl border border-navy/12 bg-white p-6 ${cardStatic}`}>
       <h3 className="text-2xl leading-tight font-extrabold text-navy">{meta.name}</h3>
       {meta.line && <p className="mt-0.5 text-navy/75">{meta.line}</p>}
       <p className="mt-3 text-navy/85">{copy.tagline}</p>
@@ -89,7 +89,7 @@ function FeaturedProduct({ id, index }: { id: ProductId; index: number }) {
   const copy = t.products.items[id];
   const image = productImages[id];
   return (
-    <article {...revealProps(index)} className="grid overflow-hidden rounded-[1.25rem] border border-navy/12 bg-white lg:grid-cols-2">
+    <article {...revealProps(index)} className={`grid overflow-hidden rounded-[1.25rem] border border-navy/12 bg-white lg:grid-cols-2 ${cardStatic}`}>
       <div className="flex flex-col items-start p-6 sm:p-8 lg:p-10">
         <h3 className="text-3xl leading-tight font-extrabold text-navy sm:text-4xl">{meta.name}</h3>
         <p className="mt-3 max-w-[28rem] text-lg text-navy/85">{copy.tagline}</p>

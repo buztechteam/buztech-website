@@ -112,6 +112,19 @@ test('reveal hidden state is gated', () => {
   assert.ok(css().includes('.reveal-ready [data-reveal]:not([data-in])'))
 })
 
+test('lift effects only apply on hover-capable devices and with motion allowed', () => {
+  const c = css()
+  // rules that set --tw-translate-y on :hover (also group-hover's ":hover *)")
+  const lifts = [...c.matchAll(/:hover(?: \*\))?\{[^}]*--tw-translate-y:/g)]
+  assert.ok(lifts.length > 0, 'no hover lift rules found')
+  for (const m of lifts) {
+    const before = c.slice(Math.max(0, m.index - 400), m.index)
+    const rule = c.slice(Math.max(0, m.index - 80), m.index + 60)
+    assert.ok(before.includes('hover:hover'), `lift outside (hover:hover): ${rule}`)
+    assert.ok(before.includes('prefers-reduced-motion:no-preference'), `lift outside motion-safe: ${rule}`)
+  }
+})
+
 test('internal links resolve', () => {
   const broken = []
   for (const file of pages()) {
