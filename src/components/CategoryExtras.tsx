@@ -2,6 +2,7 @@ import { categoryServices } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import type { CategoryId } from '../i18n/types';
 import { pagePath, productPages } from '../routes';
+import { revealProps } from '../motion/reveal';
 import { ArrowRight, categoryIcons } from './icons';
 import { Steps } from './Services';
 import { h2Class } from './ui';
@@ -15,10 +16,10 @@ export function CategoryServices({ id }: { id: CategoryId }) {
   return (
     <section className="bg-navy py-16 text-light lg:py-20">
       <div className="container-x">
-        <h2 className={`${h2Class} text-white`}>{t.services.heading}</h2>
+        <h2 {...revealProps(0)} className={`${h2Class} text-white`}>{t.services.heading}</h2>
         <ul className={`mt-8 grid gap-4 ${items.length > 2 ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
-          {items.map((item) => (
-            <li key={item.id} className="rounded-xl border border-white/12 bg-white/5 p-6">
+          {items.map((item, i) => (
+            <li key={item.id} {...revealProps(i)} className="rounded-xl border border-white/12 bg-white/5 p-6">
               <h3 className="text-xl leading-snug font-extrabold text-white">{item.title}</h3>
               <p className="mt-2 text-light/85">{item.text}</p>
             </li>
@@ -39,16 +40,17 @@ export function OtherCategories({ current }: { current?: CategoryId }) {
   return (
     <section className="surface-light bg-white py-16 text-navy lg:py-20">
       <div className="container-x">
-        <h2 className="text-2xl leading-tight font-extrabold">{t.products.heading}</h2>
+        <h2 {...revealProps(0)} className="text-2xl leading-tight font-extrabold">{t.products.heading}</h2>
         <ul className={`mt-6 grid gap-4 ${current ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4'}`}>
           {productPages
             .filter((id) => id !== current)
-            .map((id) => {
+            .map((id, i) => {
               const Icon = categoryIcons[id];
               const cat = t.products.categories[id];
               return (
                 <li
                   key={id}
+                  {...revealProps(i)}
                   className="group relative flex items-start gap-4 rounded-xl border border-navy/12 bg-light p-5 transition-colors hover:border-deep-teal has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-3 has-[a:focus-visible]:outline-deep-teal"
                 >
                   <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-navy text-brand-teal">

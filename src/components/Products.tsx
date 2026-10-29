@@ -3,6 +3,7 @@ import { useLang } from '../i18n/LanguageContext';
 import type { CategoryId, ProductId } from '../i18n/types';
 import { inquireHref } from '../routes';
 import { BoardIllustration } from './BoardIllustration';
+import { revealProps } from '../motion/reveal';
 import { Check } from './icons';
 import { btn } from './ui';
 
@@ -24,7 +25,7 @@ function FlagshipM365() {
   const { lang, t } = useLang();
   const copy = t.products.items.m365;
   return (
-    <article className="grid gap-8 rounded-[1.25rem] bg-navy p-6 text-light sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:p-10">
+    <article {...revealProps(0)} className="grid gap-8 rounded-[1.25rem] bg-navy p-6 text-light sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:p-10">
       <div className="flex flex-col items-start">
         <span className="rounded-md bg-brand-teal px-3 py-1 text-sm font-extrabold text-ink">
           {t.products.flagship}
@@ -62,12 +63,12 @@ function FlagshipM365() {
   );
 }
 
-function ProductCard({ id }: { id: ProductId }) {
+function ProductCard({ id, index }: { id: ProductId; index: number }) {
   const { lang, t } = useLang();
   const meta = productMeta[id];
   const copy = t.products.items[id];
   return (
-    <article className="flex flex-col rounded-xl border border-navy/12 bg-white p-6 transition-colors hover:border-deep-teal">
+    <article {...revealProps(index)} className="flex flex-col rounded-xl border border-navy/12 bg-white p-6 transition-colors hover:border-deep-teal">
       <h3 className="text-2xl leading-tight font-extrabold text-navy">{meta.name}</h3>
       {meta.line && <p className="mt-0.5 text-navy/75">{meta.line}</p>}
       <p className="mt-3 text-navy/85">{copy.tagline}</p>
@@ -82,13 +83,13 @@ function ProductCard({ id }: { id: ProductId }) {
 }
 
 /** Wide card for a category with a single product. */
-function FeaturedProduct({ id }: { id: ProductId }) {
+function FeaturedProduct({ id, index }: { id: ProductId; index: number }) {
   const { lang, t } = useLang();
   const meta = productMeta[id];
   const copy = t.products.items[id];
   const image = productImages[id];
   return (
-    <article className="grid overflow-hidden rounded-[1.25rem] border border-navy/12 bg-white lg:grid-cols-2">
+    <article {...revealProps(index)} className="grid overflow-hidden rounded-[1.25rem] border border-navy/12 bg-white lg:grid-cols-2">
       <div className="flex flex-col items-start p-6 sm:p-8 lg:p-10">
         <h3 className="text-3xl leading-tight font-extrabold text-navy sm:text-4xl">{meta.name}</h3>
         <p className="mt-3 max-w-[28rem] text-lg text-navy/85">{copy.tagline}</p>
@@ -126,13 +127,17 @@ function CategoryPanel({ id }: { id: CategoryId }) {
       <div className={gridClass[id]}>
         {category.products
           .filter((product) => !(id === 'licensing' && product === 'm365'))
-          .map((product) =>
-            id === 'workspaces' ? <FeaturedProduct key={product} id={product} /> : <ProductCard key={product} id={product} />,
+          .map((product, i) =>
+            id === 'workspaces' ? (
+              <FeaturedProduct key={product} id={product} index={i} />
+            ) : (
+              <ProductCard key={product} id={product} index={i} />
+            ),
           )}
       </div>
 
       {id === 'servers' && (
-        <ul className="mt-5 flex flex-wrap gap-x-8 gap-y-3 rounded-xl border border-navy/12 bg-white px-6 py-4 font-extrabold">
+        <ul {...revealProps(0)} className="mt-5 flex flex-wrap gap-x-8 gap-y-3 rounded-xl border border-navy/12 bg-white px-6 py-4 font-extrabold">
           {t.products.serversNote.map((note) => (
             <li key={note} className="flex items-center gap-2.5">
               <Check className="size-4 shrink-0 text-deep-teal" strokeWidth={3} />

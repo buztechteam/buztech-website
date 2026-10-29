@@ -61,6 +61,22 @@
   }
 }
 
+/*
+  Scroll reveals: hidden only under .reveal-ready, which src/motion/reveal.ts adds after
+  marking everything already on screen as [data-in]. Without it nothing is hidden.
+  An animation, not a transition, so it never fights a card's own hover transitions.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready [data-reveal]:not([data-in]) {
+    opacity: 0;
+    transform: translateY(22px) scale(0.98);
+  }
+  .reveal-ready [data-reveal][data-in='reveal'] {
+    animation: arrive var(--dur-arrive) var(--ease-soft) both;
+    animation-delay: calc(var(--i, 0) * var(--stagger));
+  }
+}
+
 /* Page changes cross-fade; the header and the phone bar keep their place. */
 @view-transition {
   navigation: auto;

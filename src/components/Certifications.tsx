@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { certs } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import type { CertId } from '../i18n/types';
+import { revealProps } from '../motion/reveal';
 import { certIcons, Check, Close } from './icons';
 import { btn, h2Class, leadClass } from './ui';
 
@@ -105,15 +106,15 @@ export function Certifications() {
   return (
     <section id="certifications" className="surface-light bg-light py-20 text-navy lg:py-28">
       <div className="container-x">
-        <h2 className={h2Class}>{t.certs.heading}</h2>
-        <p className={`${leadClass} text-navy/85`}>{t.certs.lead}</p>
+        <h2 {...revealProps(0)} className={h2Class}>{t.certs.heading}</h2>
+        <p {...revealProps(1)} className={`${leadClass} text-navy/85`}>{t.certs.lead}</p>
 
         <ul className="mt-12 grid gap-5 md:grid-cols-3">
-          {certs.map((cert) => {
+          {certs.map((cert, i) => {
             const Icon = certIcons[cert.id];
             const copy = t.certs.items[cert.id];
             return (
-              <li key={cert.id}>
+              <li key={cert.id} {...revealProps(i)}>
                 <article className="flex h-full flex-col rounded-xl border border-navy/12 bg-white p-6">
                   <span className="grid size-12 place-items-center rounded-lg bg-navy text-brand-teal">
                     <Icon className="size-6" />

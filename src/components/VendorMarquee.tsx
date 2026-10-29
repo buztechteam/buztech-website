@@ -1,5 +1,6 @@
 import { vendors } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
+import { revealProps } from '../motion/reveal';
 
 function VendorSet({ hidden }: { hidden?: boolean }) {
   return (
@@ -27,14 +28,15 @@ export function PartnerGrid() {
   return (
     <section className="border-y border-white/10 bg-ink py-16 lg:py-20">
       <div className="container-x">
-        <h2 className="text-[clamp(1.75rem,1.1rem+2.2vw,2.75rem)] leading-[1.15] font-extrabold tracking-tight text-white">
+        <h2 {...revealProps(0)} className="text-[clamp(1.75rem,1.1rem+2.2vw,2.75rem)] leading-[1.15] font-extrabold tracking-tight text-white">
           {t.partners.heading}
         </h2>
-        <p className="mt-4 max-w-[38rem] text-lg leading-relaxed text-light/80">{t.partners.lead}</p>
+        <p {...revealProps(1)} className="mt-4 max-w-[38rem] text-lg leading-relaxed text-light/80">{t.partners.lead}</p>
         <ul className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-          {vendors.map((vendor) => (
+          {vendors.map((vendor, i) => (
             <li
               key={vendor.name}
+              {...revealProps(i)}
               className="flex min-h-28 flex-col justify-center gap-2 rounded-xl border border-white/12 bg-white/5 px-5 py-6"
             >
               <span className="text-xl leading-tight font-extrabold text-white sm:text-2xl">{vendor.name}</span>

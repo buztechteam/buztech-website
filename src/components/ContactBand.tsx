@@ -1,6 +1,7 @@
 import { site } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import { pagePath } from '../routes';
+import { revealProps } from '../motion/reveal';
 import { Phone, WhatsApp } from './icons';
 import { btn } from './ui';
 
@@ -10,13 +11,13 @@ export function ContactBand() {
   return (
     <section aria-labelledby="contact-band-title" className="surface-teal bg-brand-teal text-ink">
       <div className="container-x flex flex-col gap-8 py-14 lg:flex-row lg:items-center lg:justify-between">
-        <div>
+        <div {...revealProps(0)}>
           <h2 id="contact-band-title" className="text-[clamp(1.6rem,1.1rem+1.6vw,2.25rem)] leading-tight font-extrabold tracking-tight">
             {t.contact.heading}
           </h2>
           <p className="mt-3 max-w-[34rem] text-lg leading-relaxed">{t.contact.lead}</p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div {...revealProps(1)} className="flex flex-wrap items-center gap-3">
           <a href={pagePath('contact', lang)} className={btn('navyOnTeal')}>
             {t.cta}
           </a>

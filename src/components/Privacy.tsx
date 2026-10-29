@@ -1,5 +1,6 @@
 import { site } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
+import { revealProps } from '../motion/reveal';
 
 /** Body of the privacy page; the title and intro sit in the page's PageIntro. */
 export function Privacy() {
@@ -9,7 +10,7 @@ export function Privacy() {
     <section className="surface-light bg-light py-16 text-navy lg:py-20">
       <div className="container-x max-w-[48rem]">
         {p.sections.map((s) => (
-          <section key={s.heading} className="mt-10 first:mt-0">
+          <section key={s.heading} {...revealProps(0)} className="mt-10 first:mt-0">
             <h2 className="text-2xl leading-tight font-extrabold">{s.heading}</h2>
             <p className="mt-3 text-lg text-navy/85">{s.body}</p>
           </section>

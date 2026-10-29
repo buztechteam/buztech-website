@@ -2,6 +2,7 @@ import { useLang } from '../i18n/LanguageContext';
 import { pagePath } from '../routes';
 import { Check } from './icons';
 import { HeroStack } from './HeroStack';
+import { arriveProps } from '../motion/reveal';
 import { btn } from './ui';
 
 export function Hero() {
@@ -20,12 +21,12 @@ export function Hero() {
 
       <div className="container-x grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-[1.12fr_0.88fr] lg:py-24">
         <div>
-          <h1 className="text-[clamp(2rem,1rem+2.7vw,3.375rem)] leading-[1.15] font-extrabold tracking-tight text-balance text-white">
+          <h1 {...arriveProps(0)} className="text-[clamp(2rem,1rem+2.7vw,3.375rem)] leading-[1.15] font-extrabold tracking-tight text-balance text-white">
             {t.hero.title}
           </h1>
-          <p className="mt-6 max-w-[34rem] text-lg leading-relaxed text-light sm:text-xl">{t.hero.lead}</p>
+          <p {...arriveProps(1)} className="mt-6 max-w-[34rem] text-lg leading-relaxed text-light sm:text-xl">{t.hero.lead}</p>
 
-          <ul className="mt-8 flex flex-wrap gap-x-7 gap-y-3 font-extrabold text-white">
+          <ul {...arriveProps(2)} className="mt-8 flex flex-wrap gap-x-7 gap-y-3 font-extrabold text-white">
             {t.hero.points.map((point) => (
               <li key={point} className="flex items-center gap-2.5">
                 <Check className="size-5 shrink-0 text-light" strokeWidth={3} />
@@ -34,7 +35,7 @@ export function Hero() {
             ))}
           </ul>
 
-          <div className="mt-10 flex flex-wrap items-center gap-4">
+          <div {...arriveProps(3)} className="mt-10 flex flex-wrap items-center gap-4">
             <a href={pagePath('contact', lang)} className={btn('primary')}>
               {t.cta}
             </a>

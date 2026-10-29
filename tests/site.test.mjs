@@ -84,6 +84,34 @@ test('reduced motion and page transitions are declared', () => {
   assert.ok(reduced.some((block) => /navigation:\s*none/.test(block)), 'no navigation:none under reduced motion')
 })
 
+const count = (text, re) => (text.match(re) ?? []).length
+
+test('every page has an arrival at its top', () => {
+  for (const file of pages()) {
+    assert.ok(count(readFileSync(file, 'utf8'), /\sdata-arrive[=\s>]/g) >= 1, `${rel(file)} has no data-arrive`)
+  }
+})
+
+test('content below the top can reveal', () => {
+  assert.ok(count(html('index.html'), /\sdata-reveal[=\s>]/g) >= 8, 'home has fewer than 8 data-reveal')
+  for (const lang of ['', 'en/']) {
+    const page = html(`${lang}contact/index.html`)
+    const form = page.slice(page.indexOf('<form'), page.indexOf('</form>'))
+    assert.ok(form.length > 0, `${lang}contact has no <form>`)
+    assert.equal(count(form, /\sdata-reveal[=\s>]/g), 0, `${lang}contact form has data-reveal`)
+  }
+})
+
+test('no reveal state is baked into HTML', () => {
+  for (const file of pages()) {
+    assert.doesNotMatch(readFileSync(file, 'utf8'), /data-in\b|reveal-ready/, `${rel(file)} has reveal state`)
+  }
+})
+
+test('reveal hidden state is gated', () => {
+  assert.ok(css().includes('.reveal-ready [data-reveal]:not([data-in])'))
+})
+
 test('internal links resolve', () => {
   const broken = []
   for (const file of pages()) {

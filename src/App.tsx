@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { brandNames } from './config/site';
 import { CategoryCards } from './components/CategoryCards';
 import { CategoryServices, OtherCategories } from './components/CategoryExtras';
@@ -17,6 +17,7 @@ import { Services, StepsSection } from './components/Services';
 import { Facts, TrustStrip } from './components/TrustStrip';
 import { PartnerGrid, VendorMarquee } from './components/VendorMarquee';
 import { useLang } from './i18n/LanguageContext';
+import { initReveal } from './motion/reveal';
 import type { Dict, Lang, PageId } from './i18n/types';
 import { btn } from './components/ui';
 import { isProductPage, pagePath } from './routes';
@@ -95,6 +96,8 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
 export default function App() {
   const { lang, page, t } = useLang();
   const quickBar = page !== 'contact';
+  // after hydration, so server and client markup match
+  useEffect(() => initReveal(), []);
   return (
     <>
       <a

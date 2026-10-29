@@ -2,6 +2,7 @@ import { brandNames, categories } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import type { CategoryId } from '../i18n/types';
 import { pagePath } from '../routes';
+import { revealProps } from '../motion/reveal';
 import { ArrowRight, categoryIcons } from './icons';
 import { h2Class, leadClass } from './ui';
 
@@ -10,7 +11,7 @@ const cardBase =
   'group relative flex flex-col rounded-[1.25rem] border p-6 transition-colors sm:p-8 has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-3 has-[a:focus-visible]:outline-deep-teal';
 const stretchedLink = 'after:absolute after:inset-0 after:rounded-[1.25rem] focus-visible:outline-none';
 
-function CategoryCard({ id }: { id: CategoryId }) {
+function CategoryCard({ id, index }: { id: CategoryId; index: number }) {
   const { lang, t } = useLang();
   const Icon = categoryIcons[id];
   const cat = t.products.categories[id];
@@ -19,6 +20,7 @@ function CategoryCard({ id }: { id: CategoryId }) {
 
   return (
     <li
+      {...revealProps(index)}
       className={`${cardBase} ${
         flagship
           ? 'border-navy bg-navy text-light hover:border-brand-teal lg:col-span-3 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:p-10'
@@ -73,11 +75,11 @@ export function CategoryCards() {
   return (
     <section id="products" className="surface-light bg-light py-20 text-navy lg:py-24">
       <div className="container-x">
-        <h2 className={h2Class}>{t.products.heading}</h2>
-        <p className={`${leadClass} text-navy/85`}>{t.products.lead}</p>
+        <h2 {...revealProps(0)} className={h2Class}>{t.products.heading}</h2>
+        <p {...revealProps(1)} className={`${leadClass} text-navy/85`}>{t.products.lead}</p>
         <ul className="mt-10 grid gap-5 lg:grid-cols-3">
-          {categories.map((cat) => (
-            <CategoryCard key={cat.id} id={cat.id} />
+          {categories.map((cat, i) => (
+            <CategoryCard key={cat.id} id={cat.id} index={i} />
           ))}
         </ul>
       </div>

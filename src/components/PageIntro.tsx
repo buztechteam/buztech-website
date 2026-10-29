@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { useLang } from '../i18n/LanguageContext';
+import { arriveProps } from '../motion/reveal';
 import { isProductPage, pagePath } from '../routes';
 
 /**
@@ -28,7 +29,7 @@ export function PageIntro({
         className="absolute inset-0 -z-10 from-navy/80 via-navy/45 to-navy/10 max-lg:bg-linear-to-b lg:bg-linear-to-r"
       />
       <div className="container-x py-12 sm:py-16">
-        <nav aria-label={t.a11y.breadcrumb}>
+        <nav {...arriveProps(0)} aria-label={t.a11y.breadcrumb}>
           <ol className="flex flex-wrap items-center gap-x-2 text-sm text-light/85">
             {trail.map((label, index) => (
               <li key={label} className="flex items-center gap-2">
@@ -47,12 +48,12 @@ export function PageIntro({
             </li>
           </ol>
         </nav>
-        <h1 className="mt-4 text-[clamp(2rem,1.2rem+2.4vw,3.25rem)] leading-[1.15] font-extrabold tracking-tight text-balance">
+        <h1 {...arriveProps(1)} className="mt-4 text-[clamp(2rem,1.2rem+2.4vw,3.25rem)] leading-[1.15] font-extrabold tracking-tight text-balance">
           {title}
         </h1>
-        {lead && <p className="mt-4 max-w-[40rem] text-lg leading-relaxed text-light">{lead}</p>}
+        {lead && <p {...arriveProps(2)} className="mt-4 max-w-[40rem] text-lg leading-relaxed text-light">{lead}</p>}
         {chips && chips.length > 0 && (
-          <ul className="mt-6 flex flex-wrap gap-2">
+          <ul {...arriveProps(3)} className="mt-6 flex flex-wrap gap-2">
             {chips.map((chip) => (
               <li key={chip} className="rounded-md border border-white/40 bg-navy/30 px-3 py-1.5 text-sm font-extrabold text-white">
                 {chip}
@@ -60,7 +61,7 @@ export function PageIntro({
             ))}
           </ul>
         )}
-        {children}
+        {children && <div {...arriveProps(4)}>{children}</div>}
       </div>
     </section>
   );

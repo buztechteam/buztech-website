@@ -1,4 +1,5 @@
 import { useLang } from '../i18n/LanguageContext';
+import { revealProps } from '../motion/reveal';
 import { serviceIcons } from './icons';
 
 /** Services page: all six services as cards; the title and lead sit in the page's PageIntro. */
@@ -8,10 +9,10 @@ export function Services() {
     <section id="services" className="surface-light bg-light py-16 text-navy lg:py-20">
       <div className="container-x">
         <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {t.services.items.map((item) => {
+          {t.services.items.map((item, i) => {
             const Icon = serviceIcons[item.id];
             return (
-              <li key={item.id} className="flex flex-col rounded-xl border border-navy/12 bg-white p-6 sm:p-7">
+              <li key={item.id} {...revealProps(i)} className="flex flex-col rounded-xl border border-navy/12 bg-white p-6 sm:p-7">
                 <span className="grid size-12 place-items-center rounded-lg bg-navy text-brand-teal">
                   <Icon className="size-6" />
                 </span>
@@ -37,12 +38,13 @@ export function Steps({ level = 3 }: { level?: 2 | 3 }) {
   const StepTitle = level === 2 ? 'h3' : 'h4';
   return (
     <>
-      <Title className="text-2xl font-extrabold text-white">{s.stepsHeading}</Title>
+      <Title {...revealProps(0)} className="text-2xl font-extrabold text-white">{s.stepsHeading}</Title>
       {/* The one place numbers are right: this really is a sequence. */}
       <ol className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
         {s.steps.map((step, index) => (
           <li
             key={step.title}
+            {...revealProps(index)}
             className="relative lg:before:absolute lg:before:top-[1.125rem] lg:before:left-12 lg:before:h-px lg:before:w-[calc(100%-2rem)] lg:before:bg-white/20 lg:last:before:hidden"
           >
             <span className="grid size-9 place-items-center rounded-full bg-brand-teal font-extrabold text-ink">
