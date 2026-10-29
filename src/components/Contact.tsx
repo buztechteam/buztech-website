@@ -14,6 +14,11 @@ interface Errors {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/* Field limits. maxLength stops typing and pasting past them; the submit handler re-checks. */
+const MAX_COMPANY = 120;
+const MAX_EMAIL = 254;
+const MAX_MESSAGE = 2000;
+
 const fieldClass =
   'mt-2 w-full rounded-lg border border-navy/30 bg-white px-4 py-3 text-base text-navy placeholder:text-navy/55 aria-invalid:border-2 aria-invalid:border-navy';
 
@@ -70,15 +75,15 @@ export function Contact({ intro = true }: { intro?: boolean }) {
       return;
     }
 
-    const company = String(data.get('company') ?? '').trim();
+    const company = String(data.get('company') ?? '').trim().slice(0, MAX_COMPANY);
     const email = String(data.get('email') ?? '').trim();
-    const message = String(data.get('message') ?? '').trim();
+    const message = String(data.get('message') ?? '').trim().slice(0, MAX_MESSAGE);
     const productName = product === 'other' ? 'Other' : product;
 
     const next: Errors = {};
     if (!company) next.company = c.required;
     if (!email) next.email = c.required;
-    else if (!EMAIL_PATTERN.test(email)) next.email = c.invalidEmail;
+    else if (email.length > MAX_EMAIL || !EMAIL_PATTERN.test(email)) next.email = c.invalidEmail;
     setErrors(next);
     if (next.company) {
       companyRef.current?.focus();
@@ -184,6 +189,7 @@ export function Contact({ intro = true }: { intro?: boolean }) {
                 name="company"
                 type="text"
                 autoComplete="organization"
+                maxLength={MAX_COMPANY}
                 required
                 placeholder={c.placeholders.company}
                 aria-invalid={errors.company ? true : undefined}
@@ -204,6 +210,7 @@ export function Contact({ intro = true }: { intro?: boolean }) {
                 type="email"
                 autoComplete="email"
                 inputMode="email"
+                maxLength={MAX_EMAIL}
                 required
                 placeholder={c.placeholders.email}
                 aria-invalid={errors.email ? true : undefined}
@@ -247,6 +254,7 @@ export function Contact({ intro = true }: { intro?: boolean }) {
               id="message"
               name="message"
               rows={4}
+              maxLength={MAX_MESSAGE}
               placeholder={c.placeholders.message}
               className={`${fieldClass} resize-y`}
             />

@@ -55,6 +55,22 @@ On phones a quick-contact bar (call, WhatsApp, price request) stays at the botto
 Cloudflare Workers Builds runs `npm run build`, then `npx wrangler deploy`, which uploads `dist/` as static assets
 using `wrangler.jsonc`. Keep that file: without it Wrangler auto-configures the project, adds the Cloudflare Vite
 plugin and rebuilds, and the pre-render step then fails (`Cannot find module .../dist-ssr/entry-server.js`).
+Wrangler is pinned in `devDependencies`, so deploys don't pull a new version on every build.
+
+`npm test` builds the site and checks the output in `dist/`: one h1 per page, links that resolve, the motion
+gating, the security headers and the form limits.
+
+## Security headers
+
+`public/_headers` sends a Content-Security-Policy and the usual protective headers with every response. The policy
+allows only what the site uses: its own files, Web3Forms (the price form) and Cloudflare Web Analytics.
+
+- The inline script at the top of `index.html` (it turns animation on) is allowed by its hash. If you change it, update
+  the `sha256-…` value in `_headers`; `npm test` fails until they match.
+- A `VITE_FORM_ENDPOINT` on another domain must be added to `connect-src`, or the browser blocks the request.
+- HSTS is not sent yet: turn it on in Cloudflare once the custom domain is live.
+- After a deploy, open the live site's console: a CSP error there usually means a Cloudflare feature (Rocket Loader,
+  email obfuscation) injected a script. Turn that feature off or allow it in the policy.
 
 ## How the brand rules are enforced
 
@@ -93,6 +109,7 @@ Set these in Cloudflare under Settings > Variables and Secrets (build variables)
 | Variable | Effect |
 | --- | --- |
 | `VITE_WEB3FORMS_KEY` | form submissions delivered by email through Web3Forms |
+| `VITE_FORM_ENDPOINT` | alternative to Web3Forms: any endpoint that accepts a JSON POST; add its domain to `connect-src` in `public/_headers` |
 | `VITE_SITE_URL` | per-page canonical and hreflang links, og:url, og:image, `sitemap.xml` with all 18 addresses, sitemap line in `robots.txt` (e.g. `https://buztech.ge`) |
 | `VITE_CF_ANALYTICS_TOKEN` | Cloudflare Web Analytics (cookie-free); the privacy text mentions it automatically |
 

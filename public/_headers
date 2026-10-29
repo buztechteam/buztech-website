@@ -1,0 +1,15 @@
+# Security headers for every response (Cloudflare Workers static assets read this file).
+#
+# Content-Security-Policy allows exactly what the site uses:
+# - script-src: our own bundle, the inline motion gate in index.html (by hash: if that script
+#   changes, update the hash; `npm test` checks it), and Cloudflare Web Analytics.
+# - connect-src: the price form (Web3Forms) and analytics. A VITE_FORM_ENDPOINT on another
+#   domain must be added here too.
+# - style-src 'unsafe-inline': React style attributes carry CSS variables (--i, --d).
+# No HSTS here: set it in Cloudflare once the custom domain is live.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-CFUZQLULwLPlcSFIxnzaIHgooH/e1fACiz/OQxBlvoM=' https://static.cloudflareinsights.com; connect-src 'self' https://api.web3forms.com https://cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

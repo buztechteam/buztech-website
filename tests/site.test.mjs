@@ -1,6 +1,7 @@
 // Assertions over the built site in dist/. Run with `npm test` (builds first).
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
+import { createHash } from 'node:crypto'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -140,6 +141,73 @@ test('menus are always rendered, closed by visibility', () => {
 
 test('header can show a shadow', () => {
   assert.match(css(), /\[data-scrolled=true\][^{]*\{[^}]*box-shadow/)
+})
+
+const headersBlock = () => {
+  const lines = html('_headers').split(/\r?\n/)
+  const start = lines.findIndex((l) => l.trim() === '/*')
+  assert.ok(start >= 0, '_headers has no /* block')
+  const block = []
+  for (const line of lines.slice(start + 1)) {
+    if (!/^\s/.test(line)) break
+    block.push(line.trim())
+  }
+  return block
+}
+const csp = () => headersBlock().find((l) => l.startsWith('Content-Security-Policy:')) ?? ''
+
+test('security headers are published', () => {
+  const block = headersBlock().join('\n')
+  for (const h of [
+    'X-Content-Type-Options: nosniff',
+    'Referrer-Policy: strict-origin-when-cross-origin',
+    'X-Frame-Options: DENY',
+  ]) {
+    assert.ok(block.includes(h), `missing ${h}`)
+  }
+  const permissions = headersBlock().find((l) => l.startsWith('Permissions-Policy:')) ?? ''
+  for (const p of ['camera=()', 'microphone=()', 'geolocation=()']) assert.ok(permissions.includes(p), `Permissions-Policy lacks ${p}`)
+  for (const d of [
+    "default-src 'self'",
+    "frame-ancestors 'none'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    'https://api.web3forms.com',
+    'https://static.cloudflareinsights.com',
+    'https://cloudflareinsights.com',
+  ]) {
+    assert.ok(csp().includes(d), `CSP lacks ${d}`)
+  }
+})
+
+test('CSP allows exactly the inline gate script', () => {
+  const gate = html('index.html').match(/<script>([\s\S]*?)<\/script>/)?.[1]
+  assert.ok(gate, 'no inline gate script in index.html')
+  const hash = createHash('sha256').update(gate).digest('base64')
+  assert.ok(csp().includes(`'sha256-${hash}'`), `CSP lacks 'sha256-${hash}'`)
+  for (const file of pages()) {
+    for (const [, attrs, body] of readFileSync(file, 'utf8').matchAll(/<script(\s[^>]*)?>([\s\S]*?)<\/script>/g)) {
+      if (/\ssrc=/.test(attrs ?? '') || /type="application\/ld\+json"/.test(attrs ?? '')) continue
+      assert.equal(body, gate, `${rel(file)}: unexpected inline script`)
+    }
+  }
+})
+
+test('form fields are length-limited', () => {
+  for (const lang of ['', 'en/']) {
+    const page = html(`${lang}contact/index.html`)
+    for (const [id, max] of [['company', 120], ['email', 254], ['message', 2000]]) {
+      const tag = page.match(new RegExp(`<(?:input|textarea)[^>]*\\sid="${id}"[^>]*>`))?.[0] ?? ''
+      // React renders maxLength="…"; HTML attribute names are case-insensitive
+      assert.match(tag, new RegExp(`\\smaxlength="${max}"`, 'i'), `${lang}contact #${id} lacks maxlength=${max}`)
+    }
+  }
+})
+
+test('wrangler is pinned', () => {
+  const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
+  assert.equal(pkg.devDependencies?.wrangler, '4.154.0')
 })
 
 test('internal links resolve', () => {
