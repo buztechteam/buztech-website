@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
     "preview": "vite preview",
+    "test": "npm run build && node --test \"tests/**/*.test.mjs\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
