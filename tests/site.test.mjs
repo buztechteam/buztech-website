@@ -113,6 +113,21 @@ test('reveal hidden state is gated', () => {
   assert.ok(css().includes('.reveal-ready [data-reveal]:not([data-in])'))
 })
 
+test('the footer year is fixed at build time', () => {
+  // computed in the browser it would differ from the pre-rendered year after New Year (hydration mismatch)
+  const js = walk(join(dist, 'assets'))
+    .filter((f) => f.endsWith('.js'))
+    .map((f) => readFileSync(f, 'utf8'))
+    .join('\n')
+  assert.doesNotMatch(js, /getFullYear\(/)
+  const year = new Date().getFullYear()
+  for (const file of pages()) {
+    // React separates adjacent text with <!-- --> markers
+    const text = readFileSync(file, 'utf8').replaceAll('<!-- -->', '')
+    assert.ok(text.includes(`© ${year} `), `${rel(file)}: no © ${year}`)
+  }
+})
+
 test('nothing loops', () => {
   assert.doesNotMatch(css(), /\binfinite\b/)
   const home = html('index.html')

@@ -51,5 +51,8 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react(), tailwindcss(), siteMeta(env)],
     build: { target: 'es2022' },
+    // The footer year, fixed when the site is built so the pre-rendered page and the browser agree
+    // (a year read in the browser would differ from the built HTML after New Year: a hydration mismatch).
+    define: { __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()) },
   };
 });

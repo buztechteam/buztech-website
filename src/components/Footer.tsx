@@ -88,7 +88,7 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="container-x flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-6 text-sm text-light/75">
           <p>
-            © {new Date().getFullYear()} {site.legalName}. {f.rights}
+            © {__BUILD_YEAR__} {site.legalName}. {f.rights}
           </p>
           <a href={pagePath('privacy', lang)} className="underline underline-offset-4 transition-colors duration-(--dur-hover) ease-soft hover:text-brand-teal">
             {f.privacy}
