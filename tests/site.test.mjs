@@ -42,8 +42,9 @@ function targetFile(path) {
 
 const ids = (page) => new Set([...page.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]))
 
-test('20 pages are built', () => {
-  assert.equal(pages().length, 20)
+test('18 pages are built', () => {
+  // 8 pages in Georgian and English, plus the two 404 pages
+  assert.equal(pages().length, 18)
 })
 
 test('every built page has exactly one h1', () => {
@@ -130,9 +131,6 @@ test('the footer year is fixed at build time', () => {
 
 test('nothing loops', () => {
   assert.doesNotMatch(css(), /\binfinite\b/)
-  const home = html('index.html')
-  const partners = home.slice(home.indexOf('id="partners"'), home.indexOf('</section>', home.indexOf('id="partners"')))
-  assert.equal(count(partners, /<li[\s>]/g), count(html('about/index.html'), /<li[^>]*min-h-28/g), 'home lists each partner once')
 })
 
 test('printing never hides unrevealed content', () => {
@@ -258,4 +256,85 @@ test('internal links resolve', () => {
     }
   }
   assert.deepEqual(broken, [])
+})
+
+/** Visible text and attribute values of a built page, without tags (so class names never match). */
+const text = (page) => page.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, ' ').replace(/<[^>]+>/g, ' ')
+
+test('retired addresses redirect to built pages', () => {
+  const rules = html('_redirects')
+    .split(/\r?\n/)
+    .filter((line) => line.trim() && !line.trim().startsWith('#'))
+    .map((line) => line.trim().split(/\s+/))
+  const from = new Map(rules.map(([source, target, status]) => [source, { target, status }]))
+  for (const lang of ['', '/en']) {
+    for (const [old, now] of [['licensing', 'microsoft-365'], ['servers', 'it-equipment'], ['networking', 'it-equipment'], ['workspaces', 'ideahub']]) {
+      for (const source of [`${lang}/${old}`, `${lang}/${old}/`]) {
+        const rule = from.get(source)
+        assert.ok(rule, `no redirect for ${source}`)
+        assert.equal(rule.target, `${lang}/${now}/`, `${source} goes to ${rule.target}`)
+        assert.equal(rule.status, '301', `${source} is not permanent`)
+        assert.ok(existsSync(join(dist, targetFile(rule.target))), `${source} → ${rule.target}, which is not built`)
+      }
+    }
+  }
+})
+
+test('only Microsoft and Huawei are named', () => {
+  // the owner has no approval to name other vendors or distributors; the Microsoft wording is "CSP partner"
+  const unapproved = /\b(Dell|HPE|Lenovo|Zyxel|TP-Link|MUK|ERC|PowerEdge|ProLiant|ThinkSystem|ThinkPad|Solution Partner)\b/
+  const js = walk(join(dist, 'assets')).filter((f) => f.endsWith('.js'))
+  for (const file of [...pages(), ...js]) {
+    const found = readFileSync(file, 'utf8').match(unapproved)
+    assert.equal(found, null, `${rel(file)} names ${found?.[0]}`)
+  }
+})
+
+test('no prices or reply times are promised', () => {
+  for (const file of pages()) {
+    const found = text(readFileSync(file, 'utf8')).match(/დღესვე|\btoday\b|24 hours|same day|\d+\s?(₾|GEL|USD|EUR|\$)|[₾$€]\s?\d/i)
+    assert.equal(found, null, `${rel(file)}: "${found?.[0]}"`)
+  }
+})
+
+test('one CTA wording in each language', () => {
+  assert.ok(html('index.html').includes('მიიღეთ ფასი'), 'Georgian home lacks მიიღეთ ფასი')
+  assert.ok(html('en/index.html').includes('Get a price'), 'English home lacks Get a price')
+})
+
+test('headings never skip a level', () => {
+  for (const file of pages()) {
+    let previous = 0
+    for (const [, level] of readFileSync(file, 'utf8').matchAll(/<h([1-6])[\s>]/g)) {
+      const n = Number(level)
+      assert.ok(n <= previous + 1, `${rel(file)}: <h${n}> after <h${previous}>`)
+      previous = n
+    }
+  }
+})
+
+test('"How we work" appears only on Services', () => {
+  for (const file of pages()) {
+    const page = readFileSync(file, 'utf8')
+    const steps = count(page, /How we work|როგორ ვმუშაობთ/g)
+    assert.equal(steps, /(^|\/)services\/index\.html$/.test(rel(file)) ? 1 : 0, `${rel(file)} has ${steps} "How we work"`)
+  }
+})
+
+test('every price link pre-selects an option of the form', () => {
+  for (const lang of ['', 'en/']) {
+    const options = new Set([...html(`${lang}contact/index.html`).matchAll(/<option value="([^"]*)"/g)].map((m) => m[1]))
+    for (const file of pages().filter((f) => rel(f).startsWith(lang) && (lang || !rel(f).startsWith('en/')))) {
+      for (const [, product] of readFileSync(file, 'utf8').matchAll(/\?product=([^"&#]+)/g)) {
+        assert.ok(options.has(product), `${rel(file)}: ?product=${product} is not a form option`)
+      }
+    }
+  }
+})
+
+test('placeholders keep text contrast', () => {
+  // Navy at 70% or more on white stays above 4.5:1 (Tailwind's own base rule is overridden by these classes)
+  const rules = [...css().matchAll(/\.placeholder\\:[^{]*::placeholder\{color:[^}]*?(\d+)%/g)]
+  assert.ok(rules.length > 0, 'no placeholder colour found')
+  for (const [rule, pct] of rules) assert.ok(Number(pct) >= 70, `faint placeholder: ${rule}`)
 })

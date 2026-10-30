@@ -13,7 +13,7 @@ export function Footer() {
     .filter((page) => page !== 'privacy')
     .map((page) => ({
       page,
-      label: isProductPage(page) ? t.products.categories[page].label : t.nav[page as 'home' | 'services' | 'about' | 'contact'],
+      label: isProductPage(page) ? t.pages[page].label : t.nav[page as 'home' | 'services' | 'about' | 'contact'],
     }));
   const social = [
     { label: 'Facebook', href: site.social.facebook, Icon: Facebook },
@@ -74,7 +74,7 @@ export function Footer() {
             {certs.map((cert) => (
               <li key={cert.id}>{cert.code}</li>
             ))}
-            <li>Microsoft Solution Partner</li>
+            <li>{t.home.proof.partner}</li>
             {site.taxId && (
               <li>
                 {f.taxId}: {site.taxId}

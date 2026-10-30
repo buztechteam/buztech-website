@@ -1,5 +1,5 @@
 import type { SVGProps } from 'react';
-import type { CategoryId, CertId, ServiceId } from '../i18n/types';
+import type { CertId, EquipmentId, ProductPageId, ServiceId } from '../i18n/types';
 
 type IconProps = SVGProps<SVGSVGElement>;
 
@@ -149,10 +149,18 @@ export const WhatsApp = (p: IconProps) => (
   </Stroke>
 );
 
-export const Key = (p: IconProps) => (
+export const Laptop = (p: IconProps) => (
   <Stroke {...p}>
-    <circle cx="8" cy="15" r="4" />
-    <path d="M11 12l8.5-8.5M16.5 6.5l3 3M14 9l2 2" />
+    <rect x="4" y="5" width="16" height="11" rx="1.5" />
+    <path d="M2 19h20" />
+  </Stroke>
+);
+
+export const Printer = (p: IconProps) => (
+  <Stroke {...p}>
+    <path d="M7 9V4h10v5" />
+    <rect x="3" y="9" width="18" height="8" rx="2" />
+    <path d="M7 14h10v6H7z" />
   </Stroke>
 );
 
@@ -163,32 +171,75 @@ export const ClipboardCheck = (p: IconProps) => (
   </Stroke>
 );
 
-export const Sliders = (p: IconProps) => (
+/** Cloud with an arrow up: setup and migration. */
+export const CloudUp = (p: IconProps) => (
   <Stroke {...p}>
-    <path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12" />
-    <circle cx="16" cy="6" r="2" />
-    <circle cx="10" cy="12" r="2" />
-    <circle cx="18" cy="18" r="2" />
+    <path d="M7 18a4 4 0 010-8 5.5 5.5 0 0110.6 1.5A3.3 3.3 0 0117 18" />
+    <path d="M12 12v8M9 15l3-3 3 3" />
   </Stroke>
 );
 
-export const serviceIcons: Record<ServiceId, (p: IconProps) => React.JSX.Element> = {
-  licensing: Key,
-  cloud: ShieldCheck,
-  audit: ClipboardCheck,
-  infrastructure: Server,
-  sizing: Sliders,
-  workspaces: Board,
+export const Headset = (p: IconProps) => (
+  <Stroke {...p}>
+    <path d="M4 14v-2a8 8 0 0116 0v2" />
+    <rect x="3" y="14" width="4" height="6" rx="1.5" />
+    <rect x="17" y="14" width="4" height="6" rx="1.5" />
+  </Stroke>
+);
+
+export const Package = (p: IconProps) => (
+  <Stroke {...p}>
+    <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
+    <path d="M4 7.5l8 4.5 8-4.5M12 12v9" />
+  </Stroke>
+);
+
+export const Receipt = (p: IconProps) => (
+  <Stroke {...p}>
+    <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z" />
+    <path d="M9 8h6M9 12h6" />
+  </Stroke>
+);
+
+export const FileCheck = (p: IconProps) => (
+  <Stroke {...p}>
+    <path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z" />
+    <path d="M14 3v5h5M9 14l2 2 4-4" />
+  </Stroke>
+);
+
+export const Bell = (p: IconProps) => (
+  <Stroke {...p}>
+    <path d="M6 16v-5a6 6 0 0112 0v5l1.5 2h-15L6 16z" />
+    <path d="M10 20.5a2 2 0 004 0" />
+  </Stroke>
+);
+
+type Icon = (p: IconProps) => React.JSX.Element;
+
+export const serviceIcons: Record<ServiceId, Icon> = {
+  setup: CloudUp,
+  support: Headset,
+  supply: Package,
 };
 
-export const categoryIcons: Record<CategoryId, (p: IconProps) => React.JSX.Element> = {
-  licensing: Cloud,
+export const pageIcons: Record<ProductPageId, Icon> = {
+  'microsoft-365': Cloud,
+  'it-equipment': Laptop,
+  ideahub: Board,
+};
+
+export const equipmentIcons: Record<EquipmentId, Icon> = {
+  laptops: Laptop,
   servers: Server,
   networking: Network,
-  workspaces: Board,
+  printers: Printer,
 };
 
-export const certIcons: Record<CertId, (p: IconProps) => React.JSX.Element> = {
+/** In the order of included.items in the dictionaries: invoice, documents, reminders, support. */
+export const includedIcons: Icon[] = [Receipt, FileCheck, Bell, Headset];
+
+export const certIcons: Record<CertId, Icon> = {
   iso9001: Award,
   iso27001: ShieldCheck,
   iso20000: Layers,

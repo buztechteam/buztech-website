@@ -13,7 +13,8 @@ type Size = 'md' | 'sm';
 */
 const soft = 'transition duration-(--dur-hover) ease-soft';
 
-const base = `inline-flex items-center justify-center rounded-lg font-extrabold leading-tight whitespace-nowrap ${soft} motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-md motion-safe:hover:shadow-navy/25 motion-safe:active:translate-y-0 motion-safe:active:scale-97`;
+/* min-h-11: every button is at least 44px tall, the touch-target minimum. */
+const base = `inline-flex min-h-11 items-center justify-center rounded-lg font-extrabold leading-tight whitespace-nowrap ${soft} motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-md motion-safe:hover:shadow-navy/25 motion-safe:active:translate-y-0 motion-safe:active:scale-97`;
 
 const sizes: Record<Size, string> = {
   md: 'px-6 py-3 text-base',
@@ -50,4 +51,4 @@ export const cardStaticDark = `${soft} hover:border-white/30`;
 /** Type scale. Headlines: Noto Sans Georgian / Inter ExtraBold, tight leading, left-aligned. */
 export const h2Class =
   'text-[clamp(1.75rem,1.1rem+2.2vw,2.75rem)] font-extrabold leading-[1.15] tracking-tight text-balance';
-export const leadClass = 'mt-4 max-w-[38rem] text-lg leading-relaxed';
+export const leadClass = 'mt-4 max-w-[38rem] text-lg leading-relaxed text-pretty';

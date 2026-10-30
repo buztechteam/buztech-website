@@ -29,7 +29,7 @@ The Impeccable plugin (`/impeccable …`) is installed for this project only. Us
   - If one of them asks for those, say no and do the closest on-brand thing.
 - **Copy:** one CTA wording, and Georgian first.
 - **Telemetry:** off for this project, in `.impeccable/config.json`.
-- **`/impeccable init` and `document`:** when they write `PRODUCT.md` / `DESIGN.md`, take the brand, audience and rules from this file and the README, not from guesses. BUZ Tech is a B2B IT seller in Georgia: Microsoft licensing, servers, networks and interactive workspaces. Its buyers are companies, and the site's job is to win price requests.
+- **`/impeccable init` and `document`:** when they write `PRODUCT.md` / `DESIGN.md`, take the brand, audience and rules from this file, `PRODUCT.md` and the README, not from guesses. BUZ Tech is a B2B IT seller in Georgia: Microsoft 365 licences first, everything else (laptops, servers, networking, Huawei IdeaHub) sourced on request. Its buyers are companies, and the site's job is to win price requests.
 
 ## Brand tokens
 
@@ -53,8 +53,13 @@ simply don't exist.
 - **Focus rings** are 3px with a 3px offset. Brand Teal on dark (default), Deep Teal on light
   sections (`surface-light`), Navy on the teal band (`surface-teal`). Put the surface class on the
   section.
-- **Copy rules:** one CTA wording, `t.cta` ("მიიღეთ ფასი დღესვე"). The name is "BUZ Tech", never
-  "BUZ Group".
+- **Copy rules:** one CTA wording, `t.cta` ("მიიღეთ ფასი" / "Get a price"). The owner dropped the brand book's "დღესვე"
+  (today): a price takes time to arrive. The name is "BUZ Tech", never "BUZ Group".
+- **Positioning rules** (`PRODUCT.md`, checked by `npm test`):
+  - Microsoft 365 leads every page; hardware is "everything else, on request".
+  - Only Microsoft and Huawei are named. Approved product brands go in `equipmentBrands` (`config/site.ts`) only.
+  - "Official Microsoft CSP partner", never "Solution Partner".
+  - No prices, "from" prices or reply times. Proof is real or absent: no invented numbers, testimonials or logos.
 
 ## Motion: "B+"
 
@@ -96,6 +101,10 @@ visitor points at responds, content eases in once, then everything rests. **Noth
 | Card that is not a link, dark surface | `cardStaticDark` |
 | Header menus | stay in the DOM, close with `data-open="false"` (`menuMotion` in `Header.tsx`), never `hidden` |
 | Section headings | `h2Class`, `leadClass` |
+| A price button for one product | `inquireHref(productId, lang)`: it opens Contact with that product chosen in the form |
+| Links to the product pages | `ProductLinks` (foot of a page, or `prominent` as a section) |
+| What every order includes | `IncludedList` (`dark` on Navy) |
+| A checked list of features | `SpecList` |
 
 - Don't animate the footer, the phone quick-contact bar or the Contact form: they must be usable at once.
 - A reveal plays an animation, not a transition, so a card's own hover transitions keep working.

@@ -99,6 +99,9 @@ function CertDialog({ certId, onClose }: { certId: CertId | null; onClose: () =>
   );
 }
 
+/* Until the issuer, number, validity or scan is filled in (certs in config/site.ts), "Details" would only repeat the card. */
+const hasDetails = (cert: (typeof certs)[number]) => Boolean(cert.issuer || cert.number || cert.validUntil || cert.file);
+
 export function Certifications() {
   const { t } = useLang();
   const [openId, setOpenId] = useState<CertId | null>(null);
@@ -111,27 +114,25 @@ export function Certifications() {
 
         <ul className="mt-12 grid gap-5 md:grid-cols-3">
           {certs.map((cert, i) => {
-            const Icon = certIcons[cert.id];
             const copy = t.certs.items[cert.id];
             return (
               <li key={cert.id} {...revealProps(i)}>
                 <article className={`flex h-full flex-col rounded-xl border border-navy/12 bg-white p-6 ${cardStatic}`}>
-                  <span className="grid size-12 place-items-center rounded-lg bg-navy text-brand-teal">
-                    <Icon className="size-6" />
-                  </span>
-                  <h3 className="mt-5 text-3xl leading-tight font-extrabold">{cert.code}</h3>
+                  <h3 className="text-3xl leading-tight font-extrabold">{cert.code}</h3>
                   <p className="mt-1 font-extrabold text-navy/85">{copy.name}</p>
-                  <p className="mt-3 text-navy/85">{copy.summary}</p>
-                  <div className="mt-auto pt-6">
-                    <button
-                      type="button"
-                      aria-haspopup="dialog"
-                      onClick={() => setOpenId(cert.id)}
-                      className={btn('outlineOnLight', 'sm')}
-                    >
-                      {t.certs.details}
-                    </button>
-                  </div>
+                  <p className="mt-3 text-pretty text-navy/85">{copy.summary}</p>
+                  {hasDetails(cert) && (
+                    <div className="mt-auto pt-6">
+                      <button
+                        type="button"
+                        aria-haspopup="dialog"
+                        onClick={() => setOpenId(cert.id)}
+                        className={btn('outlineOnLight', 'sm')}
+                      >
+                        {t.certs.details}
+                      </button>
+                    </div>
+                  )}
                 </article>
               </li>
             );
@@ -139,7 +140,7 @@ export function Certifications() {
         </ul>
       </div>
 
-      <CertDialog certId={openId} onClose={() => setOpenId(null)} />
+      {certs.some(hasDetails) && <CertDialog certId={openId} onClose={() => setOpenId(null)} />}
     </section>
   );
 }

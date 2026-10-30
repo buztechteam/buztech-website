@@ -3,9 +3,9 @@ import type { Dict } from './types';
 /** English mirror of ge.ts. Product names are identical in both languages. */
 export const en: Dict = {
   meta: {
-    title: 'BUZ Tech — Microsoft 365 licensing at the best prices in Georgia',
+    title: 'BUZ Tech — Microsoft 365 licences at the best prices in Georgia',
     description:
-      'BUZ Tech: Microsoft 365, Azure and Entra ID licensing, servers, enterprise networking and interactive workspaces from one trusted local partner in Tbilisi, Georgia.',
+      'Microsoft 365 licences at the best prices in Georgia, from an official Microsoft CSP partner. Send us any quote — we’ll beat it. Laptops, servers, networking and Huawei IdeaHub on request.',
   },
   a11y: {
     skip: 'Skip to main content',
@@ -15,7 +15,6 @@ export const en: Dict = {
     close: 'Close',
     mainNav: 'Main navigation',
     home: 'BUZ Tech — home',
-    partnerList: 'Official partners',
     breadcrumb: 'Breadcrumb',
     quickContact: 'Quick contact',
   },
@@ -30,121 +29,218 @@ export const en: Dict = {
     about: 'About us',
     contact: 'Contact',
   },
-  cta: 'Get a price today',
+  cta: 'Get a price',
   hero: {
-    title: 'Microsoft 365 licensing at the best prices in Georgia',
-    lead: 'Backed by Azure and Entra ID. Licensing, cloud, infrastructure and workspaces from one trusted local partner.',
-    points: ['Everything in one package', 'Best price', 'Local support'],
-    secondary: 'Browse products',
+    title: 'Microsoft 365 licences at the best prices in Georgia',
+    lead: 'Send us any Microsoft 365 quote — we’ll beat it. Licences, setup and support from an official Microsoft CSP partner in Tbilisi.',
+    points: ['Official Microsoft CSP partner', 'VAT invoice in GEL', 'Support after the sale'],
+    secondary: 'Free licence audit',
     stack: { top: 'Apps', mid: 'Access and MFA', base: 'Cloud' },
     stackLabel: 'Microsoft 365, Entra ID and Azure working as one system',
   },
-  partners: {
-    heading: 'Official partners',
-    lead: 'Leading manufacturers whose products we supply.',
+  pages: {
+    'microsoft-365': {
+      label: 'Microsoft 365',
+      summary: 'Business and Enterprise plans, Copilot, Windows and Office.',
+    },
+    'it-equipment': {
+      label: 'IT equipment',
+      summary: 'Laptops, servers, networking and more, sourced on request.',
+    },
+    ideahub: {
+      label: 'Huawei IdeaHub',
+      summary: 'Interactive boards for meeting rooms and learning spaces.',
+    },
   },
   products: {
-    heading: 'Products and solutions',
-    lead: 'From licences to servers — everything that forms your business technology foundation.',
-    flagship: 'Core focus',
-    plansLabel: 'Plans',
-    plans: ['Business Basic', 'Business Standard', 'Business Premium'],
-    planNote: 'We recommend the plan and price for your company size.',
-    categories: {
-      licensing: {
-        label: 'Licensing and cloud',
-        summary: 'Microsoft 365, Azure and Entra ID from one partner.',
-      },
-      servers: {
-        label: 'Servers and infrastructure',
-        summary: 'Dell, HPE and Lenovo servers with the official warranty.',
-      },
-      networking: {
-        label: 'Enterprise networking',
-        summary: 'Zyxel and TP-Link: switches and Wi-Fi for business.',
-      },
-      workspaces: {
-        label: 'Interactive workspaces',
-        summary: 'Huawei IdeaHub for offices and learning spaces.',
-      },
-    },
-    items: {
-      m365: {
-        tagline: 'Productivity, collaboration and security in one package.',
-        specs: ['Teams, Outlook and OneDrive', 'Word, Excel and PowerPoint', 'Intune, Entra ID and security'],
-      },
-      azure: {
-        tagline: 'Scalable cloud infrastructure and services.',
-        specs: ['Cloud infrastructure', 'AI services', 'Enterprise-grade security'],
-      },
-      entra: {
-        tagline: 'Identity and access management for your team.',
-        specs: ['Single sign-on (SSO)', 'Multi-factor authentication (MFA)', 'Conditional access'],
-      },
-      dell: {
-        tagline: 'Servers from the small office to the data centre.',
-        specs: ['Ready-to-deploy business servers', 'Sized for 10, 50 or 200 users'],
-      },
-      hpe: {
-        tagline: 'Servers for enterprise workloads and virtualisation.',
-        specs: ['Ready-to-deploy business servers', 'Sized for 10, 50 or 200 users'],
-      },
-      lenovo: {
-        tagline: 'Dependable servers for a growing business.',
-        specs: ['Ready-to-deploy business servers', 'Sized for 10, 50 or 200 users'],
-      },
-      zyxel: {
-        tagline: 'Switches and Wi-Fi for the business network.',
-        specs: ['Switches', 'Wi-Fi access points', 'Network security'],
-      },
-      tplink: {
-        tagline: 'Business-grade networking devices.',
-        specs: ['Switches', 'Wi-Fi access points', 'Routers'],
-      },
-      ideahub: {
-        tagline: 'One screen instead of a projector and a whiteboard.',
-        specs: ['Interactive whiteboard', 'Video conferencing', 'Wireless presentation', 'For meeting rooms and learning spaces'],
-      },
-    },
-    serversNote: [
-      'Official delivery from the distributor',
-      'Official manufacturer warranty',
-      'Free consultation on server sizing',
+    m365: 'Microsoft 365 — not sure which plan',
+    'business-basic': 'Microsoft 365 Business Basic',
+    'business-standard': 'Microsoft 365 Business Standard',
+    'business-premium': 'Microsoft 365 Business Premium',
+    e3: 'Microsoft 365 E3',
+    e5: 'Microsoft 365 E5',
+    copilot: 'Microsoft 365 Copilot',
+    'windows-office': 'Windows and Office licences',
+    azure: 'Azure',
+    entra: 'Entra ID',
+    audit: 'Free licence audit',
+    laptops: 'Laptops and PCs',
+    servers: 'Servers and storage',
+    networking: 'Networking',
+    printers: 'Printers and other equipment',
+    ideahub: 'Huawei IdeaHub',
+  },
+  productLinks: { heading: 'Products' },
+  beat: {
+    title: 'Send us any quote — we’ll beat it',
+    text: 'Have a Microsoft 365 offer from another supplier? Send it to us and we’ll come back with a better price.',
+  },
+  included: {
+    heading: 'What every order includes',
+    items: [
+      { title: 'VAT invoice in GEL', text: 'Issued by LLC BUZ Tech Georgia, ready for your accounts.' },
+      { title: 'Documents for tenders', text: 'Company documents and ISO certificates, ready for tenders and supplier files.' },
+      { title: 'Renewal reminders', text: 'We remind you before your licences renew, so nothing lapses.' },
+      { title: 'Support after the sale', text: 'Questions, changes, new users — we stay in touch.' },
     ],
+  },
+  home: {
+    m365: {
+      heading: 'Microsoft 365 for every company size',
+      lead: 'From a few mailboxes to thousands of users. We help you pick the plan that fits, then set it up.',
+      compare: 'Compare plans',
+      rows: [
+        { name: 'Business Basic, Standard, Premium', text: 'For companies up to 300 users' },
+        { name: 'E3 and E5', text: 'For larger organisations, with no user limit' },
+        { name: 'Copilot', text: 'The AI assistant in Word, Excel, Outlook and Teams' },
+        { name: 'Windows and Office', text: 'Licences for your computers' },
+      ],
+    },
+    onRequest: {
+      heading: 'Everything else, on request',
+      lead: 'Need laptops, a server or a meeting-room board too? Tell us what you need — we’ll source it.',
+    },
+    proof: {
+      heading: 'Trusted by companies and public bodies',
+      credentials: 'Partnership and standards',
+      partner: 'Official Microsoft CSP partner',
+      since: 'In Georgia since 2018',
+      countries: 'Working in 5 countries',
+    },
+  },
+  m365: {
+    lead: 'Microsoft 365 licences for every company size, from an official Microsoft CSP partner. Send us any quote — we’ll beat it.',
+    business: {
+      heading: 'Business plans, up to 300 users',
+      lead: 'Three plans for small and mid-size companies. Not sure which one fits? We’ll recommend one, free.',
+      plans: {
+        'business-basic': {
+          who: 'For teams that work in the browser: email, chat and files.',
+          includes: [
+            'Business email in Outlook, and Teams',
+            '1 TB of OneDrive storage per person',
+            'Word, Excel and PowerPoint in the browser and on phones',
+            'Sign-in protected by MFA',
+          ],
+        },
+        'business-standard': {
+          who: 'For teams that need the full Office apps on their computers.',
+          includes: [
+            'Desktop Word, Excel, PowerPoint and Outlook',
+            'On up to 5 PCs or Macs per person, plus tablets and phones',
+          ],
+        },
+        'business-premium': {
+          who: 'For companies that hold sensitive data or manage many devices.',
+          includes: [
+            'Device management with Intune',
+            'Advanced protection against phishing and malware',
+            'Conditional access: rules for who signs in, and from where',
+          ],
+        },
+      },
+      plus: 'Everything in {plan}, plus:',
+    },
+    extras: {
+      heading: 'Larger companies and add-ons',
+      lead: 'For organisations over 300 users, for AI in everyday work, and for computers that need only Windows or Office.',
+      items: {
+        e3: 'For larger organisations: the full Office apps, device management and compliance tools, with no limit on users.',
+        e5: 'Everything in E3, plus Microsoft’s most advanced security, compliance and analytics.',
+        copilot:
+          'An add-on to your Microsoft 365 plan: the AI assistant in Word, Excel, PowerPoint, Outlook and Teams, working with your company’s data.',
+        'windows-office':
+          'Windows and Office licences, including one-time purchase versions for computers that don’t need a subscription.',
+      },
+    },
+    terms: {
+      heading: 'In plain words',
+      items: [
+        {
+          term: 'MFA',
+          text: 'Multi-factor authentication: a second check, such as a code on the phone, when someone signs in. A stolen password alone is no longer enough.',
+        },
+        {
+          term: 'SSO',
+          text: 'Single sign-on: one company account for email, files and other work apps, instead of a separate password for each.',
+        },
+        {
+          term: 'Intune',
+          text: 'One place to set up and protect company laptops and phones: settings, updates, and wiping a lost device.',
+        },
+      ],
+    },
+    cloud: {
+      heading: 'Azure and Entra ID',
+      lead: 'The cloud and the sign-in system behind Microsoft 365, from the same partner.',
+      items: {
+        azure: {
+          text: 'Microsoft’s cloud: servers, storage, backup and AI services.',
+          specs: ['Cloud servers and storage', 'Backup and recovery', 'AI services'],
+        },
+        entra: {
+          text: 'Sign-in and access for your whole team, in one place.',
+          specs: ['Single sign-on (SSO)', 'Multi-factor authentication (MFA)', 'Conditional access'],
+        },
+      },
+    },
+  },
+  equipment: {
+    lead: 'Need hardware too? Tell us what you need — we’ll source it at a good price and deliver it with a VAT invoice in GEL.',
+    heading: 'What we can source',
+    items: {
+      laptops: 'Business laptops, desktops and monitors, for one employee or a whole office.',
+      servers: 'Servers, storage and backup, sized to your company.',
+      networking: 'Switches, Wi-Fi access points, routers and firewalls.',
+      printers: 'Printers, peripherals, accessories — and anything else your office needs.',
+    },
+    howHeading: 'How sourcing works',
+    how: [
+      {
+        title: 'Tell us what you need',
+        text: 'A model, a spec, or just the job it has to do. Call, write on WhatsApp or send the form.',
+      },
+      { title: 'We find the best price', text: 'We request prices from our suppliers and come back with an offer.' },
+      {
+        title: 'Delivered with a VAT invoice',
+        text: 'Delivered to your office, with a VAT invoice in GEL and the manufacturer’s warranty.',
+      },
+    ],
+  },
+  ideahub: {
+    tagline: 'One screen instead of a projector and a whiteboard.',
+    specs: ['Interactive whiteboard', 'Video conferencing', 'Wireless presentation', 'For meeting rooms and learning spaces'],
+    ask: 'Not sure which size fits your room? We’ll advise you, free.',
   },
   services: {
     heading: 'Services',
-    lead: 'From buying the licence to handing over the hardware — one partner.',
+    lead: 'A free licence audit before you buy. Setup, support and renewal reminders after. We stay in touch.',
+    audit: {
+      title: 'Free licence audit',
+      text: 'We review the Microsoft licences you already have and show you what to keep, change or cancel. Free, with no obligation.',
+      points: [
+        'Unused licences',
+        'Plans that don’t match how people work',
+        'Duplicate subscriptions',
+        'Renewal dates, in one list',
+      ],
+      cta: 'Request a free audit',
+    },
     items: [
       {
-        id: 'licensing',
-        title: 'Licensing',
-        text: 'Microsoft 365 and Azure licences at the best price, with local support.',
+        id: 'setup',
+        title: 'Setup and migration',
+        text: 'Microsoft 365, Azure and Entra ID set up for you, with email and files moved over from your old system.',
       },
       {
-        id: 'cloud',
-        title: 'Cloud and security',
-        text: 'Azure and Entra ID setup, with MFA on every account.',
+        id: 'support',
+        title: 'Ongoing support',
+        text: 'Questions, new users, changes, problems — support of every kind after the sale.',
       },
       {
-        id: 'audit',
-        title: 'Licence audit',
-        text: 'A free review: unused licences, wrong plans and duplicates.',
-      },
-      {
-        id: 'infrastructure',
-        title: 'Infrastructure supply',
-        text: 'Servers and networking equipment with the manufacturer’s official warranty.',
-      },
-      {
-        id: 'sizing',
-        title: 'Sizing and consultation',
-        text: 'Equipment sized to your company, free of charge.',
-      },
-      {
-        id: 'workspaces',
-        title: 'Interactive workspaces',
-        text: 'Meeting rooms equipped with Huawei IdeaHub.',
+        id: 'supply',
+        title: 'Equipment supply',
+        text: 'Laptops, servers, networking and Huawei IdeaHub, sourced for you and delivered with a VAT invoice.',
       },
     ],
     facts: [
@@ -154,10 +250,10 @@ export const en: Dict = {
     ],
     stepsHeading: 'How we work',
     steps: [
-      { title: 'Quote', text: 'Price and plan for your company size.' },
-      { title: 'Selection', text: 'Licences and equipment matched to your needs.' },
-      { title: 'Delivery and setup', text: 'Licences activated and equipment delivered.' },
-      { title: 'Handover and support', text: 'We stay in touch after handover.' },
+      { title: 'Request', text: 'Call, write on WhatsApp or send the form.' },
+      { title: 'Offer', text: 'We come back with a price and the plan or equipment that fits.' },
+      { title: 'Delivery and setup', text: 'Licences activated and equipment delivered, with a VAT invoice in GEL.' },
+      { title: 'Support', text: 'We stay in touch: renewal reminders and help whenever you need it.' },
     ],
   },
   clients: {
@@ -230,32 +326,35 @@ export const en: Dict = {
     },
   },
   contact: {
-    heading: 'Get a price today',
-    lead: 'Tell us your company and the product you need — we will come back with a price.',
+    heading: 'Get a price',
+    lead: 'Tell us your company and what you need — we’ll come back with a price.',
+    detailsTitle: 'Contact details',
     entity: 'Legal entity',
     location: 'Location',
     address: 'Zakaria Paliashvili St. 83, 0179 Tbilisi, Georgia',
     phone: 'Phone',
     whatsapp: 'Message us on WhatsApp',
     email: 'Email',
+    call: 'Call',
     fields: {
       company: 'Company name',
       email: 'Email',
-      product: 'Product of interest',
+      product: 'What you need',
       message: 'Message',
     },
     placeholders: {
       company: 'e.g., Your Company LLC',
       email: 'name@company.ge',
-      message: 'Add the number of users and your preferred timeline',
+      message: 'For example: the number of users or devices, your current plan',
     },
-    selectPlaceholder: 'Choose a product',
-    other: 'Other',
+    selectPlaceholder: 'Choose',
+    groups: { microsoft: 'Microsoft', equipment: 'IT equipment' },
+    other: 'Something else',
     required: 'Fill in this field',
     invalidEmail: 'Enter a valid email, e.g., name@company.ge',
     status: {
       sending: 'Sending…',
-      success: 'Thank you. Your request is in — we will get back to you.',
+      success: 'Thank you — your request is in. We’ll get back to you with a price.',
       mailto: 'Your email app has opened. Press “Send” there to finish the request.',
       error: 'The request was not sent. Try again or write to info-ge@buz-cloud.com.',
     },
@@ -265,7 +364,7 @@ export const en: Dict = {
   },
   footer: {
     overview:
-      'BUZ Tech is an enterprise IT solutions provider based in Tbilisi. We make business technology simple to buy and run: licensing, cloud, infrastructure and workspaces from one trusted local partner. Our head office is in the Czech Republic, with branches in Georgia, Azerbaijan, Turkey, Uzbekistan and Kazakhstan.',
+      'BUZ Tech is an official Microsoft CSP partner in Tbilisi. We supply Microsoft 365 licences at the best prices in Georgia, and source the rest of a company’s IT on request: laptops, servers, networking and Huawei IdeaHub. Our head office is in the Czech Republic, with branches in Georgia, Azerbaijan, Turkey, Uzbekistan and Kazakhstan.',
     quickLinks: 'Quick links',
     contactTitle: 'Contact',
     complianceTitle: 'Standards and partnership',
@@ -281,7 +380,7 @@ export const en: Dict = {
     sections: [
       {
         heading: 'What we collect',
-        body: 'In the form you give your company name, email, the product you are interested in and a message. The website asks for no other personal data.',
+        body: 'In the form you give your company name, email, what you need and a message. The website asks for no other personal data.',
       },
       {
         heading: 'What we use it for',

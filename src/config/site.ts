@@ -1,4 +1,4 @@
-import type { CategoryId, CertId, ProductId, ServiceId } from '../i18n/types';
+import type { BusinessPlanId, CertId, EquipmentId, MicrosoftExtraId, ProductId } from '../i18n/types';
 
 /**
  * Single source of truth for facts that are NOT translated.
@@ -32,64 +32,37 @@ export const site = {
   analytics: Boolean(import.meta.env.VITE_CF_ANALYTICS_TOKEN),
 } as const;
 
-export const productMeta: Record<ProductId, { name: string; line?: string }> = {
-  m365: { name: 'Microsoft 365' },
-  azure: { name: 'Azure' },
-  entra: { name: 'Entra ID' },
-  dell: { name: 'Dell', line: 'PowerEdge' },
-  hpe: { name: 'HPE', line: 'ProLiant' },
-  lenovo: { name: 'Lenovo', line: 'ThinkSystem' },
-  zyxel: { name: 'Zyxel' },
-  tplink: { name: 'TP-Link' },
-  ideahub: { name: 'Huawei IdeaHub' },
-};
-
-/** Licensing & Cloud is the flagship and always comes first. */
-export const categories: { id: CategoryId; products: ProductId[] }[] = [
-  { id: 'licensing', products: ['m365', 'azure', 'entra'] },
-  { id: 'servers', products: ['dell', 'hpe', 'lenovo'] },
-  { id: 'networking', products: ['zyxel', 'tplink'] },
-  { id: 'workspaces', products: ['ideahub'] },
+/** The price-request form's options, in groups (names: products in the dictionaries). */
+export const productGroups: { id: 'microsoft' | 'equipment'; products: ProductId[] }[] = [
+  {
+    id: 'microsoft',
+    products: ['m365', 'business-basic', 'business-standard', 'business-premium', 'e3', 'e5', 'copilot', 'windows-office', 'azure', 'entra', 'audit'],
+  },
+  { id: 'equipment', products: ['laptops', 'servers', 'networking', 'printers', 'ideahub'] },
 ];
 
-/** Brand names in a category, e.g. Dell · HPE · Lenovo (home cards and the category page intro). */
-export const brandNames = (id: CategoryId): string[] =>
-  (categories.find((c) => c.id === id)?.products ?? []).map((p) => productMeta[p].name);
-
-/** Services shown on each category page, by id (services.items in the dictionaries). */
-export const categoryServices: Record<CategoryId, ServiceId[]> = {
-  licensing: ['licensing', 'cloud', 'audit'],
-  servers: ['infrastructure', 'sizing'],
-  networking: ['infrastructure', 'sizing'],
-  workspaces: ['workspaces', 'sizing'],
-};
-
-/** Microsoft 365 apps shown on the flagship panel (names only, no vendor logos). */
-export const m365Apps = ['Teams', 'Outlook', 'OneDrive', 'Word', 'Excel', 'PowerPoint'] as const;
-
-/**
- * Real product photos. Put image files in /public/products and register them here,
- * e.g. ideahub: '/products/ideahub-front.png'. Until then an illustration is shown.
- */
-export const productImages: Partial<Record<ProductId, string>> = {};
-
-/**
- * Vendors (home strip and About tiles). Typeset names, NOT logos: the brand book lists the vendor logo packs
- * (with each vendor's co-branding rules) as an open item. Swap in logos once received.
- */
-export const vendors: { name: string; note?: string }[] = [
-  { name: 'Microsoft', note: 'Solution Partner' },
-  { name: 'Dell' },
-  { name: 'HPE' },
-  { name: 'Lenovo' },
-  { name: 'Zyxel' },
-  { name: 'TP-Link' },
-  { name: 'Huawei IdeaHub' },
+/** Microsoft 365 Business plans (up to 300 users), smallest first. Microsoft's names, the same in every language. */
+export const businessPlans: { id: BusinessPlanId; name: string }[] = [
+  { id: 'business-basic', name: 'Business Basic' },
+  { id: 'business-standard', name: 'Business Standard' },
+  { id: 'business-premium', name: 'Business Premium' },
 ];
+export const microsoftExtras: MicrosoftExtraId[] = ['e3', 'e5', 'copilot', 'windows-office'];
+export const equipment: EquipmentId[] = ['laptops', 'servers', 'networking', 'printers'];
+
+/**
+ * Brand names on the IT equipment page. Empty on purpose: only Microsoft and Huawei are approved
+ * to be named on the site. Once the owner approves more, list them per category here, e.g.
+ * laptops: ['Brand Series'], and they appear under that category. Nowhere else names a vendor.
+ */
+export const equipmentBrands: Partial<Record<EquipmentId, string[]>> = {};
+
+/** A real Huawei IdeaHub photo: put the file in /public/products and set it here. Until then an illustration is shown. */
+export const ideahubImage: string | undefined = undefined;
 
 /**
  * ISO certificates. Issuer, number, validity and the scan are intentionally empty:
- * fill them in from the real certificates and they appear in the dialog automatically.
+ * fill them in from the real certificates and they appear in the certificate dialog (its Details button shows once one of them is set).
  */
 export const certs: {
   id: CertId;

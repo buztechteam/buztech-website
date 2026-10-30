@@ -1,28 +1,32 @@
 export type Lang = 'ge' | 'en';
 
-export type CategoryId = 'licensing' | 'servers' | 'networking' | 'workspaces';
-/** One page per product category, plus the company pages. notFound is built as 404.html, not as an address. */
-export type PageId = 'home' | CategoryId | 'services' | 'about' | 'contact' | 'privacy' | 'notFound';
-/** Header menu entries; "products" opens the category list. */
+/** Product pages, in menu order. Microsoft 365 always leads; the slug is the id. */
+export type ProductPageId = 'microsoft-365' | 'it-equipment' | 'ideahub';
+/** notFound is built as 404.html, not as an address. */
+export type PageId = 'home' | ProductPageId | 'services' | 'about' | 'contact' | 'privacy' | 'notFound';
+/** Header menu entries; "products" opens the product page list. */
 export type NavId = 'home' | 'products' | 'services' | 'about' | 'contact';
+export type BusinessPlanId = 'business-basic' | 'business-standard' | 'business-premium';
+/** Microsoft offers beyond the Business plans (Microsoft 365 page). */
+export type MicrosoftExtraId = 'e3' | 'e5' | 'copilot' | 'windows-office';
+export type EquipmentId = 'laptops' | 'servers' | 'networking' | 'printers';
+/**
+ * Everything the price-request form offers. Also the ?product= value of links that pre-select it
+ * (inquireHref in routes.ts). 'm365' is "Microsoft 365, plan not chosen yet".
+ */
 export type ProductId =
   | 'm365'
+  | BusinessPlanId
+  | MicrosoftExtraId
   | 'azure'
   | 'entra'
-  | 'dell'
-  | 'hpe'
-  | 'lenovo'
-  | 'zyxel'
-  | 'tplink'
+  | 'audit'
+  | EquipmentId
   | 'ideahub';
 export type CertId = 'iso9001' | 'iso27001' | 'iso20000';
-/** Lets product pages pick their related services (categoryServices in config/site.ts). */
-export type ServiceId = 'licensing' | 'cloud' | 'audit' | 'infrastructure' | 'sizing' | 'workspaces';
+export type ServiceId = 'setup' | 'support' | 'supply';
 
-export interface ProductCopy {
-  tagline: string;
-  specs: string[];
-}
+type Item = { title: string; text: string };
 
 export interface Dict {
   meta: { title: string; description: string };
@@ -34,7 +38,6 @@ export interface Dict {
     close: string;
     mainNav: string;
     home: string;
-    partnerList: string;
     breadcrumb: string;
     /** Phone bar with call / WhatsApp / price request. */
     quickContact: string;
@@ -47,29 +50,56 @@ export interface Dict {
     title: string;
     lead: string;
     points: string[];
+    /** Link to the free licence audit. */
     secondary: string;
     stack: { top: string; mid: string; base: string };
     stackLabel: string;
   };
-  partners: { heading: string; lead: string };
-  products: {
-    heading: string;
-    lead: string;
-    flagship: string;
-    plansLabel: string;
-    plans: string[];
-    planNote: string;
-    categories: Record<CategoryId, { label: string; summary: string }>;
-    items: Record<ProductId, ProductCopy>;
-    serversNote: string[];
+  /** Product pages: name in menus and links, one-line summary (menu, links, page lead). */
+  pages: Record<ProductPageId, { label: string; summary: string }>;
+  /** Option names in the price-request form. Microsoft names are the same in both languages. */
+  products: Record<ProductId, string>;
+  /** "Products" block that links the product pages. */
+  productLinks: { heading: string };
+  /** The price promise (being tested; the owner may revert it to a plain best-price line). */
+  beat: { title: string; text: string };
+  /** What every order includes (home, Microsoft 365 page, Contact). */
+  included: { heading: string; items: Item[] };
+  home: {
+    /** Teaser rows: what is on the Microsoft 365 page. */
+    m365: { heading: string; lead: string; compare: string; rows: { name: string; text: string }[] };
+    onRequest: { heading: string; lead: string };
+    proof: { heading: string; credentials: string; partner: string; since: string; countries: string };
   };
+  m365: {
+    lead: string;
+    business: {
+      heading: string;
+      lead: string;
+      plans: Record<BusinessPlanId, { who: string; includes: string[] }>;
+      /** Heads the list of a bigger plan; {plan} is the plan before it. */
+      plus: string;
+    };
+    extras: { heading: string; lead: string; items: Record<MicrosoftExtraId, string> };
+    terms: { heading: string; items: { term: string; text: string }[] };
+    cloud: { heading: string; lead: string; items: Record<'azure' | 'entra', { text: string; specs: string[] }> };
+  };
+  equipment: {
+    lead: string;
+    heading: string;
+    items: Record<EquipmentId, string>;
+    howHeading: string;
+    how: Item[];
+  };
+  ideahub: { tagline: string; specs: string[]; ask: string };
   services: {
     heading: string;
     lead: string;
-    items: { id: ServiceId; title: string; text: string }[];
+    audit: { title: string; text: string; points: string[]; cta: string };
+    items: ({ id: ServiceId } & Item)[];
     facts: { value: string; label: string }[];
     stepsHeading: string;
-    steps: { title: string; text: string }[];
+    steps: Item[];
   };
   clients: {
     heading: string;
@@ -93,6 +123,8 @@ export interface Dict {
   contact: {
     heading: string;
     lead: string;
+    /** Heading of the details column beside the form. */
+    detailsTitle: string;
     entity: string;
     location: string;
     /** Office street address, written the local way for each language. */
@@ -101,9 +133,13 @@ export interface Dict {
     /** Link text for the WhatsApp row. */
     whatsapp: string;
     email: string;
+    /** Short labels for the call / WhatsApp row above the form on phones. */
+    call: string;
     fields: { company: string; email: string; product: string; message: string };
     placeholders: { company: string; email: string; message: string };
     selectPlaceholder: string;
+    /** Option groups in the product list. */
+    groups: { microsoft: string; equipment: string };
     other: string;
     required: string;
     invalidEmail: string;

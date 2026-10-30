@@ -3,7 +3,7 @@ import { useLang } from '../i18n/LanguageContext';
 import type { Lang, PageId } from '../i18n/types';
 import { isProductPage, pagePath, productPages } from '../routes';
 import BuzLogo from './BuzLogo';
-import { categoryIcons, ChevronDown, Close, Menu } from './icons';
+import { ChevronDown, Close, Menu, pageIcons } from './icons';
 import { btn } from './ui';
 
 const LANGS: { id: Lang; label: string; htmlLang: string }[] = [
@@ -60,7 +60,7 @@ function useScrolled(threshold = 8): boolean {
   return scrolled;
 }
 
-/** Disclosure menu with the four product categories. Esc or a click outside closes it. */
+/** Disclosure menu with the product pages, Microsoft 365 first. Esc or a click outside closes it. */
 function ProductsMenu() {
   const { lang, page, t } = useLang();
   const [open, setOpen] = useState(false);
@@ -112,12 +112,12 @@ function ProductsMenu() {
       <div
         id="products-menu"
         data-open={open}
-        className={`absolute top-full left-0 mt-3 w-[36rem] rounded-xl border border-white/12 bg-ink p-2 shadow-2xl ${menuMotion}`}
+        className={`absolute top-full left-0 mt-3 w-[26rem] rounded-xl border border-white/12 bg-ink p-2 shadow-2xl ${menuMotion}`}
       >
-        <ul className="grid grid-cols-2 gap-1">
+        <ul className="grid gap-1">
           {productPages.map((id) => {
-            const Icon = categoryIcons[id];
-            const cat = t.products.categories[id];
+            const Icon = pageIcons[id];
+            const cat = t.pages[id];
             return (
               <li key={id}>
                 <a
@@ -234,7 +234,7 @@ export function Header() {
             {productPages.map((id) => (
               <li key={id}>
                 <a href={pagePath(id, lang)} aria-current={page === id ? 'page' : undefined} className={`${mobileLink} pl-4`}>
-                  {t.products.categories[id].label}
+                  {t.pages[id].label}
                 </a>
               </li>
             ))}

@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { categories, productMeta, site } from '../config/site';
+import { productGroups, site } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
+import type { ProductId } from '../i18n/types';
 import { pagePath } from '../routes';
 import { Building, Mail, Phone, Pin, WhatsApp } from './icons';
-import { Steps } from './Services';
-import { btn, h2Class, leadClass } from './ui';
+import { IncludedList } from './Included';
+import { Credentials } from './TrustStrip';
+import { btn } from './ui';
 
 type Status = 'idle' | 'sending' | 'success' | 'mailto' | 'error';
 interface Errors {
@@ -19,8 +21,12 @@ const MAX_COMPANY = 120;
 const MAX_EMAIL = 254;
 const MAX_MESSAGE = 2000;
 
+const productIds: ProductId[] = productGroups.flatMap((group) => group.products);
+const isProductId = (value: string): value is ProductId => (productIds as string[]).includes(value);
+
+/* Placeholders at Navy/70 on white: 6:1, above the 4.5:1 that text needs. */
 const fieldClass =
-  'mt-2 w-full rounded-lg border border-navy/30 bg-white px-4 py-3 text-base text-navy placeholder:text-navy/55 aria-invalid:border-2 aria-invalid:border-navy';
+  'mt-2 w-full rounded-lg border border-navy/30 bg-white px-4 py-3 text-base text-navy placeholder:text-navy/70 aria-invalid:border-2 aria-invalid:border-navy';
 
 function FieldError({ id, children }: { id: string; children: ReactNode }) {
   return (
@@ -37,7 +43,7 @@ function InfoRow({ icon, label, children }: { icon: ReactNode; label: string; ch
   return (
     <div className="flex gap-4">
       <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-white/8 text-brand-teal">{icon}</span>
-      <div>
+      <div className="min-w-0">
         <dt className="text-sm text-light/75">{label}</dt>
         <dd className="text-lg font-extrabold text-white">{children}</dd>
       </div>
@@ -48,21 +54,25 @@ function InfoRow({ icon, label, children }: { icon: ReactNode; label: string; ch
 const linkOnDark =
   'underline decoration-brand-teal decoration-2 underline-offset-4 transition-colors hover:text-brand-teal';
 
-/** `intro={false}` when the page's PageIntro already shows the heading and lead. */
-export function Contact({ intro = true }: { intro?: boolean }) {
+/**
+ * Contact page body (its h1 and lead sit in the PageIntro). The form comes first: on phones only a
+ * call / WhatsApp row sits above it; the details, credentials and what every order includes go beside
+ * it on wide screens and below it on phones.
+ */
+export function Contact() {
   const { t, lang } = useLang();
   const c = t.contact;
   const formRef = useRef<HTMLFormElement>(null);
   const companyRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
-  const [product, setProduct] = useState('');
+  const [product, setProduct] = useState<ProductId | 'other' | ''>('');
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>('idle');
 
-  /* A product card links here with ?product=<name>; pre-select it when it is a known option. */
+  /* Price buttons link here with ?product=<id>; pre-select it when it is a known option. */
   useEffect(() => {
     const requested = new URLSearchParams(window.location.search).get('product');
-    if (requested && Object.values(productMeta).some((meta) => meta.name === requested)) setProduct(requested);
+    if (requested && isProductId(requested)) setProduct(requested);
   }, []);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -78,7 +88,7 @@ export function Contact({ intro = true }: { intro?: boolean }) {
     const company = String(data.get('company') ?? '').trim().slice(0, MAX_COMPANY);
     const email = String(data.get('email') ?? '').trim();
     const message = String(data.get('message') ?? '').trim().slice(0, MAX_MESSAGE);
-    const productName = product === 'other' ? 'Other' : product;
+    const productName = product === 'other' ? c.other : product ? t.products[product] : '';
 
     const next: Errors = {};
     if (!company) next.company = c.required;
@@ -135,166 +145,183 @@ export function Contact({ intro = true }: { intro?: boolean }) {
   };
 
   return (
-    <section id="contact" className="bg-navy py-20 text-light lg:py-28">
-      <div className="container-x grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+    <section id="contact" className="bg-navy py-10 text-light sm:py-16 lg:py-20">
+      <div className="container-x grid gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:gap-14">
         <div>
-          {intro && (
-            <>
-              <h2 className={`${h2Class} text-white`}>{c.heading}</h2>
-              <p className={`${leadClass} text-light/85`}>{c.lead}</p>
-            </>
-          )}
+          {/* Phones: one tap to call or write, right above the form. Wide screens show the details beside it. */}
+          <div className="mb-6 grid grid-cols-2 gap-3 lg:hidden">
+            <a href={site.phoneHref} className={`${btn('ghostOnDark')} gap-2`}>
+              <Phone className="size-5" />
+              {c.call}
+            </a>
+            <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer" className={`${btn('ghostOnDark')} gap-2`}>
+              <WhatsApp className="size-5" />
+              WhatsApp
+            </a>
+          </div>
 
-          <dl className={`${intro ? 'mt-10' : ''} space-y-6`}>
-            <InfoRow icon={<Building className="size-5" />} label={c.entity}>
-              {site.legalName}
-            </InfoRow>
-            <InfoRow icon={<Pin className="size-5" />} label={c.location}>
-              <a href={site.mapsHref} target="_blank" rel="noopener noreferrer" className={linkOnDark}>
-                {c.address}
+          <form
+            ref={formRef}
+            onSubmit={onSubmit}
+            noValidate
+            className="surface-light rounded-[1.25rem] bg-light p-5 text-navy sm:p-8"
+          >
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label htmlFor="company" className="font-extrabold">
+                  {c.fields.company}
+                </label>
+                <input
+                  ref={companyRef}
+                  id="company"
+                  name="company"
+                  type="text"
+                  autoComplete="organization"
+                  maxLength={MAX_COMPANY}
+                  required
+                  placeholder={c.placeholders.company}
+                  aria-invalid={errors.company ? true : undefined}
+                  aria-describedby={errors.company ? 'company-error' : undefined}
+                  className={fieldClass}
+                />
+                {errors.company && <FieldError id="company-error">{errors.company}</FieldError>}
+              </div>
+
+              <div>
+                <label htmlFor="email" className="font-extrabold">
+                  {c.fields.email}
+                </label>
+                <input
+                  ref={emailRef}
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  inputMode="email"
+                  maxLength={MAX_EMAIL}
+                  required
+                  placeholder={c.placeholders.email}
+                  aria-invalid={errors.email ? true : undefined}
+                  aria-describedby={errors.email ? 'email-error' : undefined}
+                  className={fieldClass}
+                />
+                {errors.email && <FieldError id="email-error">{errors.email}</FieldError>}
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <label htmlFor="product" className="font-extrabold">
+                {c.fields.product}
+              </label>
+              <select
+                id="product"
+                name="product"
+                value={product}
+                onChange={(e) => setProduct(e.target.value as ProductId | 'other' | '')}
+                className={fieldClass}
+              >
+                <option value="">{c.selectPlaceholder}</option>
+                {productGroups.map((group) => (
+                  <optgroup key={group.id} label={c.groups[group.id]}>
+                    {group.products.map((id) => (
+                      <option key={id} value={id}>
+                        {t.products[id]}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+                <option value="other">{c.other}</option>
+              </select>
+            </div>
+
+            <div className="mt-5">
+              <label htmlFor="message" className="font-extrabold">
+                {c.fields.message}
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={4}
+                maxLength={MAX_MESSAGE}
+                placeholder={c.placeholders.message}
+                className={`${fieldClass} resize-y`}
+              />
+            </div>
+
+            {/* honeypot */}
+            <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+              <label>
+                Website
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+              </label>
+            </div>
+
+            <p className="mt-5 text-sm text-navy/80">
+              {c.privacyNote}{' '}
+              <a href={pagePath('privacy', lang)} className="font-extrabold underline decoration-deep-teal decoration-2 underline-offset-4">
+                {c.privacyLink}
               </a>
-            </InfoRow>
-            <InfoRow icon={<Phone className="size-5" />} label={c.phone}>
-              <a href={site.phoneHref} className={linkOnDark}>
-                {site.phone}
-              </a>
-            </InfoRow>
-            <InfoRow icon={<WhatsApp className="size-5" />} label="WhatsApp">
-              <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer" className={linkOnDark}>
-                {c.whatsapp}
-              </a>
-            </InfoRow>
-            <InfoRow icon={<Mail className="size-5" />} label={c.email}>
-              <a href={`mailto:${site.email}`} className={`${linkOnDark} break-all`}>
-                {site.email}
-              </a>
-            </InfoRow>
-          </dl>
+            </p>
+
+            <div className="mt-5 flex flex-wrap items-center gap-4">
+              <button
+                type="submit"
+                disabled={status === 'sending'}
+                className={`${btn('primaryOnLight')} disabled:opacity-60 max-sm:w-full`}
+              >
+                {status === 'sending' ? c.status.sending : t.cta}
+              </button>
+              <p role="status" aria-live="polite" className="min-h-6 flex-1 font-extrabold">
+                {status === 'success' && c.status.success}
+                {status === 'mailto' && c.status.mailto}
+                {status === 'error' && c.status.error}
+              </p>
+            </div>
+          </form>
         </div>
 
-        <form
-          ref={formRef}
-          onSubmit={onSubmit}
-          noValidate
-          className="surface-light rounded-[1.25rem] bg-light p-6 text-navy sm:p-8"
-        >
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div>
-              <label htmlFor="company" className="font-extrabold">
-                {c.fields.company}
-              </label>
-              <input
-                ref={companyRef}
-                id="company"
-                name="company"
-                type="text"
-                autoComplete="organization"
-                maxLength={MAX_COMPANY}
-                required
-                placeholder={c.placeholders.company}
-                aria-invalid={errors.company ? true : undefined}
-                aria-describedby={errors.company ? 'company-error' : undefined}
-                className={fieldClass}
-              />
-              {errors.company && <FieldError id="company-error">{errors.company}</FieldError>}
-            </div>
+        <aside className="space-y-12">
+          <div>
+            <h2 className="text-2xl leading-tight font-extrabold text-white">{c.detailsTitle}</h2>
+            <dl className="mt-6 space-y-5">
+              <InfoRow icon={<Phone className="size-5" />} label={c.phone}>
+                <a href={site.phoneHref} className={linkOnDark}>
+                  {site.phone}
+                </a>
+              </InfoRow>
+              <InfoRow icon={<WhatsApp className="size-5" />} label="WhatsApp">
+                <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer" className={linkOnDark}>
+                  {c.whatsapp}
+                </a>
+              </InfoRow>
+              <InfoRow icon={<Mail className="size-5" />} label={c.email}>
+                <a href={`mailto:${site.email}`} className={`${linkOnDark} break-all`}>
+                  {site.email}
+                </a>
+              </InfoRow>
+              <InfoRow icon={<Pin className="size-5" />} label={c.location}>
+                <a href={site.mapsHref} target="_blank" rel="noopener noreferrer" className={linkOnDark}>
+                  {c.address}
+                </a>
+              </InfoRow>
+              <InfoRow icon={<Building className="size-5" />} label={c.entity}>
+                {site.legalName}
+              </InfoRow>
+            </dl>
+          </div>
 
-            <div>
-              <label htmlFor="email" className="font-extrabold">
-                {c.fields.email}
-              </label>
-              <input
-                ref={emailRef}
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                inputMode="email"
-                maxLength={MAX_EMAIL}
-                required
-                placeholder={c.placeholders.email}
-                aria-invalid={errors.email ? true : undefined}
-                aria-describedby={errors.email ? 'email-error' : undefined}
-                className={fieldClass}
-              />
-              {errors.email && <FieldError id="email-error">{errors.email}</FieldError>}
+          <div className="border-t border-white/12 pt-10">
+            <h2 className="text-2xl leading-tight font-extrabold text-white">{t.home.proof.credentials}</h2>
+            <div className="mt-6">
+              <Credentials />
             </div>
           </div>
 
-          <div className="mt-5">
-            <label htmlFor="product" className="font-extrabold">
-              {c.fields.product}
-            </label>
-            <select
-              id="product"
-              name="product"
-              value={product}
-              onChange={(e) => setProduct(e.target.value)}
-              className={fieldClass}
-            >
-              <option value="">{c.selectPlaceholder}</option>
-              {categories.map((cat) => (
-                <optgroup key={cat.id} label={t.products.categories[cat.id].label}>
-                  {cat.products.map((id) => (
-                    <option key={id} value={productMeta[id].name}>
-                      {productMeta[id].name}
-                    </option>
-                  ))}
-                </optgroup>
-              ))}
-              <option value="other">{c.other}</option>
-            </select>
+          <div className="border-t border-white/12 pt-10">
+            <h2 className="text-2xl leading-tight font-extrabold text-white">{t.included.heading}</h2>
+            <IncludedList dark className="mt-6" />
           </div>
-
-          <div className="mt-5">
-            <label htmlFor="message" className="font-extrabold">
-              {c.fields.message}
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows={4}
-              maxLength={MAX_MESSAGE}
-              placeholder={c.placeholders.message}
-              className={`${fieldClass} resize-y`}
-            />
-          </div>
-
-          {/* honeypot */}
-          <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
-            <label>
-              Website
-              <input type="text" name="website" tabIndex={-1} autoComplete="off" />
-            </label>
-          </div>
-
-          <p className="mt-5 text-sm text-navy/80">
-            {c.privacyNote}{' '}
-            <a href={pagePath('privacy', lang)} className="font-extrabold underline decoration-deep-teal decoration-2 underline-offset-4">
-              {c.privacyLink}
-            </a>
-          </p>
-
-          <div className="mt-5 flex flex-wrap items-center gap-4">
-            <button
-              type="submit"
-              disabled={status === 'sending'}
-              className={`${btn('primaryOnLight')} disabled:opacity-60`}
-            >
-              {status === 'sending' ? c.status.sending : t.cta}
-            </button>
-            <p role="status" aria-live="polite" className="min-h-6 flex-1 font-extrabold">
-              {status === 'success' && c.status.success}
-              {status === 'mailto' && c.status.mailto}
-              {status === 'error' && c.status.error}
-            </p>
-          </div>
-        </form>
-      </div>
-
-      {/* What happens after the request is sent. */}
-      <div className="container-x mt-16 border-t border-white/12 pt-12 lg:mt-20">
-        <Steps level={intro ? 3 : 2} />
+        </aside>
       </div>
     </section>
   );

@@ -1,5 +1,5 @@
 import { useLang } from '../i18n/LanguageContext';
-import { pagePath } from '../routes';
+import { inquireHref, pagePath } from '../routes';
 import { Check } from './icons';
 import { HeroStack } from './HeroStack';
 import { arriveProps } from '../motion/reveal';
@@ -24,7 +24,7 @@ export function Hero() {
           <h1 {...arriveProps(0)} className="text-[clamp(2rem,1rem+2.7vw,3.375rem)] leading-[1.15] font-extrabold tracking-tight text-balance text-white">
             {t.hero.title}
           </h1>
-          <p {...arriveProps(1)} className="mt-6 max-w-[34rem] text-lg leading-relaxed text-light sm:text-xl">{t.hero.lead}</p>
+          <p {...arriveProps(1)} className="mt-6 max-w-[34rem] text-lg leading-relaxed text-pretty text-light sm:text-xl">{t.hero.lead}</p>
 
           <ul {...arriveProps(2)} className="mt-8 flex flex-wrap gap-x-7 gap-y-3 font-extrabold text-white">
             {t.hero.points.map((point) => (
@@ -36,10 +36,10 @@ export function Hero() {
           </ul>
 
           <div {...arriveProps(3)} className="mt-10 flex flex-wrap items-center gap-4">
-            <a href={pagePath('contact', lang)} className={btn('primary')}>
+            <a href={inquireHref('m365', lang)} className={btn('primary')}>
               {t.cta}
             </a>
-            <a href="#products" className={btn('ghostOnDark')}>
+            <a href={`${pagePath('services', lang)}#audit`} className={btn('ghostOnDark')}>
               {t.hero.secondary}
             </a>
           </div>

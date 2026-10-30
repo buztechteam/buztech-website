@@ -7,7 +7,7 @@ import { btn } from './ui';
 /** Height of the bar, so App can leave the same space under the footer. */
 export const QUICK_BAR_SPACE = 'h-[calc(4.5rem+env(safe-area-inset-bottom))]';
 
-/* 44px icon buttons and a small CTA keep "მიიღეთ ფასი დღესვე" whole on a 375px phone. */
+/* 44px icon buttons and a small CTA keep "მიიღეთ ფასი" whole on a 375px phone. */
 const iconButton =
   'grid size-11 shrink-0 place-items-center rounded-lg border border-white/25 text-white transition-colors duration-(--dur-hover) ease-soft hover:border-brand-teal hover:text-brand-teal';
 

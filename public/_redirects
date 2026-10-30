@@ -1,0 +1,19 @@
+# Retired addresses from the first version of the site (October 2026 restructure).
+# Cloudflare Workers static assets apply these before looking for a file. Both with and without the
+# trailing slash, in Georgian (root) and English (/en/).
+/licensing          /microsoft-365/       301
+/licensing/         /microsoft-365/       301
+/servers            /it-equipment/        301
+/servers/           /it-equipment/        301
+/networking         /it-equipment/        301
+/networking/        /it-equipment/        301
+/workspaces         /ideahub/             301
+/workspaces/        /ideahub/             301
+/en/licensing       /en/microsoft-365/    301
+/en/licensing/      /en/microsoft-365/    301
+/en/servers         /en/it-equipment/     301
+/en/servers/        /en/it-equipment/     301
+/en/networking      /en/it-equipment/     301
+/en/networking/     /en/it-equipment/     301
+/en/workspaces      /en/ideahub/          301
+/en/workspaces/     /en/ideahub/          301

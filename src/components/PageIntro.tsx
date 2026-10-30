@@ -10,13 +10,11 @@ import { isProductPage, pagePath } from '../routes';
 export function PageIntro({
   title,
   lead,
-  chips,
   children,
 }: {
   title: string;
   lead?: string;
-  chips?: string[];
-  /** Extra content at the foot of the band, e.g. the facts on About. */
+  /** Extra content at the foot of the band, e.g. the facts on About or the price buttons on a product page. */
   children?: ReactNode;
 }) {
   const { lang, page, t } = useLang();
@@ -51,17 +49,8 @@ export function PageIntro({
         <h1 {...arriveProps(1)} className="mt-4 text-[clamp(2rem,1.2rem+2.4vw,3.25rem)] leading-[1.15] font-extrabold tracking-tight text-balance">
           {title}
         </h1>
-        {lead && <p {...arriveProps(2)} className="mt-4 max-w-[40rem] text-lg leading-relaxed text-light">{lead}</p>}
-        {chips && chips.length > 0 && (
-          <ul {...arriveProps(3)} className="mt-6 flex flex-wrap gap-2">
-            {chips.map((chip) => (
-              <li key={chip} className="rounded-md border border-white/40 bg-navy/30 px-3 py-1.5 text-sm font-extrabold text-white">
-                {chip}
-              </li>
-            ))}
-          </ul>
-        )}
-        {children && <div {...arriveProps(4)}>{children}</div>}
+        {lead && <p {...arriveProps(2)} className="mt-4 max-w-[40rem] text-lg leading-relaxed text-pretty text-light">{lead}</p>}
+        {children && <div {...arriveProps(3)}>{children}</div>}
       </div>
     </section>
   );

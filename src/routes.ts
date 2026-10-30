@@ -1,22 +1,15 @@
 import { site } from './config/site';
-import type { CategoryId, Dict, Lang, PageId } from './i18n/types';
+import type { Dict, Lang, PageId, ProductId, ProductPageId } from './i18n/types';
 
-/** Every page, in footer order. Each one is pre-rendered in both languages (scripts/prerender.mjs). */
-export const pages: PageId[] = [
-  'home',
-  'licensing',
-  'servers',
-  'networking',
-  'workspaces',
-  'services',
-  'about',
-  'contact',
-  'privacy',
-];
+/**
+ * Every page, in footer order. Each one is pre-rendered in both languages (scripts/prerender.mjs).
+ * Retired addresses (/licensing/, /servers/, /networking/, /workspaces/) redirect in public/_redirects.
+ */
+export const pages: PageId[] = ['home', 'microsoft-365', 'it-equipment', 'ideahub', 'services', 'about', 'contact', 'privacy'];
 export const langs: Lang[] = ['ge', 'en'];
-export const productPages: CategoryId[] = ['licensing', 'servers', 'networking', 'workspaces'];
+export const productPages: ProductPageId[] = ['microsoft-365', 'it-equipment', 'ideahub'];
 
-export const isProductPage = (page: PageId): page is CategoryId => (productPages as PageId[]).includes(page);
+export const isProductPage = (page: PageId): page is ProductPageId => (productPages as PageId[]).includes(page);
 
 /**
  * Georgian lives at the root, English under /en/. Slugs are Latin in both languages.
@@ -38,8 +31,7 @@ export function matchPath(pathname: string): { page: PageId; lang: Lang } {
 }
 
 /** The contact page with the product already chosen in the form. */
-export const inquireHref = (product: string, lang: Lang) =>
-  `${pagePath('contact', lang)}?product=${encodeURIComponent(product)}`;
+export const inquireHref = (product: ProductId, lang: Lang) => `${pagePath('contact', lang)}?product=${product}`;
 
 /** Title and description per page, built from existing copy. */
 export function pageMeta(page: PageId, t: Dict): { title: string; description: string } {
@@ -47,6 +39,12 @@ export function pageMeta(page: PageId, t: Dict): { title: string; description: s
   switch (page) {
     case 'home':
       return t.meta;
+    case 'microsoft-365':
+      return titled(t.pages[page].label, t.m365.lead);
+    case 'it-equipment':
+      return titled(t.pages[page].label, t.equipment.lead);
+    case 'ideahub':
+      return titled(t.pages[page].label, t.pages[page].summary);
     case 'services':
       return titled(t.services.heading, t.services.lead);
     case 'about':
@@ -57,7 +55,5 @@ export function pageMeta(page: PageId, t: Dict): { title: string; description: s
       return titled(t.privacy.title, t.privacy.intro);
     case 'notFound':
       return titled(t.notFound.title, t.notFound.lead);
-    default:
-      return titled(t.products.categories[page].label, t.products.categories[page].summary);
   }
 }
