@@ -12,6 +12,25 @@ tokens: never read from them, never commit them.
 Georgian is the main language (`/`), English lives under `/en/`. Pages are pre-rendered to static
 HTML, then hydrated; links are full page loads.
 
+## Working with Impeccable
+
+The Impeccable plugin (`/impeccable …`) is installed for this project only. Use it for design judgement:
+- `critique` and `audit` for reviews
+- `polish`, `clarify` and `adapt` to finish a page
+- `layout` and `typeset` for structure
+
+**This skill wins whenever the two disagree.** Impeccable's suggestions are applied inside these rules, never over them:
+
+- **Palette:** only the six tokens below.
+- **Weights:** only 500 and 800.
+- **Fonts:** only Inter and Noto Sans Georgian.
+- **Motion:** stays B+. Use `ease-soft`, the durations below, and no loops. That applies to every command:
+  - `animate`, `delight`, `bolder`, `colorize` and `overdrive` must not add bounce, glow, loops, new colours or decoration.
+  - If one of them asks for those, say no and do the closest on-brand thing.
+- **Copy:** one CTA wording, and Georgian first.
+- **Telemetry:** off for this project, in `.impeccable/config.json`.
+- **`/impeccable init` and `document`:** when they write `PRODUCT.md` / `DESIGN.md`, take the brand, audience and rules from this file and the README, not from guesses. BUZ Tech is a B2B IT seller in Georgia: Microsoft licensing, servers, networks and interactive workspaces. Its buyers are companies, and the site's job is to win price requests.
+
 ## Brand tokens
 
 Enforced in `src/index.css` `@theme`, which resets Tailwind's palette and weights, so off-brand values
