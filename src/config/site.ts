@@ -1,4 +1,4 @@
-import type { BusinessPlanId, CertId, EquipmentId, MicrosoftExtraId, ProductId } from '../i18n/types';
+import type { BusinessPlanId, EquipmentId, MicrosoftExtraId, ProductId } from '../i18n/types';
 
 /**
  * Single source of truth for facts that are NOT translated.
@@ -57,23 +57,12 @@ export const equipment: EquipmentId[] = ['laptops', 'servers', 'networking', 'pr
  */
 export const equipmentBrands: Partial<Record<EquipmentId, string[]>> = {};
 
-/** A real Huawei IdeaHub photo: put the file in /public/products and set it here. Until then an illustration is shown. */
-export const ideahubImage: string | undefined = undefined;
-
 /**
- * ISO certificates. Issuer, number, validity and the scan are intentionally empty:
- * fill them in from the real certificates and they appear in the certificate dialog (its Details button shows once one of them is set).
+ * The Huawei IdeaHub photo (files live in /public/products). Now Huawei's official IdeaHub S2 image from
+ * e.huawei.com, used with Huawei's approval (owner, October 2026) until the owner's own S2 photos arrive.
+ * Set it to undefined and an illustration is shown instead.
  */
-export const certs: {
-  id: CertId;
-  code: string;
-  standard: string;
-  issuer?: string;
-  number?: string;
-  validUntil?: string;
-  file?: string;
-}[] = [
-  { id: 'iso9001', code: 'ISO 9001', standard: 'ISO 9001' },
-  { id: 'iso27001', code: 'ISO 27001', standard: 'ISO/IEC 27001' },
-  { id: 'iso20000', code: 'ISO 20000-1', standard: 'ISO/IEC 20000-1' },
-];
+export const ideahubImage: string | undefined = '/products/ideahub-s2.jpg';
+
+/** ISO standards held. Shown quietly in the footer only, until the certificate details are supplied. */
+export const isoStandards = ['ISO 9001', 'ISO 27001', 'ISO 20000-1'];

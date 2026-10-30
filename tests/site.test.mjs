@@ -281,8 +281,9 @@ test('retired addresses redirect to built pages', () => {
 })
 
 test('only Microsoft and Huawei are named', () => {
-  // the owner has no approval to name other vendors or distributors; the Microsoft wording is "CSP partner"
-  const unapproved = /\b(Dell|HPE|Lenovo|Zyxel|TP-Link|MUK|ERC|PowerEdge|ProLiant|ThinkSystem|ThinkPad|Solution Partner)\b/
+  // the owner has no approval to name other vendors, distributors or clients; the Microsoft wording is "CSP partner"
+  const unapproved =
+    /\b(Dell|HPE|Lenovo|Zyxel|TP-Link|MUK|ERC|PowerEdge|ProLiant|ThinkSystem|ThinkPad|Solution Partner|Telasi|TBC|Evex|Borjomi|Likani|Enterprise Georgia|Financial Monitoring|Azergold|AZAL|Azerbaijan Airlines|AgroDairy)\b|თელასი|თიბისი|ევექსი|ბორჯომი|აწარმოე საქართველოში|ფინანსური მონიტორინგის/
   const js = walk(join(dist, 'assets')).filter((f) => f.endsWith('.js'))
   for (const file of [...pages(), ...js]) {
     const found = readFileSync(file, 'utf8').match(unapproved)
@@ -294,6 +295,15 @@ test('no prices or reply times are promised', () => {
   for (const file of pages()) {
     const found = text(readFileSync(file, 'utf8')).match(/დღესვე|\btoday\b|24 hours|same day|\d+\s?(₾|GEL|USD|EUR|\$)|[₾$€]\s?\d/i)
     assert.equal(found, null, `${rel(file)}: "${found?.[0]}"`)
+  }
+})
+
+test('visible text uses a hyphen, not an em dash', () => {
+  // the owner's preference (October 2026)
+  for (const file of pages()) {
+    const page = readFileSync(file, 'utf8')
+    const head = page.match(/<title>[^<]*|content="[^"]*"/g)?.join(' ') ?? ''
+    assert.ok(!text(page).includes('—') && !head.includes('—'), `${rel(file)} has an em dash`)
   }
 })
 

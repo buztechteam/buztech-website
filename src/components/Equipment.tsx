@@ -69,13 +69,23 @@ export function IdeaHub() {
               {t.cta}
             </a>
           </div>
-          <div className="grid place-items-center bg-navy p-6 sm:p-8 lg:p-10">
-            {ideahubImage ? (
-              <img src={ideahubImage} alt={t.pages.ideahub.label} loading="lazy" className="max-h-72 w-auto object-contain" />
-            ) : (
+          {ideahubImage ? (
+            /* A room photo fills its half of the card edge to edge; the board sits in the middle, so cropping keeps it. */
+            <div className="bg-navy max-lg:aspect-video">
+              <img
+                src={ideahubImage}
+                alt={copy.photoAlt}
+                width={800}
+                height={450}
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          ) : (
+            <div className="grid place-items-center bg-navy p-6 sm:p-8 lg:p-10">
               <BoardIllustration className="h-auto w-full max-w-sm" />
-            )}
-          </div>
+            </div>
+          )}
         </article>
       </div>
     </section>

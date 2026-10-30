@@ -1,5 +1,5 @@
 import type { SVGProps } from 'react';
-import type { CertId, EquipmentId, ProductPageId, ServiceId } from '../i18n/types';
+import type { EquipmentId, ProductPageId, ServiceId } from '../i18n/types';
 
 type IconProps = SVGProps<SVGSVGElement>;
 
@@ -105,27 +105,6 @@ export const Board = (p: IconProps) => (
   <Stroke {...p}>
     <rect x="3" y="4" width="18" height="12" rx="2" />
     <path d="M8 20h8M12 16v4M7 12l3-3 2 2 4-4" />
-  </Stroke>
-);
-
-export const Award = (p: IconProps) => (
-  <Stroke {...p}>
-    <circle cx="12" cy="9" r="6" />
-    <path d="M8.7 14.2L7.5 21l4.5-2.6 4.5 2.6-1.2-6.8" />
-  </Stroke>
-);
-
-export const ShieldCheck = (p: IconProps) => (
-  <Stroke {...p}>
-    <path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6l8-3z" />
-    <path d="M8.5 12l2.5 2.5 4.5-5" />
-  </Stroke>
-);
-
-export const Layers = (p: IconProps) => (
-  <Stroke {...p}>
-    <path d="M12 3l9 5-9 5-9-5 9-5z" />
-    <path d="M3 13l9 5 9-5" />
   </Stroke>
 );
 
@@ -238,9 +217,3 @@ export const equipmentIcons: Record<EquipmentId, Icon> = {
 
 /** In the order of included.items in the dictionaries: invoice, documents, reminders, support. */
 export const includedIcons: Icon[] = [Receipt, FileCheck, Bell, Headset];
-
-export const certIcons: Record<CertId, Icon> = {
-  iso9001: Award,
-  iso27001: ShieldCheck,
-  iso20000: Layers,
-};

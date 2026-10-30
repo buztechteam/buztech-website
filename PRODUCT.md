@@ -21,7 +21,7 @@ The website for LLC BUZ Tech Georgia ("BUZ Tech"). Its job is to turn visits int
 ## Positioning
 
 - **Microsoft 365 licences first.** BUZ Tech offers the best Microsoft prices in Georgia. The reason is confidential and must never be explained on the site.
-- **The price promise (being tested):** "Send us any Microsoft 365 quote — we'll beat it." The owner may revert it to a plain best-price statement.
+- **The price promise:** a plain "the best Microsoft 365 prices in Georgia". The "send us any quote, we'll beat it" test was dropped on 30 October 2026: the owner found the Georgian wording weak.
 - **Official Microsoft CSP partner.** Wording: "CSP partner", never "Solution Partner".
 - **Everything else, on request.** Laptops, servers, switches, Huawei IdeaHub boards and more, sourced for the client. Hardware is secondary to Microsoft and is never presented as the core.
 - **A relationship after the sale.** The owner's words: "we are friends after they buy from us". This means support of all kinds, not a one-off sale.
@@ -31,7 +31,7 @@ The website for LLC BUZ Tech Georgia ("BUZ Tech"). Its job is to turn visits int
 - **Prices are never fixed.** Every quote is requested from the group's Azerbaijan office and differs each time. A client calls, texts or sends the form, and BUZ Tech replies with a price once it arrives (usually about a day; never state a turnaround on the site).
 - **Every order includes:**
   - a VAT invoice in GEL from LLC BUZ Tech Georgia
-  - company documents and ISO certificates, ready for tenders and supplier files
+  - company documents and ISO certificates
   - renewal reminders before licences renew
 - **Services, all real:**
   - a free licence audit
@@ -44,7 +44,8 @@ The website for LLC BUZ Tech Georgia ("BUZ Tech"). Its job is to turn visits int
 
 - **Languages:** Georgian first (`/`), English under `/en/`. Georgian words are long.
 - **No prices on the site,** not even "from" prices. Every pricing path ends in a quote request.
-- **CTA wording:** "მიიღეთ ფასი" / "Get a price". "Today" was dropped, and the site never promises same-day or any timed reply.
+- **CTA wording:** "მიიღეთ ფასი" / "Get a price". "Today" was dropped, and the site never promises same-day or any timed reply. The form promises a reply, not a price ("we'll get back to you").
+- **Punctuation:** a plain hyphen ( - ), never an em dash, in any text a visitor reads.
 - **Third-party names:** only Microsoft and Huawei may appear. There is no approval to name any other vendor or distributor (no Dell, HPE, Lenovo, Zyxel, TP-Link, MUK or ERC), so there is no "partners" section.
 - **Planned page set (agreed direction):**
   - Home, Microsoft-led
@@ -67,13 +68,9 @@ The website for LLC BUZ Tech Georgia ("BUZ Tech"). Its job is to turn visits int
 
 ## Evidence on Hand
 
-- **Clients, named with permission:**
-  - Telasi, TBC Insurance, Evex, Borjomi Likani
-  - public sector: Enterprise Georgia and the Financial Monitoring Service of Georgia
-  - in Azerbaijan: Azergold, Azerbaijan Airlines (AZAL), AgroDairy
-  - the full list is in `src/i18n/*.ts`
+- **Clients: no approval to name them** (owner, 30 October 2026). The site describes them only by kind, sector and country: public bodies on Microsoft solutions, and state and private companies in Georgia, Azerbaijan, Turkey, Uzbekistan and Kazakhstan.
 - **Company facts:** founded 20 September 2018, plus the tax ID and address (`src/config/site.ts`).
-- **ISO 9001, 27001 and 20000-1 are held,** but the issuer, number, validity and scans are not yet supplied. Never invent them.
+- **ISO 9001, 27001 and 20000-1 are held,** but the issuer, number, validity and scans are not yet supplied. Never invent them. Until then ISO stays low-key: one line in the footer and the "documents" item of what every order includes, with no section of its own.
 - **Missing, and not to be fabricated:**
   - testimonials, case studies, prices and savings figures
   - partner or client logos

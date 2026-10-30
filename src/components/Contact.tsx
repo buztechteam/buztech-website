@@ -111,7 +111,7 @@ export function Contact() {
         const payload = site.web3formsKey
           ? {
               access_key: site.web3formsKey,
-              subject: `${c.mailSubject} — ${company}`,
+              subject: `${c.mailSubject} - ${company}`,
               from_name: `${site.name} website`,
               replyto: email,
               company,
@@ -139,7 +139,7 @@ export function Contact() {
 
     /* No endpoint configured: hand the request to the visitor's email app. */
     const body = [`${c.fields.company}: ${company}`, `${c.fields.email}: ${email}`, `${c.fields.product}: ${productName || '-'}`, '', message].join('\n');
-    const subject = `${c.mailSubject} — ${company}`;
+    const subject = `${c.mailSubject} - ${company}`;
     window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setStatus('mailto');
   };

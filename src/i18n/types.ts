@@ -23,7 +23,6 @@ export type ProductId =
   | 'audit'
   | EquipmentId
   | 'ideahub';
-export type CertId = 'iso9001' | 'iso27001' | 'iso20000';
 export type ServiceId = 'setup' | 'support' | 'supply';
 
 type Item = { title: string; text: string };
@@ -91,7 +90,7 @@ export interface Dict {
     howHeading: string;
     how: Item[];
   };
-  ideahub: { tagline: string; specs: string[]; ask: string };
+  ideahub: { tagline: string; specs: string[]; ask: string; photoAlt: string };
   services: {
     heading: string;
     lead: string;
@@ -101,24 +100,14 @@ export interface Dict {
     stepsHeading: string;
     steps: Item[];
   };
+  /** No client is named: there is no approval yet. Sectors and countries only. */
   clients: {
     heading: string;
     /** Where we work and where the head office is. */
     lead: string;
-    groups: { country: string; items: { name: string; sector: string }[] }[];
     more: string;
-  };
-  certs: {
-    heading: string;
-    lead: string;
-    details: string;
-    standardLabel: string;
-    benefitsTitle: string;
-    issuer: string;
-    number: string;
-    valid: string;
-    view: string;
-    items: Record<CertId, { name: string; summary: string; benefits: string[] }>;
+    sectorsHeading: string;
+    sectors: string[];
   };
   contact: {
     heading: string;

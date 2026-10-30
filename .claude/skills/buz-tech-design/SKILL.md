@@ -60,6 +60,8 @@ simply don't exist.
   - Only Microsoft and Huawei are named. Approved product brands go in `equipmentBrands` (`config/site.ts`) only.
   - "Official Microsoft CSP partner", never "Solution Partner".
   - No prices, "from" prices or reply times. Proof is real or absent: no invented numbers, testimonials or logos.
+  - No client names (no approval): kind, sector and country only. ISO stays a quiet footer line.
+  - A plain hyphen ( - ), never an em dash, in visible copy.
 
 ## Motion: "B+"
 

@@ -1,4 +1,4 @@
-import { certs, site } from '../config/site';
+import { isoStandards, site } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import { isProductPage, pagePath, pages } from '../routes';
 import BuzLogo from './BuzLogo';
@@ -6,14 +6,18 @@ import { Facebook, LinkedIn, WhatsApp } from './icons';
 
 const linkClass = 'text-light/85 transition-colors duration-(--dur-hover) ease-soft hover:text-brand-teal';
 
+/**
+ * Kept short: the logo, the pages, how to reach us and the company facts. The company overview lives on About,
+ * Home is the logo's link and the legal name sits in the copyright line.
+ */
 export function Footer() {
   const { lang, t } = useLang();
   const f = t.footer;
   const quickLinks = pages
-    .filter((page) => page !== 'privacy')
+    .filter((page) => page !== 'privacy' && page !== 'home')
     .map((page) => ({
       page,
-      label: isProductPage(page) ? t.pages[page].label : t.nav[page as 'home' | 'services' | 'about' | 'contact'],
+      label: isProductPage(page) ? t.pages[page].label : t.nav[page as 'services' | 'about' | 'contact'],
     }));
   const social = [
     { label: 'Facebook', href: site.social.facebook, Icon: Facebook },
@@ -23,19 +27,20 @@ export function Footer() {
 
   return (
     <footer className="border-t border-white/10 bg-ink text-light">
-      {/* Phone: two columns throughout, the overview hidden (About carries it), smaller lists. */}
-      <div className="container-x grid grid-cols-2 gap-x-6 gap-y-10 py-12 max-sm:text-sm sm:gap-12 sm:py-16 lg:grid-cols-[1.4fr_0.8fr_1fr_1fr]">
+      <div className="container-x grid grid-cols-2 gap-x-6 gap-y-8 py-10 text-sm sm:gap-x-10 sm:py-12 sm:text-base lg:grid-cols-[1fr_1fr_1.3fr_1fr]">
         <div className="col-span-2 lg:col-span-1">
-          <BuzLogo className="h-10 w-auto" />
+          <a href={pagePath('home', lang)} aria-label={t.a11y.home} className="inline-block">
+            <BuzLogo className="h-10 w-auto" />
+          </a>
           <p lang="en" className="mt-3 text-[0.6875rem] leading-none tracking-[0.22em] text-brand-teal uppercase">
             {site.tagline}
           </p>
-          <p className="mt-6 max-w-[26rem] text-light/85 max-sm:hidden">{f.overview}</p>
         </div>
 
-        <nav aria-label={f.quickLinks} className="col-span-2 sm:col-span-1">
-          <h2 className="text-lg text-white">{f.quickLinks}</h2>
-          <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5 sm:grid-cols-1">
+        {/* Phones have the header menu and the quick-contact bar, so the page list is left out there. */}
+        <nav aria-label={f.quickLinks} className="max-sm:hidden">
+          <h2 className="text-base text-white sm:text-lg">{f.quickLinks}</h2>
+          <ul className="mt-3 space-y-2">
             {quickLinks.map(({ page, label }) => (
               <li key={page}>
                 <a href={pagePath(page, lang)} className={linkClass}>
@@ -47,14 +52,8 @@ export function Footer() {
         </nav>
 
         <div className="min-w-0">
-          <h2 className="text-lg text-white">{f.contactTitle}</h2>
-          <ul className="mt-4 space-y-2.5">
-            <li>{site.legalName}</li>
-            <li>
-              <a href={site.mapsHref} target="_blank" rel="noopener noreferrer" className={linkClass}>
-                {t.contact.address}
-              </a>
-            </li>
+          <h2 className="text-base text-white sm:text-lg">{f.contactTitle}</h2>
+          <ul className="mt-3 space-y-2">
             <li>
               <a href={site.phoneHref} className={linkClass}>
                 {site.phone}
@@ -65,15 +64,17 @@ export function Footer() {
                 {site.email}
               </a>
             </li>
+            <li>
+              <a href={site.mapsHref} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                {t.contact.address}
+              </a>
+            </li>
           </ul>
         </div>
 
         <div className="min-w-0">
-          <h2 className="text-lg text-white">{f.complianceTitle}</h2>
-          <ul className="mt-4 space-y-2.5">
-            {certs.map((cert) => (
-              <li key={cert.id}>{cert.code}</li>
-            ))}
+          <h2 className="text-base text-white sm:text-lg">{f.complianceTitle}</h2>
+          <ul className="mt-3 space-y-2">
             <li>{t.home.proof.partner}</li>
             {site.taxId && (
               <li>
@@ -81,12 +82,13 @@ export function Footer() {
               </li>
             )}
             <li>{f.founded}</li>
+            <li className="text-light/70">{isoStandards.join(' · ')}</li>
           </ul>
         </div>
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container-x flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-6 text-sm text-light/75">
+        <div className="container-x flex flex-wrap items-center justify-between gap-x-6 gap-y-3 py-5 text-sm text-light/75">
           <p>
             © {__BUILD_YEAR__} {site.legalName}. {f.rights}
           </p>

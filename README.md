@@ -15,7 +15,7 @@ npm run preview    # serve dist/ locally
 ```
 src/
   index.css                  brand tokens (colours, fonts, weights), gradient, motion, dialog CSS
-  config/site.ts             contact details, tax ID, form options, plan names, approved brand names, ISO certificates
+  config/site.ts             contact details, tax ID, form options, plan names, approved brand names, ISO standards
                              (not translated)
   i18n/ge.ts, en.ts          all copy incl. street address and client list; ge.ts is the primary language,
                              types.ts keeps both in sync
@@ -100,15 +100,17 @@ white text (2.2:1), so a Navy scrim fades across the text column.
 - **"Official Microsoft CSP partner"**, never "Solution Partner".
 - **No prices and no reply times.** Prices come from the group office and differ every time, so every path ends in a
   price request. `npm test` fails on a price or a time promise.
-- **The price promise is a test:** "Send us any Microsoft 365 quote — we'll beat it" (`beat` and `hero.lead` in the
-  dictionaries). The owner may change it back to a plain best-price line.
+- **No client names.** There is no approval yet, so clients are described by kind, sector and country only (`clients` in
+  the dictionaries). `npm test` fails if a client name reaches the built site.
+- **ISO stays low-key** until the certificate details exist: one footer line (`isoStandards` in `config/site.ts`).
+- **A plain hyphen, never an em dash,** in visible text (`npm test` checks).
 
 ## Before launch: items only you can supply
 
 1. **Brand names on the IT equipment page.** Generic until the owner approves names (`equipmentBrands` in `config/site.ts`).
-2. **Client logos.** The clients section shows typeset names (`clients` in `i18n/ge.ts` / `en.ts`). Add logos once each client agrees.
-3. **ISO certificate details.** Issuer, certificate number, validity and a scan are empty in `certs` (`config/site.ts`). Fill them in and a Details button with a dialog appears on each certificate.
-4. **IdeaHub photo.** Add a file to `public/products/` and set `ideahubImage`; until then the IdeaHub page shows an illustration.
+2. **Client names and logos.** None are shown until each client agrees.
+3. **ISO certificate details.** Issuer, number, validity and scans. Once supplied, the certificates can get their own section again (it was removed in October 2026 while they were missing).
+4. **Your own IdeaHub S2 photos.** The IdeaHub page shows Huawei's official S2 image (`public/products/ideahub-s2.jpg`, approved by Huawei). Replace the file, or add yours and point `ideahubImage` at it.
 5. **Form delivery.** Create a free Web3Forms key (enter info-ge@buz-cloud.com, the key arrives by email) and set it as `VITE_WEB3FORMS_KEY`. Requests then go only to that inbox. Without a key the form opens the visitor's email app. See `.env.example`.
 6. **LinkedIn.** `site.social.linkedin` renders in the footer only when set.
 

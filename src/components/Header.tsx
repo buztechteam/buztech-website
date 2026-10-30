@@ -60,12 +60,43 @@ function useScrolled(threshold = 8): boolean {
   return scrolled;
 }
 
-/** Disclosure menu with the product pages, Microsoft 365 first. Esc or a click outside closes it. */
+/** Disclosure menu with the product pages, Microsoft 365 first. Opens on hover or click; Esc or a click outside closes it. */
 function ProductsMenu() {
   const { lang, page, t } = useLang();
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  /*
+    A mouse opens the menu by pointing at it, and leaving closes it after a short delay, so the pointer can
+    cross the gap between the button and the menu. Touch and keyboard keep the click toggle. A click right
+    after a hover-open keeps the menu open instead of closing it under the pointer.
+  */
+  const closeTimer = useRef<number | undefined>(undefined);
+  const hoverOpened = useRef(false);
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
+  const onPointerEnter = (e: React.PointerEvent) => {
+    if (e.pointerType !== 'mouse') return;
+    window.clearTimeout(closeTimer.current);
+    if (!open) {
+      hoverOpened.current = true;
+      setOpen(true);
+    }
+  };
+  const onPointerLeave = (e: React.PointerEvent) => {
+    if (e.pointerType !== 'mouse') return;
+    closeTimer.current = window.setTimeout(() => {
+      hoverOpened.current = false;
+      setOpen(false);
+    }, 200);
+  };
+  const onClick = () => {
+    if (hoverOpened.current) {
+      hoverOpened.current = false;
+      setOpen(true);
+      return;
+    }
+    setOpen((v) => !v);
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -90,6 +121,8 @@ function ProductsMenu() {
     <div
       ref={wrapRef}
       className="relative"
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
       onBlur={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOpen(false);
       }}
@@ -100,7 +133,7 @@ function ProductsMenu() {
         aria-expanded={open}
         aria-controls="products-menu"
         data-active={isProductPage(page)}
-        onClick={() => setOpen((v) => !v)}
+        onClick={onClick}
         className={`${navLink} flex items-center gap-1.5`}
       >
         {t.nav.products}

@@ -1,5 +1,4 @@
 import { useEffect, type ReactNode } from 'react';
-import { Certifications } from './components/Certifications';
 import { Clients } from './components/Clients';
 import { Contact } from './components/Contact';
 import { ContactBand } from './components/ContactBand';
@@ -89,7 +88,6 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
             <Facts className="mt-10" />
           </PageIntro>
           <Clients />
-          <Certifications />
         </>
       );
     case 'contact':

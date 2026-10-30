@@ -35,7 +35,7 @@ export const inquireHref = (product: ProductId, lang: Lang) => `${pagePath('cont
 
 /** Title and description per page, built from existing copy. */
 export function pageMeta(page: PageId, t: Dict): { title: string; description: string } {
-  const titled = (name: string, description: string) => ({ title: `${name} — ${site.name}`, description });
+  const titled = (name: string, description: string) => ({ title: `${name} - ${site.name}`, description });
   switch (page) {
     case 'home':
       return t.meta;
