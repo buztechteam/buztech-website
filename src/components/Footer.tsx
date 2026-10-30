@@ -4,7 +4,8 @@ import { isProductPage, pagePath, pages } from '../routes';
 import BuzLogo from './BuzLogo';
 import { Facebook, LinkedIn, WhatsApp } from './icons';
 
-const linkClass = 'text-light/85 transition-colors duration-(--dur-hover) ease-soft hover:text-brand-teal';
+/* inline-block py-1: taller tap targets on phones without changing the look. */
+const linkClass = 'inline-block py-1 text-light/85 transition-colors duration-(--dur-hover) ease-soft hover:text-brand-teal';
 
 /**
  * Kept short: the logo, the pages, how to reach us and the company facts. The company overview lives on About,
@@ -40,7 +41,7 @@ export function Footer() {
         {/* Phones have the header menu and the quick-contact bar, so the page list is left out there. */}
         <nav aria-label={f.quickLinks} className="max-sm:hidden">
           <h2 className="text-base text-white sm:text-lg">{f.quickLinks}</h2>
-          <ul className="mt-3 space-y-2">
+          <ul className="mt-2 space-y-1">
             {quickLinks.map(({ page, label }) => (
               <li key={page}>
                 <a href={pagePath(page, lang)} className={linkClass}>
@@ -89,7 +90,7 @@ export function Footer() {
 
       <div className="border-t border-white/10">
         <div className="container-x flex flex-wrap items-center justify-between gap-x-6 gap-y-3 py-5 text-sm text-light/75">
-          <p>
+          <p className="text-pretty">
             © {__BUILD_YEAR__} {site.legalName}. {f.rights}
           </p>
           <a href={pagePath('privacy', lang)} className="underline underline-offset-4 transition-colors duration-(--dur-hover) ease-soft hover:text-brand-teal">

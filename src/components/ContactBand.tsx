@@ -13,7 +13,7 @@ export function ContactBand() {
       <div className="container-x flex flex-col gap-8 py-14 lg:flex-row lg:items-center lg:justify-between">
         <div {...revealProps(0)}>
           <h2 id="contact-band-title" className="text-[clamp(1.6rem,1.1rem+1.6vw,2.25rem)] leading-tight font-extrabold tracking-tight">
-            {t.contact.heading}
+            {t.cta}
           </h2>
           <p className="mt-3 max-w-[34rem] text-lg leading-relaxed">{t.contact.lead}</p>
         </div>

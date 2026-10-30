@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from 'react';
+import { site } from './config/site';
 import { Clients } from './components/Clients';
 import { Contact } from './components/Contact';
 import { ContactBand } from './components/ContactBand';
@@ -7,7 +8,6 @@ import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { M365Teaser } from './components/Home';
-import { IncludedSection } from './components/Included';
 import { Microsoft365, PriceActions } from './components/Microsoft365';
 import { PageIntro } from './components/PageIntro';
 import { Privacy } from './components/Privacy';
@@ -21,7 +21,10 @@ import type { Dict, Lang, PageId } from './i18n/types';
 import { btn } from './components/ui';
 import { pagePath } from './routes';
 
-/** What each page shows. Microsoft 365 leads; every page ends in a price request (ContactBand, or the form itself). */
+/**
+ * What each page shows. Microsoft 365 leads; every page ends in a price request (ContactBand, or the form itself).
+ * "What every order includes" sits where the decision is made: the Microsoft 365 page and Contact.
+ */
 function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
   const priceButton = (
     <a href={pagePath('contact', lang)} className={`${btn('primary')} mt-8`}>
@@ -41,7 +44,6 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
             prominent
           />
           <Proof />
-          <IncludedSection />
         </>
       );
     case 'microsoft-365':
@@ -50,8 +52,8 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
           <PageIntro title={t.pages[page].label} lead={t.m365.lead}>
             <PriceActions className="mt-8" />
           </PageIntro>
+          {/* Ends in its own navy close and the contact band; the menu already links the other products. */}
           <Microsoft365 />
-          <ProductLinks current={page} />
         </>
       );
     case 'it-equipment':
@@ -86,6 +88,10 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
         <>
           <PageIntro title={t.nav.about} lead={t.footer.overview}>
             <Facts className="mt-10" />
+            {/* The company details tender teams look for, not only in the footer. */}
+            <p className="mt-4 text-sm text-light/85">
+              {site.legalName} · {t.footer.taxId}: {site.taxId} · {t.footer.founded}
+            </p>
           </PageIntro>
           <Clients />
         </>

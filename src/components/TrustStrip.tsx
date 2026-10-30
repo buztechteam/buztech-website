@@ -22,7 +22,7 @@ export function Facts({ className = '' }: { className?: string }) {
   );
 }
 
-/** Microsoft CSP partner and the company facts, as a checked list on Navy (home proof, Contact). */
+/** Microsoft CSP partner and the company facts, as a checked list on Navy (Contact, beside the form). */
 export function Credentials() {
   const { t } = useLang();
   const p = t.home.proof;
@@ -69,11 +69,13 @@ export function Proof() {
           </div>
         </div>
 
+        {/* What the partnership means for the buyer, said once, instead of the bare claim again. */}
         <div {...revealProps(3)} className="lg:border-l lg:border-white/12 lg:pl-12">
-          <h3 className="text-xl font-extrabold text-white">{t.home.proof.credentials}</h3>
-          <div className="mt-6">
-            <Credentials />
-          </div>
+          <h3 className="text-xl font-extrabold text-balance text-white">{t.home.proof.partner}</h3>
+          <p className="mt-3 text-pretty text-light/85">{t.home.proof.cspText}</p>
+          <p className="mt-5 text-light/75">
+            {t.home.proof.since} · {t.home.proof.countries}
+          </p>
           <a href={pagePath('about', lang)} className={`${btn('ghostOnDark')} mt-10 gap-2`}>
             {t.nav.about}
             <ArrowRight className="size-5" />

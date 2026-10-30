@@ -36,6 +36,12 @@ const variants: Record<Variant, string> = {
 export const btn = (variant: Variant, size: Size = 'md') => `${base} ${sizes[size]} ${variants[variant]}`;
 
 /**
+ * A quieter price link for cards and rows, so one page doesn't carry a dozen identical buttons.
+ * Still 44px tall to tap; on light surfaces only.
+ */
+export const textCta = `inline-flex min-h-11 items-center gap-1.5 font-extrabold text-navy underline decoration-deep-teal decoration-2 underline-offset-4 ${soft} hover:decoration-navy`;
+
+/**
  * Card recipes. A link card lifts with a soft Navy shadow; it keeps its own hover border colour
  * (Deep Teal on light cards, Brand Teal on the Navy flagship) and needs `group` for the parts.
  */

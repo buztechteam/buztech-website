@@ -35,7 +35,8 @@ export const inquireHref = (product: ProductId, lang: Lang) => `${pagePath('cont
 
 /** Title and description per page, built from existing copy. */
 export function pageMeta(page: PageId, t: Dict): { title: string; description: string } {
-  const titled = (name: string, description: string) => ({ title: `${name} - ${site.name}`, description });
+  /* Soft hyphens (long Georgian headings) only help the page itself; titles drop them. */
+  const titled = (name: string, description: string) => ({ title: `${name.replaceAll('\u00AD', '')} - ${site.name}`, description });
   switch (page) {
     case 'home':
       return t.meta;

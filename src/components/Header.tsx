@@ -26,7 +26,7 @@ function LangToggle() {
           hrefLang={l.htmlLang}
           lang={l.htmlLang}
           aria-current={lang === l.id ? 'true' : undefined}
-          className="rounded-md px-3 py-1.5 font-extrabold text-light/80 transition-colors hover:text-white aria-[current=true]:bg-brand-teal aria-[current=true]:text-ink"
+          className="grid min-h-10 min-w-11 place-items-center rounded-md px-3 font-extrabold text-light/80 transition-colors hover:text-white aria-[current=true]:bg-brand-teal aria-[current=true]:text-ink"
         >
           {l.label}
         </a>

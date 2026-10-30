@@ -69,6 +69,7 @@ export const en: Dict = {
     networking: 'Networking',
     printers: 'Printers and other equipment',
     ideahub: 'Huawei IdeaHub',
+    documents: 'Company documents for a tender',
   },
   productLinks: { heading: 'Products' },
   beat: {
@@ -79,7 +80,7 @@ export const en: Dict = {
     heading: 'What every order includes',
     items: [
       { title: 'VAT invoice in GEL', text: 'Issued by LLC BUZ Tech Georgia, ready for your accounts.' },
-      { title: 'Documents for tenders', text: 'Company documents and ISO certificates.' },
+      { title: 'Documents for tenders', text: 'Company documents and ISO certificates.', action: 'Request documents' },
       { title: 'Renewal reminders', text: 'We remind you to renew your licences on time, so your services are never interrupted.' },
       { title: 'Support after the sale', text: 'Questions, changes, new users - we stay in touch.' },
     ],
@@ -104,6 +105,8 @@ export const en: Dict = {
       heading: 'An international IT integrator',
       credentials: 'Partnership and experience',
       partner: 'Official Microsoft CSP partner',
+      cspText:
+        'Microsoft authorises us to sell and manage its cloud licences directly. Your licences sit in your own company account, invoiced in GEL, and we handle renewals and changes for you.',
       since: 'In Georgia since 2018',
       countries: 'Working in 5 countries',
     },
@@ -167,6 +170,10 @@ export const en: Dict = {
         {
           term: 'Intune',
           text: 'One place to set up and protect company laptops and phones: settings, updates, and wiping a lost device.',
+        },
+        {
+          term: 'CSP partner',
+          text: 'An official Microsoft partner that sells and manages its cloud licences directly. Your licences sit in your own company account, invoiced in GEL, and we handle the renewals.',
         },
       ],
     },
@@ -264,7 +271,7 @@ export const en: Dict = {
     sectors: ['Energy', 'Insurance', 'Healthcare', 'Public sector', 'Hospitality', 'Mining', 'Aviation', 'Agriculture and dairy'],
   },
   contact: {
-    heading: 'Get a price',
+    heading: 'Contact us',
     lead: 'Tell us your company and what you need - we’ll get back to you.',
     detailsTitle: 'Contact details',
     entity: 'Legal entity',
@@ -286,7 +293,15 @@ export const en: Dict = {
       message: 'For example: the number of users or devices, your current plan',
     },
     selectPlaceholder: 'Choose',
-    groups: { microsoft: 'Microsoft', equipment: 'IT equipment' },
+    groups: { microsoft: 'Microsoft', equipment: 'IT equipment', company: 'BUZ Tech' },
+    next: {
+      heading: 'What happens next',
+      steps: [
+        'We review your request.',
+        'We contact you by phone or email to agree the details.',
+        'You receive an offer, then a VAT invoice in GEL once you confirm.',
+      ],
+    },
     other: 'Something else',
     required: 'Fill in this field',
     invalidEmail: 'Enter a valid email, e.g., name@company.ge',

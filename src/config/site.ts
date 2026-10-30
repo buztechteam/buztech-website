@@ -33,12 +33,13 @@ export const site = {
 } as const;
 
 /** The price-request form's options, in groups (names: products in the dictionaries). */
-export const productGroups: { id: 'microsoft' | 'equipment'; products: ProductId[] }[] = [
+export const productGroups: { id: 'microsoft' | 'equipment' | 'company'; products: ProductId[] }[] = [
   {
     id: 'microsoft',
     products: ['m365', 'business-basic', 'business-standard', 'business-premium', 'e3', 'e5', 'copilot', 'windows-office', 'azure', 'entra', 'audit'],
   },
   { id: 'equipment', products: ['laptops', 'servers', 'networking', 'printers', 'ideahub'] },
+  { id: 'company', products: ['documents'] },
 ];
 
 /** Microsoft 365 Business plans (up to 300 users), smallest first. Microsoft's names, the same in every language. */

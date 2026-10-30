@@ -22,6 +22,12 @@ const MAX_EMAIL = 254;
 const MAX_MESSAGE = 2000;
 
 const productIds: ProductId[] = productGroups.flatMap((group) => group.products);
+
+/*
+  Inside the Microsoft group the "Microsoft 365 " prefix is implied, and dropping it keeps names like
+  "Business Premium" whole on a phone. "Microsoft 365 - not sure which plan" keeps it. Emails still get the full name.
+*/
+const optionLabel = (group: string, name: string) => (group === 'microsoft' ? name.replace(/^Microsoft 365 (?=[A-Z])/, '') : name);
 const isProductId = (value: string): value is ProductId => (productIds as string[]).includes(value);
 
 /* Placeholders at Navy/70 on white: 6:1, above the 4.5:1 that text needs. */
@@ -147,7 +153,8 @@ export function Contact() {
   return (
     <section id="contact" className="bg-navy py-10 text-light sm:py-16 lg:py-20">
       <div className="container-x grid gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:gap-14">
-        <div>
+        {/* Wide screens: the form stays in view while the longer details column scrolls past it. */}
+        <div className="lg:sticky lg:top-24 lg:self-start">
           {/* Phones: one tap to call or write, right above the form. Wide screens show the details beside it. */}
           <div className="mb-6 grid grid-cols-2 gap-3 lg:hidden">
             <a href={site.phoneHref} className={`${btn('ghostOnDark')} gap-2`}>
@@ -225,7 +232,7 @@ export function Contact() {
                   <optgroup key={group.id} label={c.groups[group.id]}>
                     {group.products.map((id) => (
                       <option key={id} value={id}>
-                        {t.products[id]}
+                        {optionLabel(group.id, t.products[id])}
                       </option>
                     ))}
                   </optgroup>
@@ -269,7 +276,7 @@ export function Contact() {
                 disabled={status === 'sending'}
                 className={`${btn('primaryOnLight')} disabled:opacity-60 max-sm:w-full`}
               >
-                {status === 'sending' ? c.status.sending : t.cta}
+                {status === 'sending' ? c.status.sending : product === 'audit' ? t.services.audit.cta : t.cta}
               </button>
               <p role="status" aria-live="polite" className="min-h-6 flex-1 font-extrabold">
                 {status === 'success' && c.status.success}
@@ -278,6 +285,21 @@ export function Contact() {
               </p>
             </div>
           </form>
+
+          {/* What happens after sending, without a time promise. */}
+          <div className="mt-8">
+            <h2 className="text-lg font-extrabold text-white">{c.next.heading}</h2>
+            <ol className="mt-3 space-y-2">
+              {c.next.steps.map((step, i) => (
+                <li key={step} className="flex gap-3 text-light/85">
+                  <span aria-hidden="true" className="grid size-6 shrink-0 place-items-center rounded-full bg-white/10 text-sm font-extrabold text-brand-teal">
+                    {i + 1}
+                  </span>
+                  <span className="text-pretty">{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
 
         <aside className="space-y-12">

@@ -21,7 +21,7 @@ export function Hero() {
 
       <div className="container-x grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-[1.12fr_0.88fr] lg:py-24">
         <div>
-          <h1 {...arriveProps(0)} className="text-[clamp(2rem,1rem+2.7vw,3.375rem)] leading-[1.15] font-extrabold tracking-tight text-balance text-white">
+          <h1 {...arriveProps(0)} className="text-[clamp(2rem,1rem+2.7vw,3.375rem)] leading-[1.15] font-extrabold tracking-tight text-balance break-words text-white">
             {t.hero.title}
           </h1>
           <p {...arriveProps(1)} className="mt-6 max-w-[34rem] text-lg leading-relaxed text-pretty text-light sm:text-xl">{t.hero.lead}</p>

@@ -4,6 +4,7 @@ import { revealProps } from '../motion/reveal';
 import { inquireHref } from '../routes';
 import { BoardIllustration } from './BoardIllustration';
 import { equipmentIcons } from './icons';
+import { PriceLink } from './Microsoft365';
 import { SpecList } from './SpecList';
 import { Steps } from './Services';
 import { btn, cardStatic, h2Class } from './ui';
@@ -13,7 +14,7 @@ import { btn, cardStatic, h2Class } from './ui';
  * Brand names appear only once approved (equipmentBrands in config/site.ts).
  */
 export function Equipment() {
-  const { lang, t } = useLang();
+  const { t } = useLang();
   const e = t.equipment;
   return (
     <>
@@ -32,10 +33,8 @@ export function Equipment() {
                   </div>
                   <p className="mt-3 text-pretty text-navy/85">{e.items[id]}</p>
                   {brands.length > 0 && <p className="mt-3 text-sm font-extrabold text-navy/80">{brands.join(' · ')}</p>}
-                  <div className="mt-auto pt-8">
-                    <a href={inquireHref(id, lang)} className={btn('outlineOnLight', 'sm')}>
-                      {t.cta}
-                    </a>
+                  <div className="mt-auto pt-5">
+                    <PriceLink product={id} />
                   </div>
                 </li>
               );
@@ -70,14 +69,15 @@ export function IdeaHub() {
             </a>
           </div>
           {ideahubImage ? (
-            /* A room photo fills its half of the card edge to edge; the board sits in the middle, so cropping keeps it. */
+            /* A room photo fills its half of the card edge to edge; the board sits in the middle, so cropping keeps it.
+               Not lazy: it sits near the top of the page. */
             <div className="bg-navy max-lg:aspect-video">
               <img
                 src={ideahubImage}
                 alt={copy.photoAlt}
                 width={800}
                 height={450}
-                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover"
               />
             </div>

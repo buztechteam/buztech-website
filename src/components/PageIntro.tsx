@@ -46,7 +46,7 @@ export function PageIntro({
             </li>
           </ol>
         </nav>
-        <h1 {...arriveProps(1)} className="mt-4 text-[clamp(2rem,1.2rem+2.4vw,3.25rem)] leading-[1.15] font-extrabold tracking-tight text-balance">
+        <h1 {...arriveProps(1)} className="mt-4 text-[clamp(2rem,1.2rem+2.4vw,3.25rem)] leading-[1.15] font-extrabold tracking-tight text-balance break-words">
           {title}
         </h1>
         {lead && <p {...arriveProps(2)} className="mt-4 max-w-[40rem] text-lg leading-relaxed text-pretty text-light">{lead}</p>}

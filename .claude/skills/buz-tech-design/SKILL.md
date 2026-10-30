@@ -104,6 +104,8 @@ visitor points at responds, content eases in once, then everything rests. **Noth
 | Header menus | stay in the DOM, close with `data-open="false"` (`menuMotion` in `Header.tsx`), never `hidden` |
 | Section headings | `h2Class`, `leadClass` |
 | A price button for one product | `inquireHref(productId, lang)`: it opens Contact with that product chosen in the form |
+| A price link inside a card or row (plans, extras, equipment) | `PriceLink` (`textCta` in `ui.ts`): a quiet underlined link, so a page never carries a dozen identical buttons; full buttons stay for page-level actions |
+| A long Georgian word in a heading | a soft hyphen (`\u00AD`) at a syllable break in the dictionary; headings also carry `break-words` as a safety net |
 | Links to the product pages | `ProductLinks` (foot of a page, or `prominent` as a section) |
 | What every order includes | `IncludedList` (`dark` on Navy) |
 | A checked list of features | `SpecList` |

@@ -22,10 +22,13 @@ export type ProductId =
   | 'entra'
   | 'audit'
   | EquipmentId
-  | 'ideahub';
+  | 'ideahub'
+  | 'documents';
 export type ServiceId = 'setup' | 'support' | 'supply';
 
 type Item = { title: string; text: string };
+/** An included item can carry a link that asks for it (the tender documents). */
+type IncludedItem = Item & { action?: string };
 
 export interface Dict {
   meta: { title: string; description: string };
@@ -63,12 +66,13 @@ export interface Dict {
   /** The price promise (being tested; the owner may revert it to a plain best-price line). */
   beat: { title: string; text: string };
   /** What every order includes (home, Microsoft 365 page, Contact). */
-  included: { heading: string; items: Item[] };
+  included: { heading: string; items: IncludedItem[] };
   home: {
     /** Teaser rows: what is on the Microsoft 365 page. */
     m365: { heading: string; lead: string; compare: string; rows: { name: string; text: string }[] };
     onRequest: { heading: string; lead: string };
-    proof: { heading: string; credentials: string; partner: string; since: string; countries: string };
+    /** cspText says in plain words what being a Microsoft CSP partner means for the buyer. */
+    proof: { heading: string; credentials: string; partner: string; cspText: string; since: string; countries: string };
   };
   m365: {
     lead: string;
@@ -128,7 +132,9 @@ export interface Dict {
     placeholders: { company: string; email: string; message: string };
     selectPlaceholder: string;
     /** Option groups in the product list. */
-    groups: { microsoft: string; equipment: string };
+    groups: { microsoft: string; equipment: string; company: string };
+    /** Under the form: what happens after sending, with no times. */
+    next: { heading: string; steps: string[] };
     other: string;
     required: string;
     invalidEmail: string;
