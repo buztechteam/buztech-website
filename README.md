@@ -23,7 +23,7 @@ src/
   App.tsx                    which sections each page shows
   components/                Header (+Products menu), PageIntro, ContactBand, Hero (+HeroStack), Home (Microsoft 365
                              teaser), Microsoft365, Equipment (+IdeaHub), ProductLinks, Included, TrustStrip (proof),
-                             Services, Clients, Certifications (+dialog), Contact, Privacy, Footer, BuzLogo, icons
+                             Services, Clients, Events (About: event photos), Contact, Privacy, Footer, BuzLogo, icons
   entry-server.tsx           renders one page to HTML at build time
 scripts/prerender.mjs        writes dist/<page>/index.html for every page in both languages
 ```
@@ -110,9 +110,14 @@ white text (2.2:1), so a Navy scrim fades across the text column.
 1. **Brand names on the IT equipment page.** Generic until the owner approves names (`equipmentBrands` in `config/site.ts`).
 2. **Client names and logos.** None are shown until each client agrees.
 3. **ISO certificate details.** Issuer, number, validity and scans. Once supplied, the certificates can get their own section again (it was removed in October 2026 while they were missing).
-4. **Your own IdeaHub S2 photos.** The IdeaHub page shows Huawei's official S2 image (`public/products/ideahub-s2.jpg`, approved by Huawei). Replace the file, or add yours and point `ideahubImage` at it.
+4. **IdeaHub photo.** The IdeaHub page shows Huawei's official S2 image (`public/products/ideahub-s2.jpg`, approved by Huawei); there are no own S2 photos. To use your own later, replace the file or point `ideahubImage` at it.
 5. **Form delivery.** Create a free Web3Forms key (enter info-ge@buz-cloud.com, the key arrives by email) and set it as `VITE_WEB3FORMS_KEY`. Requests then go only to that inbox. Without a key the form opens the visitor's email app. See `.env.example`.
 6. **LinkedIn.** `site.social.linkedin` renders in the footer only when set.
+
+**Event photos** (About us, `eventPhotos` in `config/site.ts`, captions under `events` in `i18n`): each is
+`public/events/<id>-480.webp` and `-960.webp`, cropped to 4:3 with all metadata stripped (iPhone photos carry the
+place they were taken; `npm test` checks). Only use a photo where no other company's banner, logo or lanyard text
+shows, and name no person, organiser or sponsor in the caption.
 
 The legal name, tax ID, founding date (20 September 2018), street address, the five countries, the Czech head office
 and the client list come from the company profile (*საქმიანობის მოკლე აღწერილობა*). The profile's letterhead still

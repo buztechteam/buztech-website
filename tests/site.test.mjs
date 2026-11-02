@@ -283,7 +283,7 @@ test('retired addresses redirect to built pages', () => {
 test('only Microsoft and Huawei are named', () => {
   // the owner has no approval to name other vendors, distributors or clients; the Microsoft wording is "CSP partner"
   const unapproved =
-    /\b(Dell|HPE|Lenovo|Zyxel|TP-Link|MUK|ERC|PowerEdge|ProLiant|ThinkSystem|ThinkPad|Solution Partner|Telasi|TBC|Evex|Borjomi|Likani|Enterprise Georgia|Financial Monitoring|Azergold|AZAL|Azerbaijan Airlines|AgroDairy)\b|თელასი|თიბისი|ევექსი|ბორჯომი|აწარმოე საქართველოში|ფინანსური მონიტორინგის/
+    /\b(Dell|HPE|Lenovo|Zyxel|TP-Link|MUK|ERC|PowerEdge|ProLiant|ThinkSystem|ThinkPad|Solution Partner|Telasi|TBC|Evex|Borjomi|Likani|Enterprise Georgia|Financial Monitoring|Azergold|AZAL|Azerbaijan Airlines|AgroDairy|Netwrix|HT Solutions|AWS)\b|თელასი|თიბისი|ევექსი|ბორჯომი|აწარმოე საქართველოში|ფინანსური მონიტორინგის/
   const js = walk(join(dist, 'assets')).filter((f) => f.endsWith('.js'))
   for (const file of [...pages(), ...js]) {
     const found = readFileSync(file, 'utf8').match(unapproved)
@@ -347,4 +347,29 @@ test('placeholders keep text contrast', () => {
   const rules = [...css().matchAll(/\.placeholder\\:[^{]*::placeholder\{color:[^}]*?(\d+)%/g)]
   assert.ok(rules.length > 0, 'no placeholder colour found')
   for (const [rule, pct] of rules) assert.ok(Number(pct) >= 70, `faint placeholder: ${rule}`)
+})
+
+test('About shows the event photos, small and without photo metadata', () => {
+  for (const page of ['about/index.html', 'en/about/index.html']) {
+    const section = html(page).match(/<section[^>]*\sid="events"[\s\S]*?<\/section>/)?.[0]
+    assert.ok(section, `${page} has no events section`)
+    const imgs = [...section.matchAll(/<img\s[^>]*>/g)].map((m) => m[0])
+    assert.equal(imgs.length, 3, `${page} shows ${imgs.length} event photos`)
+    for (const img of imgs) {
+      assert.match(img, /\salt="[^"]+"/, `${page}: a photo has no description`)
+      assert.match(img, /\sloading="lazy"/, `${page}: a photo loads before it is needed`)
+      assert.match(img, /\swidth="\d+"/, `${page}: a photo has no width`)
+      assert.match(img, /\sheight="\d+"/, `${page}: a photo has no height`)
+      const files = [...(img.match(/\ssrcset="([^"]*)"/i)?.[1] ?? '').matchAll(/(\/\S+)\s+\d+w/g)].map((m) => m[1])
+      assert.ok(files.length >= 2, `${page}: a photo has no sizes to choose from`)
+      for (const f of files) {
+        const path = join(dist, targetFile(f))
+        assert.ok(existsSync(path), `${page}: ${f} is not built`)
+        const bytes = readFileSync(path)
+        assert.ok(bytes.length < 150_000, `${f} is ${bytes.length} bytes`)
+        // iPhone photos carry where they were taken; none of it may reach the site
+        for (const marker of ['Exif', 'EXIF', 'XMP ']) assert.equal(bytes.includes(marker), false, `${f} carries ${marker} metadata`)
+      }
+    }
+  }
 })

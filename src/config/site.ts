@@ -1,4 +1,4 @@
-import type { BusinessPlanId, EquipmentId, MicrosoftExtraId, ProductId } from '../i18n/types';
+import type { BusinessPlanId, EquipmentId, EventId, MicrosoftExtraId, ProductId } from '../i18n/types';
 
 /**
  * Single source of truth for facts that are NOT translated.
@@ -64,6 +64,12 @@ export const equipmentBrands: Partial<Record<EquipmentId, string[]>> = {};
  * Set it to undefined and an illustration is shown instead.
  */
 export const ideahubImage: string | undefined = '/products/ideahub-s2.jpg';
+
+/**
+ * Event photos on About us, in order. Each is /events/<id>-480.webp and -960.webp (4:3, metadata stripped).
+ * Only photos where no other company's banner or logo shows.
+ */
+export const eventPhotos: EventId[] = ['antalya', 'conference', 'club'];
 
 /** ISO standards held. Shown quietly in the footer only, until the certificate details are supplied. */
 export const isoStandards = ['ISO 9001', 'ISO 27001', 'ISO 20000-1'];

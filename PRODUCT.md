@@ -74,7 +74,7 @@ The website for LLC BUZ Tech Georgia ("BUZ Tech"). Its job is to turn visits int
 - **Missing, and not to be fabricated:**
   - testimonials, case studies, prices and savings figures
   - partner or client logos
-  - photos of the team, office or installations
+  - photos of the team, office or installations (About us shows three event photos; a team block is not wanted yet)
 
 ## Product Principles
 

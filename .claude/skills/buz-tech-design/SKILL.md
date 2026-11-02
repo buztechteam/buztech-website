@@ -109,6 +109,8 @@ visitor points at responds, content eases in once, then everything rests. **Noth
 | Links to the product pages | `ProductLinks` (foot of a page, or `prominent` as a section) |
 | What every order includes | `IncludedList` (`dark` on Navy) |
 | A checked list of features | `SpecList` |
+| A row of cards or photos that swipes on phones and tablets | the `ul` classes of `BusinessPlans` / `Events`: one `revealProps` on the row, `snap-start` items at 85% width, a grid from `lg` |
+| A photo | self-hosted WebP in two widths (`srcSet`, `sizes`), `width`/`height`, `loading="lazy"` below the fold, metadata stripped, no other company's branding in frame |
 
 - Don't animate the footer, the phone quick-contact bar or the Contact form: they must be usable at once.
 - A reveal plays an animation, not a transition, so a card's own hover transitions keep working.

@@ -25,6 +25,8 @@ export type ProductId =
   | 'ideahub'
   | 'documents';
 export type ServiceId = 'setup' | 'support' | 'supply';
+/** Event photos on About us, in order (eventPhotos in config/site.ts). */
+export type EventId = 'antalya' | 'conference' | 'club';
 
 type Item = { title: string; text: string };
 /** An included item can carry a link that asks for it (the tender documents). */
@@ -112,6 +114,12 @@ export interface Dict {
     more: string;
     sectorsHeading: string;
     sectors: string[];
+  };
+  /** Captions for the event photos on About us. No person, organiser or sponsor is named. */
+  events: {
+    heading: string;
+    lead: string;
+    items: Record<EventId, { title: string; place: string; alt: string }>;
   };
   contact: {
     heading: string;

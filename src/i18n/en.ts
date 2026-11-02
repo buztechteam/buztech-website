@@ -270,6 +270,27 @@ export const en: Dict = {
     sectorsHeading: 'Sectors we work with',
     sectors: ['Energy', 'Insurance', 'Healthcare', 'Public sector', 'Hospitality', 'Mining', 'Aviation', 'Agriculture and dairy'],
   },
+  events: {
+    heading: 'At industry events',
+    lead: 'We attend industry conferences and partner events, in Georgia and abroad.',
+    items: {
+      antalya: {
+        title: 'Cloud technology conference',
+        place: 'Antalya, September 2026',
+        alt: 'Attendees at a conference session in Antalya',
+      },
+      conference: {
+        title: 'Technology conference',
+        place: 'Tbilisi, July 2026',
+        alt: 'A full hall listening to a speaker on stage',
+      },
+      club: {
+        title: 'IT business club meetup',
+        place: 'Tbilisi, 2026',
+        alt: 'The BUZ Tech team talking with other guests at the meetup',
+      },
+    },
+  },
   contact: {
     heading: 'Contact us',
     lead: 'Tell us your company and what you need - we’ll get back to you.',

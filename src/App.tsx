@@ -4,6 +4,7 @@ import { Clients } from './components/Clients';
 import { Contact } from './components/Contact';
 import { ContactBand } from './components/ContactBand';
 import { Equipment, IdeaHub } from './components/Equipment';
+import { Events } from './components/Events';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
@@ -94,6 +95,7 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
             </p>
           </PageIntro>
           <Clients />
+          <Events />
         </>
       );
     case 'contact':
