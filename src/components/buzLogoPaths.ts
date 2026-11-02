@@ -7,7 +7,7 @@
  *
  * Derived from the master logo SVGs. "TECH" is drawn from the BUZ letter metrics (24° slant,
  * stems 0.33 x height, bars 0.28); its edges continue the slant of B and Z, so the wordmark
- * frame starts left of BUZ. The full logo kit and its generator: Marketing/Logos/logo-kit.
+ * frame starts left of BUZ. The full logo kit and its generator: Marketing/Brand Kit/_source (master.mjs, kit.mjs).
  */
 
 export const BUZ_COLORS = {
