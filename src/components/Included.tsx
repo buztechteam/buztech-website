@@ -13,7 +13,7 @@ export function IncludedList({ dark = false, className = '' }: { dark?: boolean;
   return (
     <ul className={`grid gap-x-8 gap-y-7 ${className}`}>
       {t.included.items.map((item, i) => {
-        const Icon = includedIcons[i];
+        const Icon = includedIcons[item.icon];
         return (
           <li key={item.title} {...revealProps(i)} className={`border-t pt-5 ${dark ? 'border-white/15' : 'border-navy/15'}`}>
             <div className="flex items-center gap-3">

@@ -1,4 +1,4 @@
-import { site } from '../config/site';
+import { officeFor } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import { pagePath } from '../routes';
 import { Phone, WhatsApp } from './icons';
@@ -17,16 +17,17 @@ const iconButton =
  */
 export function QuickContactBar() {
   const { lang, t } = useLang();
+  const office = officeFor(lang);
   return (
     <nav
       aria-label={t.a11y.quickContact}
       className="fixed inset-x-0 bottom-0 z-30 [view-transition-name:quick-bar] border-t border-white/12 bg-ink/95 backdrop-blur md:hidden"
     >
       <div className="container-x flex items-center gap-2 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-        <a href={site.phoneHref} aria-label={`${t.contact.phone}: ${site.phone}`} className={iconButton}>
+        <a href={office.phoneHref} aria-label={`${t.contact.phone}: ${office.phone}`} className={iconButton}>
           <Phone className="size-5" />
         </a>
-        <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className={iconButton}>
+        <a href={office.whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className={iconButton}>
           <WhatsApp className="size-5" />
         </a>
         <a

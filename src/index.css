@@ -1,6 +1,10 @@
 /* Fonts: exactly two families, exactly two weights each (brand rule: never more than two weights). */
 @import "@fontsource/inter/latin-500.css";
 @import "@fontsource/inter/latin-800.css";
+@import "@fontsource/inter/latin-ext-500.css";
+@import "@fontsource/inter/latin-ext-800.css";
+@import "@fontsource/inter/cyrillic-500.css";
+@import "@fontsource/inter/cyrillic-800.css";
 @import "@fontsource/noto-sans-georgian/georgian-500.css";
 @import "@fontsource/noto-sans-georgian/georgian-800.css";
 @import "tailwindcss";

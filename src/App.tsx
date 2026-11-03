@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from 'react';
-import { site } from './config/site';
+import { showsCompanyDetails, site } from './config/site';
 import { Clients } from './components/Clients';
 import { Contact } from './components/Contact';
 import { ContactBand } from './components/ContactBand';
@@ -90,9 +90,11 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
           <PageIntro title={t.nav.about} lead={t.footer.overview}>
             <Facts className="mt-10" />
             {/* The company details tender teams look for, not only in the footer. */}
-            <p className="mt-4 text-sm text-light/85">
-              {site.legalName} · {t.footer.taxId}: {site.taxId} · {t.footer.founded}
-            </p>
+            {showsCompanyDetails(lang) && (
+              <p className="mt-4 text-sm text-light/85">
+                {site.legalName} · {t.footer.taxId}: {site.taxId} · {t.footer.founded}
+              </p>
+            )}
           </PageIntro>
           <Clients />
           <Events />

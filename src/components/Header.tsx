@@ -1,39 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLang } from '../i18n/LanguageContext';
 import type { Lang, PageId } from '../i18n/types';
-import { isProductPage, pagePath, productPages } from '../routes';
+import { htmlLang, isProductPage, pagePath, productPages } from '../routes';
 import BuzLogo from './BuzLogo';
 import { ChevronDown, Close, Menu, pageIcons } from './icons';
 import { btn } from './ui';
 
-const LANGS: { id: Lang; label: string; htmlLang: string }[] = [
-  { id: 'ge', label: 'GE', htmlLang: 'ka' },
-  { id: 'en', label: 'EN', htmlLang: 'en' },
+/** Each language named in itself; the button shows the short code. */
+const LANGS: { id: Lang; code: string; name: string }[] = [
+  { id: 'ge', code: 'GE', name: 'ქართული' },
+  { id: 'en', code: 'EN', name: 'English' },
+  { id: 'az', code: 'AZ', name: 'Azərbaycan dili' },
+  { id: 'ru', code: 'RU', name: 'Русский' },
 ];
 
 /** Pages linked directly from the header (products sit in their own menu). */
 const DIRECT = ['services', 'about', 'contact'] as const satisfies readonly PageId[];
-
-/** Links to the same page in the other language. */
-function LangToggle() {
-  const { lang, page, t } = useLang();
-  return (
-    <div role="group" aria-label={t.a11y.language} className="flex rounded-lg border border-white/25 p-0.5 text-sm">
-      {LANGS.map((l) => (
-        <a
-          key={l.id}
-          href={pagePath(page, l.id)}
-          hrefLang={l.htmlLang}
-          lang={l.htmlLang}
-          aria-current={lang === l.id ? 'true' : undefined}
-          className="grid min-h-10 min-w-11 place-items-center rounded-md px-3 font-extrabold text-light/80 transition-colors hover:text-white aria-[current=true]:bg-brand-teal aria-[current=true]:text-ink"
-        >
-          {l.label}
-        </a>
-      ))}
-    </div>
-  );
-}
 
 /* A Brand Teal underline slides in from the left on hover and stays for the current page. */
 const navLink =
@@ -173,6 +155,82 @@ function ProductsMenu() {
   );
 }
 
+/** The same page in each language, in a small menu. Esc, a click outside or tabbing out closes it. */
+function LangMenu() {
+  const { lang, page, t } = useLang();
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const current = LANGS.find((l) => l.id === lang) ?? LANGS[0];
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointer = (e: PointerEvent) => {
+      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        buttonRef.current?.focus();
+      }
+    };
+    document.addEventListener('pointerdown', onPointer);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('pointerdown', onPointer);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  return (
+    <div
+      ref={wrapRef}
+      className="relative"
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOpen(false);
+      }}
+    >
+      <button
+        ref={buttonRef}
+        type="button"
+        aria-expanded={open}
+        aria-controls="lang-menu"
+        onClick={() => setOpen((v) => !v)}
+        className="flex min-h-11 items-center gap-1.5 rounded-lg border border-white/25 px-3 text-sm font-extrabold text-white transition-colors duration-(--dur-hover) ease-soft hover:border-white/50"
+      >
+        <span className="sr-only">{t.a11y.language}: </span>
+        {current.code}
+        <ChevronDown className={`size-4 transition-transform duration-(--dur-menu) ease-soft ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      <div
+        id="lang-menu"
+        data-open={open}
+        className={`absolute top-full right-0 z-10 mt-3 w-56 rounded-xl border border-white/12 bg-ink p-2 shadow-2xl ${menuMotion}`}
+      >
+        <ul className="grid gap-1">
+          {LANGS.map((l) => (
+            <li key={l.id}>
+              <a
+                href={pagePath(page, l.id)}
+                hrefLang={htmlLang[l.id]}
+                lang={htmlLang[l.id]}
+                aria-current={lang === l.id ? 'true' : undefined}
+                className="flex min-h-11 items-center justify-between gap-3 rounded-lg px-3 font-extrabold text-light/85 transition-colors hover:bg-white/8 hover:text-white aria-[current=true]:bg-white/8 aria-[current=true]:text-white"
+              >
+                {l.name}
+                <span aria-hidden="true" className="text-sm text-light/60">
+                  {l.code}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 export function Header() {
   const { lang, page, t } = useLang();
   const [open, setOpen] = useState(false);
@@ -237,7 +295,7 @@ export function Header() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-3">
-          <LangToggle />
+          <LangMenu />
           <a href={pagePath('contact', lang)} className={`${btn('primary', 'sm')} max-md:hidden`}>
             {t.cta}
           </a>
@@ -275,6 +333,22 @@ export function Header() {
               <li key={id}>
                 <a href={pagePath(id, lang)} aria-current={page === id ? 'page' : undefined} className={mobileLink}>
                   {t.nav[id]}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p className="pt-6 pb-1 text-sm tracking-[0.14em] text-light/60 uppercase">{t.a11y.language}</p>
+          <ul className="grid grid-cols-2 gap-x-4">
+            {LANGS.map((l) => (
+              <li key={l.id}>
+                <a
+                  href={pagePath(page, l.id)}
+                  hrefLang={htmlLang[l.id]}
+                  lang={htmlLang[l.id]}
+                  aria-current={lang === l.id ? 'true' : undefined}
+                  className={`${mobileLink} aria-[current=true]:text-brand-teal`}
+                >
+                  {l.name}
                 </a>
               </li>
             ))}

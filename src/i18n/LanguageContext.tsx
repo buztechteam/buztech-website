@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useMemo, type ReactNode } from 'react';
-import { pageMeta } from '../routes';
-import { ge } from './ge';
+import { htmlLang, pageMeta } from '../routes';
+import { az } from './az';
 import { en } from './en';
+import { ge } from './ge';
+import { ru } from './ru';
 import type { Dict, Lang, PageId } from './types';
 
-export const dictionaries: Record<Lang, Dict> = { ge, en };
+export const dictionaries: Record<Lang, Dict> = { ge, en, az, ru };
 
 interface LanguageValue {
   lang: Lang;
@@ -21,7 +23,7 @@ export function LanguageProvider({ lang, page, children }: { lang: Lang; page: P
   /* Pre-rendered pages already carry these; this keeps the dev server in step. */
   useEffect(() => {
     const meta = pageMeta(page, dictionaries[lang]);
-    document.documentElement.lang = lang === 'ge' ? 'ka' : 'en';
+    document.documentElement.lang = htmlLang[lang];
     document.title = meta.title;
     document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
   }, [lang, page]);

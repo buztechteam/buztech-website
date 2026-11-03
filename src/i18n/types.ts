@@ -1,4 +1,5 @@
-export type Lang = 'ge' | 'en';
+/** Georgian (root), English, Azerbaijani, Russian. AZ and RU show the Baku office (officeFor in config/site.ts). */
+export type Lang = 'ge' | 'en' | 'az' | 'ru';
 
 /** Product pages, in menu order. Microsoft 365 always leads; the slug is the id. */
 export type ProductPageId = 'microsoft-365' | 'it-equipment' | 'ideahub';
@@ -29,8 +30,10 @@ export type ServiceId = 'setup' | 'support' | 'supply';
 export type EventId = 'antalya' | 'conference' | 'club';
 
 type Item = { title: string; text: string };
+/** Which icon an included item shows; keyed, so a language can drop an item (AZ/RU have no GEL invoice). */
+export type IncludedIconId = 'invoice' | 'documents' | 'renewals' | 'support';
 /** An included item can carry a link that asks for it (the tender documents). */
-type IncludedItem = Item & { action?: string };
+type IncludedItem = Item & { icon: IncludedIconId; action?: string };
 
 export interface Dict {
   meta: { title: string; description: string };
@@ -74,7 +77,8 @@ export interface Dict {
     m365: { heading: string; lead: string; compare: string; rows: { name: string; text: string }[] };
     onRequest: { heading: string; lead: string };
     /** cspText says in plain words what being a Microsoft CSP partner means for the buyer. */
-    proof: { heading: string; credentials: string; partner: string; cspText: string; since: string; countries: string };
+    /** since is a Georgian-company fact: absent in AZ and RU. */
+    proof: { heading: string; credentials: string; partner: string; cspText: string; since?: string; countries: string };
   };
   m365: {
     lead: string;
@@ -130,6 +134,8 @@ export interface Dict {
     location: string;
     /** Office street address, written the local way for each language. */
     address: string;
+    /** A second office shown on Contact (English only: the Baku office). */
+    otherOffice?: { title: string; address: string };
     phone: string;
     /** Link text for the WhatsApp row. */
     whatsapp: string;
@@ -158,9 +164,10 @@ export interface Dict {
     complianceTitle: string;
     rights: string;
     social: string;
-    taxId: string;
+    /** taxId and founded are Georgian-company facts: absent in AZ and RU (showsCompanyDetails in config/site.ts). */
+    taxId?: string;
     /** Label and date written out: browsers can lack Georgian month names, so no Intl. */
-    founded: string;
+    founded?: string;
     privacy: string;
   };
   privacy: {

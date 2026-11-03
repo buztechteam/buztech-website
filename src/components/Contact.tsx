@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { productGroups, site } from '../config/site';
+import { offices, officeFor, productGroups, showsCompanyDetails, site } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import type { ProductId } from '../i18n/types';
 import { pagePath } from '../routes';
@@ -67,6 +67,9 @@ const linkOnDark =
  */
 export function Contact() {
   const { t, lang } = useLang();
+  const office = officeFor(lang);
+  /* AZ/RU requests still reach the Tbilisi inbox; the tag tells the team to pass them to Baku. */
+  const langTag = lang === 'az' || lang === 'ru' ? ` [${lang.toUpperCase()}]` : '';
   const c = t.contact;
   const formRef = useRef<HTMLFormElement>(null);
   const companyRef = useRef<HTMLInputElement>(null);
@@ -117,7 +120,7 @@ export function Contact() {
         const payload = site.web3formsKey
           ? {
               access_key: site.web3formsKey,
-              subject: `${c.mailSubject} - ${company}`,
+              subject: `${c.mailSubject} - ${company}${langTag}`,
               from_name: `${site.name} website`,
               replyto: email,
               company,
@@ -145,7 +148,7 @@ export function Contact() {
 
     /* No endpoint configured: hand the request to the visitor's email app. */
     const body = [`${c.fields.company}: ${company}`, `${c.fields.email}: ${email}`, `${c.fields.product}: ${productName || '-'}`, '', message].join('\n');
-    const subject = `${c.mailSubject} - ${company}`;
+    const subject = `${c.mailSubject} - ${company}${langTag}`;
     window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setStatus('mailto');
   };
@@ -157,11 +160,11 @@ export function Contact() {
         <div className="lg:sticky lg:top-24 lg:self-start">
           {/* Phones: one tap to call or write, right above the form. Wide screens show the details beside it. */}
           <div className="mb-6 grid grid-cols-2 gap-3 lg:hidden">
-            <a href={site.phoneHref} className={`${btn('ghostOnDark')} gap-2`}>
+            <a href={office.phoneHref} className={`${btn('ghostOnDark')} gap-2`}>
               <Phone className="size-5" />
               {c.call}
             </a>
-            <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer" className={`${btn('ghostOnDark')} gap-2`}>
+            <a href={office.whatsappHref} target="_blank" rel="noopener noreferrer" className={`${btn('ghostOnDark')} gap-2`}>
               <WhatsApp className="size-5" />
               WhatsApp
             </a>
@@ -307,29 +310,54 @@ export function Contact() {
             <h2 className="text-2xl leading-tight font-extrabold text-white">{c.detailsTitle}</h2>
             <dl className="mt-6 space-y-5">
               <InfoRow icon={<Phone className="size-5" />} label={c.phone}>
-                <a href={site.phoneHref} className={linkOnDark}>
-                  {site.phone}
+                <a href={office.phoneHref} className={linkOnDark}>
+                  {office.phone}
                 </a>
               </InfoRow>
               <InfoRow icon={<WhatsApp className="size-5" />} label="WhatsApp">
-                <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer" className={linkOnDark}>
+                <a href={office.whatsappHref} target="_blank" rel="noopener noreferrer" className={linkOnDark}>
                   {c.whatsapp}
                 </a>
               </InfoRow>
               <InfoRow icon={<Mail className="size-5" />} label={c.email}>
-                <a href={`mailto:${site.email}`} className={`${linkOnDark} break-all`}>
-                  {site.email}
+                <a href={`mailto:${office.email}`} className={`${linkOnDark} break-all`}>
+                  {office.email}
                 </a>
               </InfoRow>
               <InfoRow icon={<Pin className="size-5" />} label={c.location}>
-                <a href={site.mapsHref} target="_blank" rel="noopener noreferrer" className={linkOnDark}>
+                <a href={office.mapsHref} target="_blank" rel="noopener noreferrer" className={linkOnDark}>
                   {c.address}
                 </a>
               </InfoRow>
-              <InfoRow icon={<Building className="size-5" />} label={c.entity}>
-                {site.legalName}
-              </InfoRow>
+              {showsCompanyDetails(lang) && (
+                <InfoRow icon={<Building className="size-5" />} label={c.entity}>
+                  {site.legalName}
+                </InfoRow>
+              )}
             </dl>
+            {/* English only: the Baku office too, for visitors from Azerbaijan reading in English. */}
+            {c.otherOffice && (
+              <>
+                <h3 className="mt-10 text-xl leading-tight font-extrabold text-white">{c.otherOffice.title}</h3>
+                <dl className="mt-5 space-y-5">
+                  <InfoRow icon={<Phone className="size-5" />} label={c.phone}>
+                    <a href={offices.baku.phoneHref} className={linkOnDark}>
+                      {offices.baku.phone}
+                    </a>
+                  </InfoRow>
+                  <InfoRow icon={<Mail className="size-5" />} label={c.email}>
+                    <a href={`mailto:${offices.baku.email}`} className={`${linkOnDark} break-all`}>
+                      {offices.baku.email}
+                    </a>
+                  </InfoRow>
+                  <InfoRow icon={<Pin className="size-5" />} label={c.location}>
+                    <a href={offices.baku.mapsHref} target="_blank" rel="noopener noreferrer" className={linkOnDark}>
+                      {c.otherOffice.address}
+                    </a>
+                  </InfoRow>
+                </dl>
+              </>
+            )}
           </div>
 
           <div className="border-t border-white/12 pt-10">

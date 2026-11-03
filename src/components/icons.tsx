@@ -1,5 +1,5 @@
 import type { SVGProps } from 'react';
-import type { EquipmentId, ProductPageId, ServiceId } from '../i18n/types';
+import type { EquipmentId, IncludedIconId, ProductPageId, ServiceId } from '../i18n/types';
 
 type IconProps = SVGProps<SVGSVGElement>;
 
@@ -216,4 +216,4 @@ export const equipmentIcons: Record<EquipmentId, Icon> = {
 };
 
 /** In the order of included.items in the dictionaries: invoice, documents, reminders, support. */
-export const includedIcons: Icon[] = [Receipt, FileCheck, Bell, Headset];
+export const includedIcons: Record<IncludedIconId, Icon> = { invoice: Receipt, documents: FileCheck, renewals: Bell, support: Headset };

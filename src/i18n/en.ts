@@ -79,10 +79,10 @@ export const en: Dict = {
   included: {
     heading: 'What every order includes',
     items: [
-      { title: 'VAT invoice in GEL', text: 'Issued by LLC BUZ Tech Georgia, ready for your accounts.' },
-      { title: 'Documents for tenders', text: 'Company documents and ISO certificates.', action: 'Request documents' },
-      { title: 'Renewal reminders', text: 'We remind you to renew your licences on time, so your services are never interrupted.' },
-      { title: 'Support after the sale', text: 'Questions, changes, new users - we stay in touch.' },
+      { icon: 'invoice', title: 'VAT invoice in GEL', text: 'Issued by LLC BUZ Tech Georgia, ready for your accounts.' },
+      { icon: 'documents', title: 'Documents for tenders', text: 'Company documents and ISO certificates.', action: 'Request documents' },
+      { icon: 'renewals', title: 'Renewal reminders', text: 'We remind you to renew your licences on time, so your services are never interrupted.' },
+      { icon: 'support', title: 'Support after the sale', text: 'Questions, changes, new users - we stay in touch.' },
     ],
   },
   home: {
@@ -298,6 +298,7 @@ export const en: Dict = {
     entity: 'Legal entity',
     location: 'Location',
     address: 'Zakaria Paliashvili St. 83, 0179 Tbilisi, Georgia',
+    otherOffice: { title: 'Baku office, Azerbaijan', address: 'Ziya Bunyadov Ave. 1965, Chinar Park Business Center, Building 2, Baku' },
     phone: 'Phone',
     whatsapp: 'Message us on WhatsApp',
     email: 'Email',
@@ -366,7 +367,7 @@ export const en: Dict = {
       },
       {
         heading: 'Cookies and language',
-        body: 'The website uses no cookies and stores nothing in your browser. The language (GE or EN) is part of the page address.',
+        body: 'The website uses no cookies and stores nothing in your browser. The language is part of the page address; when you open the home page, it may choose a language for you from your country and browser settings.',
       },
       {
         heading: 'Your rights',
@@ -375,6 +376,6 @@ export const en: Dict = {
     ],
     analyticsOn: 'We count website visits with Cloudflare Web Analytics. It uses no cookies and collects no personal data.',
     analyticsOff: '',
-    updated: 'Updated: October 2026',
+    updated: 'Updated: November 2026',
   },
 };

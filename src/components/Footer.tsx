@@ -1,4 +1,4 @@
-import { isoStandards, site } from '../config/site';
+import { isoStandards, officeFor, showsCompanyDetails, site } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import { isProductPage, pagePath, pages } from '../routes';
 import BuzLogo from './BuzLogo';
@@ -13,6 +13,8 @@ const linkClass = 'inline-block py-1 text-light/85 transition-colors duration-(-
  */
 export function Footer() {
   const { lang, t } = useLang();
+  const office = officeFor(lang);
+  const company = showsCompanyDetails(lang);
   const f = t.footer;
   const quickLinks = pages
     .filter((page) => page !== 'privacy' && page !== 'home')
@@ -21,9 +23,9 @@ export function Footer() {
       label: isProductPage(page) ? t.pages[page].label : t.nav[page as 'services' | 'about' | 'contact'],
     }));
   const social = [
-    { label: 'Facebook', href: site.social.facebook, Icon: Facebook },
-    { label: 'LinkedIn', href: site.social.linkedin, Icon: LinkedIn },
-    { label: 'WhatsApp', href: site.whatsappHref, Icon: WhatsApp },
+    { label: 'Facebook', href: office.social.facebook, Icon: Facebook },
+    { label: 'LinkedIn', href: office.social.linkedin, Icon: LinkedIn },
+    { label: 'WhatsApp', href: office.whatsappHref, Icon: WhatsApp },
   ].filter((s): s is { label: string; href: string; Icon: typeof Facebook } => Boolean(s.href));
 
   return (
@@ -56,17 +58,17 @@ export function Footer() {
           <h2 className="text-base text-white sm:text-lg">{f.contactTitle}</h2>
           <ul className="mt-3 space-y-2">
             <li>
-              <a href={site.phoneHref} className={linkClass}>
-                {site.phone}
+              <a href={office.phoneHref} className={linkClass}>
+                {office.phone}
               </a>
             </li>
             <li>
-              <a href={`mailto:${site.email}`} className={`${linkClass} break-all`}>
-                {site.email}
+              <a href={`mailto:${office.email}`} className={`${linkClass} break-all`}>
+                {office.email}
               </a>
             </li>
             <li>
-              <a href={site.mapsHref} target="_blank" rel="noopener noreferrer" className={linkClass}>
+              <a href={office.mapsHref} target="_blank" rel="noopener noreferrer" className={linkClass}>
                 {t.contact.address}
               </a>
             </li>
@@ -77,12 +79,12 @@ export function Footer() {
           <h2 className="text-base text-white sm:text-lg">{f.complianceTitle}</h2>
           <ul className="mt-3 space-y-2">
             <li>{t.home.proof.partner}</li>
-            {site.taxId && (
+            {company && site.taxId && (
               <li>
                 {f.taxId}: {site.taxId}
               </li>
             )}
-            <li>{f.founded}</li>
+            {company && <li>{f.founded}</li>}
             <li className="text-light/70">{isoStandards.join(' · ')}</li>
           </ul>
         </div>
@@ -91,7 +93,7 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="container-x flex flex-wrap items-center justify-between gap-x-6 gap-y-3 py-5 text-sm text-light/75">
           <p className="text-pretty">
-            © {__BUILD_YEAR__} {site.legalName}. {f.rights}
+            © {__BUILD_YEAR__} {company ? site.legalName : site.name}. {f.rights}
           </p>
           <a href={pagePath('privacy', lang)} className="underline underline-offset-4 transition-colors duration-(--dur-hover) ease-soft hover:text-brand-teal">
             {f.privacy}

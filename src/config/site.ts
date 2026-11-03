@@ -1,4 +1,4 @@
-import type { BusinessPlanId, EquipmentId, EventId, MicrosoftExtraId, ProductId } from '../i18n/types';
+import type { BusinessPlanId, EquipmentId, EventId, Lang, MicrosoftExtraId, ProductId } from '../i18n/types';
 
 /**
  * Single source of truth for facts that are NOT translated.
@@ -9,17 +9,11 @@ export const site = {
   legalName: 'LLC BUZ Tech Georgia',
   /** Official tagline format from the brand book. */
   tagline: 'Consulting · Cloud · Tech',
-  /** The street address itself is translated (contact.address in the dictionaries). */
-  mapsHref: 'https://www.google.com/maps/search/?api=1&query=Zakaria+Paliashvili+St+83+Tbilisi+Georgia',
-  phone: '+995 599 13 77 23',
-  phoneHref: 'tel:+995599137723',
-  /** Same number as the phone. */
-  whatsappHref: 'https://wa.me/995599137723',
+  /**
+   * Where price requests are delivered, in every language (the Privacy page names this inbox).
+   * The inbox visitors see is the office's (officeFor below).
+   */
   email: 'info-ge@buz-cloud.com',
-  social: {
-    facebook: 'https://www.facebook.com/LLCBUZTechGeorgia',
-    linkedin: 'https://ge.linkedin.com/company/llc-buz-tech-georgia' as string | undefined,
-  },
   /** Company ID, shown in the footer compliance block. */
   taxId: '405291786' as string | undefined,
   /**
@@ -31,6 +25,48 @@ export const site = {
   /** True when Cloudflare Web Analytics is switched on at build time (changes the privacy wording). */
   analytics: Boolean(import.meta.env.VITE_CF_ANALYTICS_TOKEN),
 } as const;
+
+export type OfficeId = 'tbilisi' | 'baku';
+
+export interface Office {
+  phone: string;
+  phoneHref: string;
+  /** Same number as the phone. */
+  whatsappHref: string;
+  email: string;
+  /** The street address itself is translated (contact.address, contact.otherOffice in the dictionaries). */
+  mapsHref: string;
+  social: { facebook?: string; linkedin?: string };
+}
+
+/** The two offices the site shows. Baku details confirmed by the owner (2026-11-03); Baku has no social pages. */
+export const offices: Record<OfficeId, Office> = {
+  tbilisi: {
+    phone: '+995 599 13 77 23',
+    phoneHref: 'tel:+995599137723',
+    whatsappHref: 'https://wa.me/995599137723',
+    email: 'info-ge@buz-cloud.com',
+    mapsHref: 'https://www.google.com/maps/search/?api=1&query=Zakaria+Paliashvili+St+83+Tbilisi+Georgia',
+    social: {
+      facebook: 'https://www.facebook.com/LLCBUZTechGeorgia',
+      linkedin: 'https://ge.linkedin.com/company/llc-buz-tech-georgia',
+    },
+  },
+  baku: {
+    phone: '+994 70 860 89 86',
+    phoneHref: 'tel:+994708608986',
+    whatsappHref: 'https://wa.me/994708608986',
+    email: 'info@buz-cloud.com',
+    mapsHref: 'https://www.google.com/maps/search/?api=1&query=Ziya+Bunyadov+Ave+1965+Chinar+Park+Business+Center+Baku',
+    social: {},
+  },
+};
+
+/** Georgian and English show the Tbilisi office; Azerbaijani and Russian the Baku office. */
+export const officeFor = (lang: Lang): Office => offices[lang === 'az' || lang === 'ru' ? 'baku' : 'tbilisi'];
+
+/** Legal name, tax ID and founding date are LLC BUZ Tech Georgia's: Georgian and English only. */
+export const showsCompanyDetails = (lang: Lang) => lang === 'ge' || lang === 'en';
 
 /** The price-request form's options, in groups (names: products in the dictionaries). */
 export const productGroups: { id: 'microsoft' | 'equipment' | 'company'; products: ProductId[] }[] = [

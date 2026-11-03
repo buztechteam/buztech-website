@@ -1,4 +1,4 @@
-import { site } from '../config/site';
+import { officeFor } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import { pagePath } from '../routes';
 import { revealProps } from '../motion/reveal';
@@ -8,6 +8,7 @@ import { btn } from './ui';
 /** Closes every page except Contact: the price request, WhatsApp and phone, never more than a scroll away. */
 export function ContactBand() {
   const { lang, t } = useLang();
+  const office = officeFor(lang);
   return (
     <section aria-labelledby="contact-band-title" className="surface-teal bg-brand-teal text-ink">
       <div className="container-x flex flex-col gap-8 py-14 lg:flex-row lg:items-center lg:justify-between">
@@ -21,13 +22,13 @@ export function ContactBand() {
           <a href={pagePath('contact', lang)} className={btn('navyOnTeal')}>
             {t.cta}
           </a>
-          <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer" className={`${btn('outlineOnTeal')} gap-2`}>
+          <a href={office.whatsappHref} target="_blank" rel="noopener noreferrer" className={`${btn('outlineOnTeal')} gap-2`}>
             <WhatsApp className="size-5" />
             WhatsApp
           </a>
-          <a href={site.phoneHref} className={`${btn('outlineOnTeal')} gap-2`}>
+          <a href={office.phoneHref} className={`${btn('outlineOnTeal')} gap-2`}>
             <Phone className="size-5" />
-            {site.phone}
+            {office.phone}
           </a>
         </div>
       </div>

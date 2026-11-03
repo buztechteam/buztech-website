@@ -42,9 +42,14 @@ function targetFile(path) {
 
 const ids = (page) => new Set([...page.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]))
 
-test('18 pages are built', () => {
-  // 8 pages in Georgian and English, plus the two 404 pages
-  assert.equal(pages().length, 18)
+/** Address prefix of each language's pages in dist/. */
+const LANG_DIRS = ['', 'en/', 'az/', 'ru/']
+/** True for a dist/ path in the Georgian (root) version. */
+const isGeorgian = (relPath) => !/^(en|az|ru)\//.test(relPath)
+
+test('36 pages are built', () => {
+  // 8 pages in each of Georgian, English, Azerbaijani and Russian, plus the four 404 pages
+  assert.equal(pages().length, 36)
 })
 
 test('every built page has exactly one h1', () => {
@@ -96,7 +101,7 @@ test('every page has an arrival at its top', () => {
 
 test('content below the top can reveal', () => {
   assert.ok(count(html('index.html'), /\sdata-reveal[=\s>]/g) >= 8, 'home has fewer than 8 data-reveal')
-  for (const lang of ['', 'en/']) {
+  for (const lang of LANG_DIRS) {
     const page = html(`${lang}contact/index.html`)
     const form = page.slice(page.indexOf('<form'), page.indexOf('</form>'))
     assert.ok(form.length > 0, `${lang}contact has no <form>`)
@@ -222,7 +227,7 @@ test('CSP allows exactly the inline gate script', () => {
 })
 
 test('form fields are length-limited', () => {
-  for (const lang of ['', 'en/']) {
+  for (const lang of LANG_DIRS) {
     const page = html(`${lang}contact/index.html`)
     for (const [id, max] of [['company', 120], ['email', 254], ['message', 2000]]) {
       const tag = page.match(new RegExp(`<(?:input|textarea)[^>]*\\sid="${id}"[^>]*>`))?.[0] ?? ''
@@ -293,7 +298,7 @@ test('only Microsoft and Huawei are named', () => {
 
 test('no prices or reply times are promised', () => {
   for (const file of pages()) {
-    const found = text(readFileSync(file, 'utf8')).match(/დღესვე|\btoday\b|24 hours|same day|\d+\s?(₾|GEL|USD|EUR|\$)|[₾$€]\s?\d/i)
+    const found = text(readFileSync(file, 'utf8')).match(/დღესვე|\btoday\b|сегодня|bu gün|24 hours|same day|\d+\s?(₾|GEL|USD|EUR|AZN|₼|manat|₽|руб|\$)|[₾$€₼₽]\s?\d/i)
     assert.equal(found, null, `${rel(file)}: "${found?.[0]}"`)
   }
 })
@@ -310,6 +315,8 @@ test('visible text uses a hyphen, not an em dash', () => {
 test('one CTA wording in each language', () => {
   assert.ok(html('index.html').includes('მიიღეთ ფასი'), 'Georgian home lacks მიიღეთ ფასი')
   assert.ok(html('en/index.html').includes('Get a price'), 'English home lacks Get a price')
+  assert.ok(html('az/index.html').includes('Qiymət alın'), 'Azerbaijani home lacks Qiymət alın')
+  assert.ok(html('ru/index.html').includes('Получить цену'), 'Russian home lacks Получить цену')
 })
 
 test('headings never skip a level', () => {
@@ -326,15 +333,15 @@ test('headings never skip a level', () => {
 test('"How we work" appears only on Services', () => {
   for (const file of pages()) {
     const page = readFileSync(file, 'utf8')
-    const steps = count(page, /How we work|როგორ ვმუშაობთ/g)
+    const steps = count(page, /How we work|როგორ ვმუშაობთ|Necə işləyirik|Как мы работаем/g)
     assert.equal(steps, /(^|\/)services\/index\.html$/.test(rel(file)) ? 1 : 0, `${rel(file)} has ${steps} "How we work"`)
   }
 })
 
 test('every price link pre-selects an option of the form', () => {
-  for (const lang of ['', 'en/']) {
+  for (const lang of LANG_DIRS) {
     const options = new Set([...html(`${lang}contact/index.html`).matchAll(/<option value="([^"]*)"/g)].map((m) => m[1]))
-    for (const file of pages().filter((f) => rel(f).startsWith(lang) && (lang || !rel(f).startsWith('en/')))) {
+    for (const file of pages().filter((f) => (lang ? rel(f).startsWith(lang) : isGeorgian(rel(f))))) {
       for (const [, product] of readFileSync(file, 'utf8').matchAll(/\?product=([^"&#]+)/g)) {
         assert.ok(options.has(product), `${rel(file)}: ?product=${product} is not a form option`)
       }
@@ -350,7 +357,7 @@ test('placeholders keep text contrast', () => {
 })
 
 test('About shows the event photos, small and without photo metadata', () => {
-  for (const page of ['about/index.html', 'en/about/index.html']) {
+  for (const page of LANG_DIRS.map((lang) => `${lang}about/index.html`)) {
     const section = html(page).match(/<section[^>]*\sid="events"[\s\S]*?<\/section>/)?.[0]
     assert.ok(section, `${page} has no events section`)
     const imgs = [...section.matchAll(/<img\s[^>]*>/g)].map((m) => m[0])
@@ -372,4 +379,60 @@ test('About shows the event photos, small and without photo metadata', () => {
       }
     }
   }
+})
+
+test('every language has its own lang, og:locale, 404 page and language menu', () => {
+  const codes = { '': ['ka', 'ka_GE'], 'en/': ['en', 'en_US'], 'az/': ['az', 'az_AZ'], 'ru/': ['ru', 'ru_RU'] }
+  for (const [dir, [lang, locale]] of Object.entries(codes)) {
+    for (const page of [`${dir}index.html`, `${dir}services/index.html`, `${dir}404.html`]) {
+      const text = html(page)
+      assert.match(text, new RegExp(`<html lang="${lang}"`), `${page} is not lang=${lang}`)
+      assert.match(text, new RegExp(`og:locale" content="${locale}"`), `${page} lacks og:locale ${locale}`)
+    }
+    const menu = html(`${dir}services/index.html`).match(/<div[^>]*id="lang-menu"[\s\S]*?<\/ul>/)?.[0] ?? ''
+    for (const [other, target] of [['ka', '/services/'], ['en', '/en/services/'], ['az', '/az/services/'], ['ru', '/ru/services/']]) {
+      assert.match(menu, new RegExp(`href="${target}"[^>]*hreflang="${other}"|hreflang="${other}"[^>]*href="${target}"`, 'i'), `${dir}services: the menu has no ${other} link to ${target}`)
+    }
+  }
+})
+
+test('with a site address, every page lists all four languages for search engines', () => {
+  const home = html('index.html')
+  // hreflang links are written only when VITE_SITE_URL is set (the custom domain is still to come)
+  if (!/rel="canonical"/.test(home)) return
+  for (const file of pages().filter((f) => !f.endsWith('404.html'))) {
+    const text = readFileSync(file, 'utf8')
+    for (const lang of ['ka', 'en', 'az', 'ru', 'x-default']) {
+      assert.match(text, new RegExp(`hreflang="${lang}"`), `${rel(file)} lacks hreflang ${lang}`)
+    }
+  }
+})
+
+test('Azerbaijani and Russian show the Baku office and none of the Georgian company facts', () => {
+  const georgianOnly = [/405291786/, /\bGEL\b/, /₾/, /Paliashvili|ფალიაშვილ/, /\+995|995599137723/, /facebook\.com|linkedin\.com/, /\bƏDV\b|\bНДС\b|\bVAT\b/]
+  for (const file of pages().filter((f) => /^(az|ru)\//.test(rel(f)))) {
+    const text = readFileSync(file, 'utf8')
+    for (const pattern of georgianOnly) assert.doesNotMatch(text, pattern, `${rel(file)} shows ${pattern}`)
+    // The Privacy page names who receives a price request: the Tbilisi inbox, in every language
+    if (!rel(file).includes('privacy/')) {
+      assert.doesNotMatch(text, /LLC BUZ Tech Georgia|info-ge@/, `${rel(file)} names the Georgian company`)
+    }
+  }
+  for (const dir of ['az/', 'ru/']) {
+    const contact = html(`${dir}contact/index.html`)
+    assert.match(contact, /tel:\+994708608986/, `${dir}contact has no Baku phone`)
+    assert.match(contact, /wa\.me\/994708608986/, `${dir}contact has no Baku WhatsApp`)
+    assert.match(contact, /mailto:info@buz-cloud\.com/, `${dir}contact has no Baku email`)
+    assert.match(html(`${dir}privacy/index.html`), /info-ge@buz-cloud\.com/, `${dir}privacy no longer names the inbox requests reach`)
+  }
+})
+
+test('Georgian and English keep the Tbilisi office; English Contact also shows Baku', () => {
+  for (const file of pages().filter((f) => isGeorgian(rel(f)) || rel(f).startsWith('en/'))) {
+    const text = readFileSync(file, 'utf8')
+    assert.match(text, /tel:\+995599137723/, `${rel(file)} has no Tbilisi phone`)
+    const baku = /\+994|info@buz-cloud\.com/.test(text)
+    assert.equal(baku, rel(file) === 'en/contact/index.html', `${rel(file)} ${baku ? 'shows' : 'lacks'} the Baku office`)
+  }
+  assert.match(html('index.html'), /405291786/, 'the Georgian site lost its tax ID')
 })

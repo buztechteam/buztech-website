@@ -9,7 +9,7 @@ export function Facts({ className = '' }: { className?: string }) {
   const { t } = useLang();
   return (
     /* Phone: one compact row per fact (Georgian labels like "საქართველოში" are too long for columns). */
-    <dl {...revealProps(0)} className={`grid gap-px overflow-hidden rounded-xl border border-white/12 bg-white/12 sm:grid-cols-2 ${className}`}>
+    <dl {...revealProps(0)} className={`grid gap-px overflow-hidden rounded-xl border border-white/12 bg-white/12 ${t.services.facts.length > 1 ? 'sm:grid-cols-2' : ''} ${className}`}>
       {t.services.facts.map((fact) => (
         <div key={fact.label} className="flex items-center gap-4 bg-navy px-5 py-4 sm:flex-col sm:items-start sm:gap-1 sm:p-8">
           <dd className="order-1 w-20 shrink-0 text-3xl leading-none font-extrabold text-white sm:w-auto sm:text-5xl">
@@ -28,7 +28,7 @@ export function Credentials() {
   const p = t.home.proof;
   return (
     <ul className="space-y-3.5">
-      {[p.partner, p.since, p.countries].map((item, i) => (
+      {[p.partner, p.since, p.countries].filter((item): item is string => Boolean(item)).map((item, i) => (
         <li key={item} className="flex gap-3">
           <Check className="mt-1 size-4 shrink-0 text-brand-teal" strokeWidth={3} />
           <span className={i === 0 ? 'font-extrabold text-white' : 'text-light/85'}>{item}</span>

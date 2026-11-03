@@ -2,29 +2,31 @@ import { site } from './config/site';
 import type { Dict, Lang, PageId, ProductId, ProductPageId } from './i18n/types';
 
 /**
- * Every page, in footer order. Each one is pre-rendered in both languages (scripts/prerender.mjs).
+ * Every page, in footer order. Each one is pre-rendered in every language (scripts/prerender.mjs).
  * Retired addresses (/licensing/, /servers/, /networking/, /workspaces/) redirect in public/_redirects.
  */
 export const pages: PageId[] = ['home', 'microsoft-365', 'it-equipment', 'ideahub', 'services', 'about', 'contact', 'privacy'];
-export const langs: Lang[] = ['ge', 'en'];
+export const langs: Lang[] = ['ge', 'en', 'az', 'ru'];
+/** The html lang / hreflang code of each language. */
+export const htmlLang: Record<Lang, string> = { ge: 'ka', en: 'en', az: 'az', ru: 'ru' };
 export const productPages: ProductPageId[] = ['microsoft-365', 'it-equipment', 'ideahub'];
 
 export const isProductPage = (page: PageId): page is ProductPageId => (productPages as PageId[]).includes(page);
 
 /**
- * Georgian lives at the root, English under /en/. Slugs are Latin in both languages.
- * notFound has no address of its own (it is /404.html and /en/404.html), so links to it go home.
+ * Georgian lives at the root; English, Azerbaijani and Russian under /en/, /az/, /ru/. Slugs are Latin in every language.
+ * notFound has no address of its own (it is /404.html, /en/404.html ...), so links to it go home.
  */
 export function pagePath(page: PageId, lang: Lang): string {
-  const prefix = lang === 'en' ? '/en/' : '/';
+  const prefix = lang === 'ge' ? '/' : `/${lang}/`;
   return page === 'home' || page === 'notFound' ? prefix : `${prefix}${page}/`;
 }
 
 /** Unknown addresses resolve to notFound, matching the 404.html Cloudflare serves for them. */
 export function matchPath(pathname: string): { page: PageId; lang: Lang } {
   const parts = pathname.split('/').filter((part) => part && part !== 'index.html');
-  const lang: Lang = parts[0] === 'en' ? 'en' : 'ge';
-  if (lang === 'en') parts.shift();
+  const lang: Lang = parts[0] !== 'ge' && (langs as string[]).includes(parts[0]) ? (parts[0] as Lang) : 'ge';
+  if (lang !== 'ge') parts.shift();
   if (parts.length === 0) return { page: 'home', lang };
   const page = parts.length === 1 && (pages as string[]).includes(parts[0]) ? (parts[0] as PageId) : 'notFound';
   return { page, lang };
