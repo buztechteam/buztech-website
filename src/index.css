@@ -197,34 +197,36 @@
   --focus-color: var(--color-navy);
 }
 
-/* ---------- Hero stack: the single orchestrated load moment ---------- */
-@keyframes slab-in {
-  from {
-    opacity: 0;
-    transform: translateY(-40px);
+/* ---------- Hero logo: the single orchestrated load moment (src/motion/heroLogo.ts) ---------- */
+/* The lines fade out toward the text, so they never sit behind the headline. */
+.hero-lines {
+  mask-image: linear-gradient(to bottom, transparent 40%, #000 70%);
+  @media (width >= 64rem) {
+    mask-image: linear-gradient(to right, transparent 32%, #000 60%);
   }
+}
+
+/* The shadow comes on once the logo has landed (a filter during the reveal stalls its sweep). */
+.hero-logo {
+  transition: filter 800ms ease-out;
+}
+.hero-logo[data-landed] {
+  filter: drop-shadow(0 1.1rem 1.6rem rgb(17 34 64 / 0.35));
+}
+
+/*
+  Gated by .motion: the art waits for the script that plays its arrival (hidden only until
+  then, and shown anyway after 2.5 s should the script never run). Without .motion the logo
+  simply renders at rest.
+*/
+@keyframes hero-art-fallback {
   to {
     opacity: 1;
-    transform: none;
   }
 }
-
-@keyframes wire-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* Gated by .motion: without it the layers and wires render in their final, visible state. */
 @media (prefers-reduced-motion: no-preference) {
-  .motion .slab {
-    animation: slab-in 900ms var(--ease-soft) both;
-    animation-delay: var(--d, 0ms);
-  }
-  .motion .wire {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    animation: wire-draw 1100ms var(--ease-soft) forwards;
-    animation-delay: var(--d, 0ms);
+  .motion [data-hero-art]:not([data-live]) {
+    opacity: 0;
+    animation: hero-art-fallback 0s 2.5s forwards;
   }
 }

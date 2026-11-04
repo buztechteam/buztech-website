@@ -36,7 +36,6 @@ export const en: Dict = {
     points: ['Official Microsoft CSP partner', 'VAT invoice in GEL', 'Support after the sale'],
     secondary: 'Free licence audit',
     stack: { top: 'Apps', mid: 'Access and MFA', base: 'Cloud' },
-    stackLabel: 'Microsoft 365, Entra ID and Azure working as one system',
   },
   pages: {
     'microsoft-365': {

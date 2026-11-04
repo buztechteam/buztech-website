@@ -21,7 +21,7 @@ src/
                              types.ts keeps both in sync
   routes.ts                  the page list, addresses per language, page titles/descriptions
   App.tsx                    which sections each page shows
-  components/                Header (+Products menu), PageIntro, ContactBand, Hero (+HeroStack), Home (Microsoft 365
+  components/                Header (+Products menu), PageIntro, ContactBand, Hero (+HeroLogo), Home (Microsoft 365
                              teaser), Microsoft365, Equipment (+IdeaHub), ProductLinks, Included, TrustStrip (proof),
                              Services, Clients, Events (About: event photos), Contact, Privacy, Footer, BuzLogo, icons
   entry-server.tsx           renders one page to HTML at build time

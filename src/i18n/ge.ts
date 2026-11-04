@@ -36,7 +36,6 @@ export const ge: Dict = {
     points: ['Microsoft-ის ოფიციალური CSP პარტნიორი', 'დღგ-იანი ინვოისი ლარში', 'მხარდაჭერა შეძენის შემდეგაც'],
     secondary: 'ლიცენზიების უფასო აუდიტი',
     stack: { top: 'აპლიკაციები', mid: 'წვდომა და MFA', base: 'ღრუბელი' },
-    stackLabel: 'Microsoft 365, Entra ID და Azure - ერთიანი სისტემა',
   },
   pages: {
     'microsoft-365': {

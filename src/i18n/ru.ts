@@ -39,7 +39,6 @@ export const ru: Dict = {
     points: ['Официальный CSP-партнёр Microsoft', 'Документы для тендеров', 'Поддержка после покупки'],
     secondary: 'Бесплатный аудит лицензий',
     stack: { top: 'Приложения', mid: 'Доступ и MFA', base: 'Облако' },
-    stackLabel: 'Microsoft 365, Entra ID и Azure работают как единая система',
   },
   pages: {
     'microsoft-365': {

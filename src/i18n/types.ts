@@ -60,7 +60,6 @@ export interface Dict {
     /** Link to the free licence audit. */
     secondary: string;
     stack: { top: string; mid: string; base: string };
-    stackLabel: string;
   };
   /** Product pages: name in menus and links, one-line summary (menu, links, page lead). */
   pages: Record<ProductPageId, { label: string; summary: string }>;

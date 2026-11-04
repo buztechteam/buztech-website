@@ -75,10 +75,18 @@ test('arrivals only run under .motion', () => {
   const c = css()
   assert.match(c, /\.motion \[data-arrive\]/)
   assert.match(c, /@keyframes arrive/)
-  for (const cls of ['slab', 'wire']) {
-    assert.match(c, new RegExp(`\\.motion \\.${cls}\\s*\\{[^}]*animation`), `.${cls} animation not under .motion`)
-    // a selector that starts with .slab / .wire (not ".motion .slab") carrying an animation
-    assert.doesNotMatch(c, new RegExp(`(^|[{},;])\\s*\\.${cls}\\s*\\{[^}]*animation`), `un-gated .${cls} animation`)
+  // the hero art waits for its script only under .motion, and shows anyway if it never runs
+  assert.match(c, /\.motion \[data-hero-art\]:not\(\[data-live\]\)\s*\{[^}]*opacity:\s*0[^}]*animation/)
+  assert.doesNotMatch(c, /(^|[{},;])\s*\[data-hero-art\][^{]*\{[^}]*opacity:\s*0/, 'hero art hidden without .motion')
+})
+
+test('the home hero pre-renders the logo at rest', () => {
+  for (const lang of LANG_DIRS) {
+    const page = html(`${lang}index.html`)
+    const art = page.slice(page.indexOf('data-hero-art'), page.indexOf('</svg>', page.indexOf('data-hero-art')))
+    assert.ok(art.length > 0, `${lang}index.html has no hero art`)
+    assert.equal(count(art, /data-hl="(bar|dot|gear)"/g), 7, `${lang}index.html: hero logo pieces missing`)
+    assert.doesNotMatch(art, /\s(mask|clip-path)="url/, `${lang}index.html: hero logo starts masked`)
   }
 })
 

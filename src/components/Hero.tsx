@@ -1,7 +1,7 @@
 import { useLang } from '../i18n/LanguageContext';
 import { inquireHref, pagePath } from '../routes';
 import { Check } from './icons';
-import { HeroStack } from './HeroStack';
+import { HeroLogo } from './HeroLogo';
 import { arriveProps } from '../motion/reveal';
 import { btn } from './ui';
 
@@ -45,7 +45,7 @@ export function Hero() {
           </div>
         </div>
 
-        <HeroStack />
+        <HeroLogo />
       </div>
     </section>
   );

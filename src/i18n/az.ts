@@ -40,7 +40,6 @@ export const az: Dict = {
     points: ['Rəsmi Microsoft CSP partnyoru', 'Tenderlər üçün sənədlər', 'Satışdan sonra dəstək'],
     secondary: 'Pulsuz lisenziya auditi',
     stack: { top: 'Tətbiqlər', mid: 'Giriş və MFA', base: 'Bulud' },
-    stackLabel: 'Microsoft 365, Entra ID və Azure vahid sistem kimi işləyir',
   },
   pages: {
     'microsoft-365': {
