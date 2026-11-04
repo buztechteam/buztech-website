@@ -183,6 +183,17 @@ test('header can show a shadow', () => {
   assert.match(css(), /\[data-scrolled=true\][^{]*\{[^}]*box-shadow/)
 })
 
+test('the slimmer header keeps the page still and tucks away only below lg', () => {
+  // the 1rem the bar loses comes back as margin, so the content below never jumps
+  assert.match(css(), /\[data-scrolled=true\][^{]*\{[^}]*margin-bottom/)
+  assert.match(css(), /\[data-tucked=true\]/)
+  assert.doesNotMatch(css(), /@media \(width >= 64rem\)[^@]*\[data-tucked=true\]/)
+})
+
+test('selected text is Brand Teal', () => {
+  assert.match(css(), /::selection\s*\{[^}]*background-color:\s*var\(--color-brand-teal\)/)
+})
+
 const headersBlock = () => {
   const lines = html('_headers').split(/\r?\n/)
   const start = lines.findIndex((l) => l.trim() === '/*')

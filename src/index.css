@@ -137,6 +137,12 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  /* selected text in Brand Teal with Ink text (6.8:1), on every surface */
+  ::selection {
+    background-color: var(--color-brand-teal);
+    color: var(--color-ink);
+  }
+
   body {
     background: var(--color-ink);
     color: var(--color-light);

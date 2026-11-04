@@ -30,16 +30,37 @@ const navLink =
 const menuMotion =
   'transition-[opacity,translate,visibility] data-[open=true]:transition-[opacity,translate] duration-(--dur-menu) ease-soft data-[open=false]:invisible data-[open=false]:opacity-0 motion-safe:data-[open=false]:-translate-y-1.5';
 
-/** True once the page is scrolled past `threshold` px. Starts false on server and client alike. */
-function useScrolled(threshold = 8): boolean {
+/*
+  Scrolled, the bar slims from 4.5rem to 3.5rem and a 1rem margin takes up the difference, so the page
+  below never jumps: height and margin share one duration and easing, so their sum stays constant.
+  On phones and tablets the header tucks away while scrolling down. Reduced motion: it snaps.
+*/
+const headerMotion =
+  'transition-[height,margin,translate,box-shadow] duration-(--dur-hover) ease-soft motion-reduce:transition-none';
+
+/**
+ * `scrolled`: the page is past `threshold` px (the header slims down and gets a shadow).
+ * `down`: the visitor is scrolling down, well below the top (phones and tablets tuck the header away;
+ * any scroll up brings it back). Small moves, like iOS's bounce, don't count.
+ * Both start false on server and client alike.
+ */
+function useScrollState(threshold = 8): { scrolled: boolean; down: boolean } {
   const [scrolled, setScrolled] = useState(false);
+  const [down, setDown] = useState(false);
   useEffect(() => {
-    const update = () => setScrolled(window.scrollY > threshold);
+    let lastY = window.scrollY;
+    const update = () => {
+      const y = window.scrollY;
+      setScrolled(y > threshold);
+      if (Math.abs(y - lastY) < 8) return;
+      setDown(y > lastY && y > 160);
+      lastY = y;
+    };
     update();
     window.addEventListener('scroll', update, { passive: true });
     return () => window.removeEventListener('scroll', update);
   }, [threshold]);
-  return scrolled;
+  return { scrolled, down };
 }
 
 /** Disclosure menu with the product pages, Microsoft 365 first. Opens on hover or click; Esc or a click outside closes it. */
@@ -234,7 +255,7 @@ function LangMenu() {
 export function Header() {
   const { lang, page, t } = useLang();
   const [open, setOpen] = useState(false);
-  const scrolled = useScrolled();
+  const { scrolled, down } = useScrollState();
   const headerRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
 
@@ -273,16 +294,19 @@ export function Header() {
     <header
       ref={headerRef}
       data-scrolled={scrolled}
-      className="sticky top-0 z-40 [view-transition-name:site-header] border-b border-white/10 bg-ink/95 backdrop-blur transition-shadow duration-(--dur-menu) ease-soft data-[scrolled=true]:shadow-lg data-[scrolled=true]:shadow-ink/30"
+      data-tucked={down && !open}
+      className={`group sticky top-0 z-40 [view-transition-name:site-header] border-b border-white/10 bg-ink/95 backdrop-blur ${headerMotion} data-[scrolled=true]:mb-4 data-[scrolled=true]:shadow-lg data-[scrolled=true]:shadow-ink/30 max-lg:data-[tucked=true]:not-focus-within:-translate-y-full`}
     >
-      <div className="container-wide flex h-[4.5rem] items-center justify-between gap-4">
+      <div
+        className={`container-wide flex h-[4.5rem] items-center justify-between gap-4 ${headerMotion} group-data-[scrolled=true]:h-14`}
+      >
         <a
           href={pagePath('home', lang)}
           aria-label={t.a11y.home}
           aria-current={page === 'home' ? 'page' : undefined}
           className="shrink-0"
         >
-          <BuzLogo className="h-11 w-auto" />
+          <BuzLogo className={`h-11 w-auto ${headerMotion} group-data-[scrolled=true]:h-9`} />
         </a>
 
         <nav aria-label={t.a11y.mainNav} className="hidden items-center gap-1 lg:flex">

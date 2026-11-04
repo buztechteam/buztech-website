@@ -81,6 +81,8 @@ visitor points at responds, content eases in once, then everything rests. **Noth
   - Nav links get a Brand Teal underline that grows from the left.
   - Cards that aren't links change border colour only.
 - **Menus** fade and slide about 6px.
+- **Header** slims from 4.5rem to 3.5rem once scrolled (a matching margin keeps the page still); below `lg` it tucks away while scrolling down and returns on any scroll up.
+- **Selected text** is Brand Teal with Ink text.
 - **Page changes** cross-fade, while the header and the phone bar stay in place.
 - **Never:** bounce, overshoot, 3D tilt, shimmer, floating, pulsing, particles, constant motion.
 
