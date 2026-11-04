@@ -83,6 +83,7 @@ visitor points at responds, content eases in once, then everything rests. **Noth
 - **Menus** fade and slide about 6px.
 - **Header** slims from 4.5rem to 3.5rem once scrolled (a matching margin keeps the page still); below `lg` it tucks away while scrolling down and returns on any scroll up.
 - **Selected text** is Brand Teal with Ink text.
+- **Header logo** (`BuzLogo live`): pointed at with a mouse, a light runs along each wing into its dot and the dot flashes white, once, then rests (owner-approved, like the hero). It presses to .97 like buttons.
 - **Page changes** cross-fade, while the header and the phone bar stay in place.
 - **Never:** bounce, overshoot, 3D tilt, shimmer, floating, pulsing, particles, constant motion.
 

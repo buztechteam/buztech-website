@@ -190,6 +190,12 @@ test('the slimmer header keeps the page still and tucks away only below lg', () 
   assert.doesNotMatch(css(), /@media \(width >= 64rem\)[^@]*\[data-tucked=true\]/)
 })
 
+test('the header logo runs its light only when pointed at, never with reduced motion', () => {
+  assert.equal(count(html('index.html'), /data-logo-run/g), 3, 'header logo should carry one light per wing')
+  assert.match(css(), /prefers-reduced-motion:\s*no-preference\)\s*\{[^@]*\.logo-live\[data-play\]/)
+  assert.match(css(), /\[data-logo-run\][^{]*\{[^}]*opacity:\s*0/)
+})
+
 test('selected text is Brand Teal', () => {
   assert.match(css(), /::selection\s*\{[^}]*background-color:\s*var\(--color-brand-teal\)/)
 })

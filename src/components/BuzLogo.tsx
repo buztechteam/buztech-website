@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import {
   BUZ_PATH,
   GEAR_PATH,
@@ -56,7 +57,7 @@ const wordmarkTransform: Record<Exclude<BuzLogoLayout, 'icon'>, string> = {
   stacked: `translate(${STACK_X} ${STACK_Y}) scale(${STACK_SCALE})`,
 };
 
-function Mark({ variant }: { variant: BuzLogoVariant }) {
+function Mark({ variant, liveId }: { variant: BuzLogoVariant; liveId?: string }) {
   return (
     <>
       <path d={GEAR_PATH} className={gearFill[variant]} />
@@ -68,6 +69,39 @@ function Mark({ variant }: { variant: BuzLogoVariant }) {
           </g>
         ))}
       </g>
+      {liveId && <LightRun id={liveId} />}
+    </>
+  );
+}
+
+/**
+ * The light that runs along each wing into its dot when the logo is pointed at (the hero's
+ * heartbeat in miniature). Invisible at rest; index.css `.logo-live` plays it.
+ */
+function LightRun({ id }: { id: string }) {
+  return (
+    <>
+      <defs>
+        <linearGradient id={`${id}-light`}>
+          <stop offset="0" stopColor="#fff" stopOpacity="0" />
+          <stop offset="0.7" stopColor="#fff" stopOpacity="0.9" />
+          <stop offset="1" stopColor="#fff" stopOpacity="0" />
+        </linearGradient>
+        {WINGS.map((wing, i) => (
+          <clipPath key={wing.cy} id={`${id}-wing${i}`}>
+            <path d={wing.bar} />
+            <circle cx={wing.cx} cy={wing.cy} r={WING_RADIUS} />
+          </clipPath>
+        ))}
+      </defs>
+      {WINGS.map((wing, i) => (
+        <g key={wing.cy} style={{ '--i': i } as React.CSSProperties}>
+          <g clipPath={`url(#${id}-wing${i})`}>
+            <rect data-logo-run="" x="-220" y={wing.cy - 45} width="220" height="90" fill={`url(#${id}-light)`} />
+          </g>
+          <circle data-logo-flash={i === WINGS.length - 1 ? 'last' : ''} cx={wing.cx} cy={wing.cy} r={WING_RADIUS} className="fill-white" />
+        </g>
+      ))}
     </>
   );
 }
@@ -78,6 +112,8 @@ interface BuzLogoProps {
   width?: number | string;
   height?: number | string;
   className?: string;
+  /** Pointing at the logo with a mouse runs a light along the wings into the dots (the header logo). */
+  live?: boolean;
 }
 
 export default function BuzLogo({
@@ -86,7 +122,24 @@ export default function BuzLogo({
   width,
   height,
   className,
+  live = false,
 }: BuzLogoProps) {
+  const liveId = useId().replace(/[^\w-]/g, '');
+  /*
+    The run plays in full once per pointing: it starts on pointer enter, ignores new enters while it
+    plays, and ends when the last dot's flash does. The attribute is set on the DOM directly, so the
+    server markup and the first render stay the same.
+  */
+  const play = (e: React.PointerEvent<SVGSVGElement>) => {
+    const svg = e.currentTarget;
+    if (e.pointerType !== 'mouse' || svg.hasAttribute('data-play')) return;
+    svg.setAttribute('data-play', '');
+  };
+  const done = (e: React.AnimationEvent<SVGSVGElement>) => {
+    if ((e.target as Element).getAttribute('data-logo-flash') === 'last') {
+      e.currentTarget.removeAttribute('data-play');
+    }
+  };
   return (
     <svg
       viewBox={viewBox[layout]}
@@ -94,9 +147,11 @@ export default function BuzLogo({
       height={height ?? (width == null ? 40 : undefined)}
       role="img"
       aria-label="BUZ Tech"
-      className={className}
+      className={live ? `logo-live ${className ?? ''}` : className}
+      onPointerEnter={live ? play : undefined}
+      onAnimationEnd={live ? done : undefined}
     >
-      <Mark variant={variant} />
+      <Mark variant={variant} liveId={live ? liveId : undefined} />
       {layout !== 'icon' && (
         <g transform={wordmarkTransform[layout]} className={accentFill[variant]}>
           <path d={BUZ_PATH} />

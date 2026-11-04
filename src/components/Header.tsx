@@ -304,9 +304,9 @@ export function Header() {
           href={pagePath('home', lang)}
           aria-label={t.a11y.home}
           aria-current={page === 'home' ? 'page' : undefined}
-          className="shrink-0"
+          className="shrink-0 transition-transform duration-(--dur-hover) ease-soft motion-safe:active:scale-97"
         >
-          <BuzLogo className={`h-11 w-auto ${headerMotion} group-data-[scrolled=true]:h-9`} />
+          <BuzLogo live className={`h-11 w-auto ${headerMotion} group-data-[scrolled=true]:h-9`} />
         </a>
 
         <nav aria-label={t.a11y.mainNav} className="hidden items-center gap-1 lg:flex">

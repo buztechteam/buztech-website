@@ -58,6 +58,32 @@
   }
 }
 
+/* the header logo's light run (see `.logo-live` below): 800 units carries the light past every dot */
+@keyframes logo-run {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(800px);
+  }
+}
+@keyframes logo-flash {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .motion [data-arrive] {
     animation: arrive var(--dur-arrive) var(--ease-soft) both;
@@ -135,6 +161,25 @@
     scroll-padding-top: 5.5rem;
     font-synthesis: none;
     -webkit-text-size-adjust: 100%;
+  }
+
+  /*
+    The header logo's light run (BuzLogo `live`): pointed at, a light runs along each wing into its
+    dot, top wing first, and each dot flashes white for a moment. Plays once, then rests.
+    Reduced motion: nothing plays.
+  */
+  [data-logo-run],
+  [data-logo-flash] {
+    opacity: 0;
+    transform-box: view-box;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .logo-live[data-play] [data-logo-run] {
+      animation: logo-run 620ms cubic-bezier(0.45, 0, 0.35, 1) calc(var(--i) * var(--stagger)) both;
+    }
+    .logo-live[data-play] [data-logo-flash] {
+      animation: logo-flash 520ms var(--ease-soft) calc(var(--i) * var(--stagger) + 470ms) both;
+    }
   }
 
   /* selected text in Brand Teal with Ink text (6.8:1), on every surface */
