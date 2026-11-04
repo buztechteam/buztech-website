@@ -70,7 +70,7 @@ The website for LLC BUZ Tech Georgia ("BUZ Tech"). Its job is to turn visits int
 
 - **Clients: no approval to name them** (owner, 30 October 2026). The site describes them only by kind, sector and country: public bodies on Microsoft solutions, and state and private companies in Georgia, Azerbaijan, Turkey, Uzbekistan and Kazakhstan.
 - **Company facts:** founded 20 September 2018, plus the tax ID and address (`src/config/site.ts`).
-- **ISO 9001, 27001 and 20000-1 are held,** but the issuer, number, validity and scans are not yet supplied. Never invent them. Until then ISO stays low-key: one line in the footer and the "documents" item of what every order includes, with no section of its own.
+- **ISO 9001, 27001 and 20000-1 are held by the Baku company,** "BUZ Tech" LLC in Baku, not LLC BUZ Tech Georgia (certificates supplied 4 November 2026, valid to 20 May 2027). The Georgian and English versions name that holder wherever ISO appears. ISO stays low-key: one line in the footer and the "documents" item of what every order includes, with no section of its own.
 - **Missing, and not to be fabricated:**
   - testimonials, case studies, prices and savings figures
   - partner or client logos

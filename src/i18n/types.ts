@@ -167,6 +167,8 @@ export interface Dict {
     taxId?: string;
     /** Label and date written out: browsers can lack Georgian month names, so no Intl. */
     founded?: string;
+    /** GE/EN only: they show the Georgian company, but the ISO certificates belong to the Baku one. */
+    isoHolder?: string;
     privacy: string;
   };
   privacy: {

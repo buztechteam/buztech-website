@@ -107,5 +107,5 @@ export const ideahubImage: string | undefined = '/products/ideahub-s2.jpg';
  */
 export const eventPhotos: EventId[] = ['antalya', 'conference', 'club'];
 
-/** ISO standards held. Shown quietly in the footer only, until the certificate details are supplied. */
+/** ISO standards held by the Baku company (BUZ Tech LLC), valid to 20 May 2027. A quiet footer line; GE/EN add the holder. */
 export const isoStandards = ['ISO 9001', 'ISO 27001', 'ISO 20000-1'];

@@ -85,7 +85,10 @@ export function Footer() {
               </li>
             )}
             {company && <li>{f.founded}</li>}
-            <li className="text-light/70">{isoStandards.join(' · ')}</li>
+            <li className="text-light/70">
+              {isoStandards.join(' · ')}{' '}
+              {f.isoHolder && <span className="block">{f.isoHolder}</span>}
+            </li>
           </ul>
         </div>
       </div>

@@ -102,14 +102,15 @@ white text (2.2:1), so a Navy scrim fades across the text column.
   price request. `npm test` fails on a price or a time promise.
 - **No client names.** There is no approval yet, so clients are described by kind, sector and country only (`clients` in
   the dictionaries). `npm test` fails if a client name reaches the built site.
-- **ISO stays low-key** until the certificate details exist: one footer line (`isoStandards` in `config/site.ts`).
+- **ISO stays low-key:** one footer line (`isoStandards` in `config/site.ts`). The certificates belong to the Baku company, so the
+  Georgian and English versions name it (`footer.isoHolder`); `npm test` checks.
 - **A plain hyphen, never an em dash,** in visible text (`npm test` checks).
 
 ## Before launch: items only you can supply
 
 1. **Brand names on the IT equipment page.** Generic until the owner approves names (`equipmentBrands` in `config/site.ts`).
 2. **Client names and logos.** None are shown until each client agrees.
-3. **ISO certificate details.** Issuer, number, validity and scans. Once supplied, the certificates can get their own section again (it was removed in October 2026 while they were missing).
+3. **ISO for the Georgian company.** The certificates supplied in November 2026 are held by "BUZ Tech" LLC in Baku (valid to 20 May 2027). To show ISO as LLC BUZ Tech Georgia's, it needs its own certificates or must be added to their scope.
 4. **IdeaHub photo.** The IdeaHub page shows Huawei's official S2 image (`public/products/ideahub-s2.jpg`, approved by Huawei); there are no own S2 photos. To use your own later, replace the file or point `ideahubImage` at it.
 5. **Form delivery.** Create a free Web3Forms key (enter info-ge@buz-cloud.com, the key arrives by email) and set it as `VITE_WEB3FORMS_KEY`. Requests then go only to that inbox. Without a key the form opens the visitor's email app. See `.env.example`.
 6. **LinkedIn.** `site.social.linkedin` renders in the footer only when set.

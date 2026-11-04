@@ -79,7 +79,7 @@ export const en: Dict = {
     heading: 'What every order includes',
     items: [
       { icon: 'invoice', title: 'VAT invoice in GEL', text: 'Issued by LLC BUZ Tech Georgia, ready for your accounts.' },
-      { icon: 'documents', title: 'Documents for tenders', text: 'Company documents and ISO certificates.', action: 'Request documents' },
+      { icon: 'documents', title: 'Documents for tenders', text: 'Company documents, plus the ISO certificates of our Baku company.', action: 'Request documents' },
       { icon: 'renewals', title: 'Renewal reminders', text: 'We remind you to renew your licences on time, so your services are never interrupted.' },
       { icon: 'support', title: 'Support after the sale', text: 'Questions, changes, new users - we stay in touch.' },
     ],
@@ -346,6 +346,7 @@ export const en: Dict = {
     social: 'Social media',
     taxId: 'Tax ID',
     founded: 'Founded: 20 September 2018',
+    isoHolder: 'Certificate holder: BUZ Tech LLC, Baku',
     privacy: 'Privacy',
   },
   privacy: {

@@ -444,3 +444,11 @@ test('Georgian and English keep the Tbilisi office; English Contact also shows B
   }
   assert.match(html('index.html'), /405291786/, 'the Georgian site lost its tax ID')
 })
+
+test('Georgian and English name the Baku company wherever ISO appears', () => {
+  assert.match(html('index.html'), /\bISO\b/, 'the Georgian site no longer shows ISO')
+  for (const file of pages().filter((f) => isGeorgian(rel(f)) || rel(f).startsWith('en/'))) {
+    const text = readFileSync(file, 'utf8')
+    if (/\bISO\b/.test(text)) assert.match(text, /BUZ Tech LLC, (Baku|ბაქო)/, `${rel(file)} shows ISO without its holder`)
+  }
+})
