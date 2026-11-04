@@ -307,6 +307,7 @@ export const az: Dict = {
     fields: {
       company: 'Şirkətin adı',
       email: 'E-poçt',
+      phone: 'Telefon',
       product: 'Nə lazımdır',
       message: 'Mesaj',
     },
@@ -315,6 +316,7 @@ export const az: Dict = {
       email: 'name@company.az',
       message: 'Məsələn: istifadəçi və ya cihaz sayı, hazırkı planınız',
     },
+    optional: 'istəyə bağlı',
     selectPlaceholder: 'Seçin',
     groups: { microsoft: 'Microsoft', equipment: 'IT avadanlığı', company: 'BUZ Tech' },
     next: {
@@ -354,7 +356,7 @@ export const az: Dict = {
     sections: [
       {
         heading: 'Nə toplayırıq',
-        body: 'Formada şirkətinizin adını, e-poçtunuzu, nəyə ehtiyacınız olduğunu və mesajınızı qeyd edirsiniz. Vebsayt başqa heç bir şəxsi məlumat tələb etmir.',
+        body: 'Formada şirkətinizin adını, e-poçtunuzu, istəsəniz telefon nömrənizi, nəyə ehtiyacınız olduğunu və mesajınızı qeyd edirsiniz. Vebsayt başqa heç bir şəxsi məlumat tələb etmir.',
       },
       {
         heading: 'Nə üçün istifadə edirik',

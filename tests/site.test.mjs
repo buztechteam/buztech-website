@@ -254,7 +254,7 @@ test('CSP allows exactly the inline gate script', () => {
 test('form fields are length-limited', () => {
   for (const lang of LANG_DIRS) {
     const page = html(`${lang}contact/index.html`)
-    for (const [id, max] of [['company', 120], ['email', 254], ['message', 2000]]) {
+    for (const [id, max] of [['company', 120], ['email', 254], ['phone', 40], ['message', 2000]]) {
       const tag = page.match(new RegExp(`<(?:input|textarea)[^>]*\\sid="${id}"[^>]*>`))?.[0] ?? ''
       // React renders maxLength="…"; HTML attribute names are case-insensitive
       assert.match(tag, new RegExp(`\\smaxlength="${max}"`, 'i'), `${lang}contact #${id} lacks maxlength=${max}`)
@@ -460,6 +460,21 @@ test('Georgian and English keep the Tbilisi office; English Contact also shows B
     assert.equal(baku, rel(file) === 'en/contact/index.html', `${rel(file)} ${baku ? 'shows' : 'lacks'} the Baku office`)
   }
   assert.match(html('index.html'), /405291786/, 'the Georgian site lost its tax ID')
+})
+
+test('Georgian keeps a Latin word and its Georgian ending together (Microsoft\u2011ის)', () => {
+  for (const file of pages().filter((f) => isGeorgian(rel(f)))) {
+    const text = readFileSync(file, 'utf8').replace(/<script[\s\S]*?<\/script>/g, '')
+    const split = text.match(/[A-Za-z0-9]-[\u10D0-\u10FF]+/)?.[0]
+    assert.equal(split, undefined, `${rel(file)}: "${split}" can break at its hyphen; write it with U+2011`)
+  }
+})
+
+test('pages that open with price buttons mark them, so the phone bar waits', () => {
+  for (const page of ['index.html', 'microsoft-365/index.html', 'it-equipment/index.html', 'en/index.html']) {
+    assert.match(html(page), /\sdata-hero-cta[=\s>]/, `${page} has no data-hero-cta`)
+  }
+  assert.doesNotMatch(html('contact/index.html'), /\sdata-hero-cta[=\s>]/, 'Contact has no price buttons above the form')
 })
 
 test('Georgian and English name the Baku company wherever ISO appears', () => {

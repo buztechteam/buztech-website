@@ -35,7 +35,7 @@ export function Hero() {
             ))}
           </ul>
 
-          <div {...arriveProps(3)} className="mt-10 flex flex-wrap items-center gap-4">
+          <div {...arriveProps(3)} data-hero-cta className="mt-10 flex flex-wrap items-center gap-4">
             <a href={inquireHref('m365', lang)} className={btn('primary')}>
               {t.cta}
             </a>

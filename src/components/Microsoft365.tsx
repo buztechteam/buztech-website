@@ -12,7 +12,7 @@ import { btn, cardStatic, h2Class, leadClass, textCta } from './ui';
 export function PriceActions({ className = '' }: { className?: string }) {
   const { lang, t } = useLang();
   return (
-    <div className={`flex flex-wrap gap-3 ${className}`}>
+    <div data-hero-cta className={`flex flex-wrap gap-3 ${className}`}>
       <a href={inquireHref('m365', lang)} className={btn('primary')}>
         {t.cta}
       </a>

@@ -258,6 +258,8 @@ export function Header() {
   const { scrolled, down } = useScrollState();
   const headerRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
+  /* On Contact the form is already here: jump to it instead of reloading the page and losing what was typed. */
+  const ctaHref = page === 'contact' ? '#price-form' : pagePath('contact', lang);
 
   /*
     The phone menu overlays the page, so it must not stay open behind the visitor's back:
@@ -265,6 +267,15 @@ export function Header() {
   */
   useEffect(() => {
     if (!open) return;
+    /* The page behind stays put and the phone bar steps aside (QuickContactBar); a wide screen has no phone menu. */
+    const root = document.documentElement;
+    root.style.overflow = 'hidden';
+    root.dataset.menuOpen = 'true';
+    const wide = window.matchMedia('(min-width: 64rem)');
+    const onWide = () => {
+      if (wide.matches) setOpen(false);
+    };
+    wide.addEventListener('change', onWide);
     const outside = (target: EventTarget | null) => !headerRef.current?.contains(target as Node | null);
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
@@ -284,6 +295,9 @@ export function Header() {
       document.removeEventListener('keydown', onKey);
       document.removeEventListener('pointerdown', onPointer);
       document.removeEventListener('focusin', onFocus);
+      wide.removeEventListener('change', onWide);
+      root.style.overflow = '';
+      delete root.dataset.menuOpen;
     };
   }, [open]);
 
@@ -320,7 +334,7 @@ export function Header() {
 
         <div className="flex shrink-0 items-center gap-3">
           <LangMenu />
-          <a href={pagePath('contact', lang)} className={`${btn('primary', 'sm')} max-md:hidden`}>
+          <a href={ctaHref} className={`${btn('primary', 'sm')} max-md:hidden`}>
             {t.cta}
           </a>
           <button
@@ -344,7 +358,8 @@ export function Header() {
         className={`absolute inset-x-0 top-full max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-y border-white/10 bg-ink lg:hidden ${menuMotion}`}
       >
         <nav aria-label={t.a11y.mainNav} className="container-x py-3">
-          <p className="pt-3 pb-1 text-sm tracking-[0.14em] text-light/60 uppercase">{t.nav.products}</p>
+          {/* Georgian has no capitals: uppercase would switch it to Mtavruli, and tracking stretches its long words. */}
+          <p className={`pt-3 pb-1 text-sm text-light/60 ${lang === 'ge' ? '' : 'tracking-[0.14em] uppercase'}`}>{t.nav.products}</p>
           <ul>
             {productPages.map((id) => (
               <li key={id}>
@@ -361,23 +376,8 @@ export function Header() {
               </li>
             ))}
           </ul>
-          <p className="pt-6 pb-1 text-sm tracking-[0.14em] text-light/60 uppercase">{t.a11y.language}</p>
-          <ul className="grid grid-cols-2 gap-x-4">
-            {LANGS.map((l) => (
-              <li key={l.id}>
-                <a
-                  href={pagePath(page, l.id)}
-                  hrefLang={htmlLang[l.id]}
-                  lang={htmlLang[l.id]}
-                  aria-current={lang === l.id ? 'true' : undefined}
-                  className={`${mobileLink} aria-[current=true]:text-brand-teal`}
-                >
-                  {l.name}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <a href={pagePath('contact', lang)} className={`${btn('primary')} mt-4 w-full`}>
+          {/* Languages are not repeated here: the language button stays in the bar above the open menu. */}
+          <a href={ctaHref} onClick={() => setOpen(false)} className={`${btn('primary')} mt-6 w-full`}>
             {t.cta}
           </a>
         </nav>

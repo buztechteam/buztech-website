@@ -141,7 +141,9 @@ export interface Dict {
     email: string;
     /** Short labels for the call / WhatsApp row above the form on phones. */
     call: string;
-    fields: { company: string; email: string; product: string; message: string };
+    fields: { company: string; email: string; phone: string; product: string; message: string };
+    /** After the label of every field that is not required. */
+    optional: string;
     placeholders: { company: string; email: string; message: string };
     selectPlaceholder: string;
     /** Option groups in the product list. */

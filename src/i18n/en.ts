@@ -305,6 +305,7 @@ export const en: Dict = {
     fields: {
       company: 'Company name',
       email: 'Email',
+      phone: 'Phone',
       product: 'What you need',
       message: 'Message',
     },
@@ -313,6 +314,7 @@ export const en: Dict = {
       email: 'name@company.ge',
       message: 'For example: the number of users or devices, your current plan',
     },
+    optional: 'optional',
     selectPlaceholder: 'Choose',
     groups: { microsoft: 'Microsoft', equipment: 'IT equipment', company: 'BUZ Tech' },
     next: {
@@ -355,7 +357,7 @@ export const en: Dict = {
     sections: [
       {
         heading: 'What we collect',
-        body: 'In the form you give your company name, email, what you need and a message. The website asks for no other personal data.',
+        body: 'In the form you give your company name, email, a phone number if you wish, what you need and a message. The website asks for no other personal data.',
       },
       {
         heading: 'What we use it for',

@@ -28,7 +28,7 @@ import { pagePath } from './routes';
  */
 function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
   const priceButton = (
-    <a href={pagePath('contact', lang)} className={`${btn('primary')} mt-8`}>
+    <a href={pagePath('contact', lang)} data-hero-cta className={`${btn('primary')} mt-8`}>
       {t.cta}
     </a>
   );

@@ -20,6 +20,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_COMPANY = 120;
 const MAX_EMAIL = 254;
 const MAX_MESSAGE = 2000;
+const MAX_PHONE = 40;
 
 const productIds: ProductId[] = productGroups.flatMap((group) => group.products);
 
@@ -34,15 +35,22 @@ const isProductId = (value: string): value is ProductId => (productIds as string
 const fieldClass =
   'mt-2 w-full rounded-lg border border-navy/30 bg-white px-4 py-3 text-base text-navy placeholder:text-navy/70 aria-invalid:border-2 aria-invalid:border-navy';
 
+/* A tinted strip with the mark: the palette has no red, so an error stands out by shape and weight. */
 function FieldError({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <p id={id} className="mt-2 flex items-center gap-2 text-sm font-extrabold text-navy">
+    <p id={id} className="mt-2 flex items-center gap-2 rounded-md bg-navy/8 px-3 py-2 text-sm font-extrabold text-navy">
       <span aria-hidden="true" className="grid size-5 shrink-0 place-items-center rounded-full bg-navy text-xs text-white">
         !
       </span>
       {children}
     </p>
   );
+}
+
+/* Company and email are required; every other field says it is optional. */
+function Optional() {
+  const { t } = useLang();
+  return <span className="font-medium text-navy/70">({t.contact.optional})</span>;
 }
 
 function InfoRow({ icon, label, children }: { icon: ReactNode; label: string; children: ReactNode }) {
@@ -78,6 +86,14 @@ export function Contact() {
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>('idle');
 
+  /* An error clears as soon as its field is filled in correctly, not only on the next submit. */
+  const revalidate = (field: keyof Errors, value: string) => {
+    if (!errors[field]) return;
+    const v = value.trim();
+    const valid = field === 'company' ? v !== '' : v.length <= MAX_EMAIL && EMAIL_PATTERN.test(v);
+    if (valid) setErrors((prev) => ({ ...prev, [field]: undefined }));
+  };
+
   /* Price buttons link here with ?product=<id>; pre-select it when it is a known option. */
   useEffect(() => {
     const requested = new URLSearchParams(window.location.search).get('product');
@@ -96,6 +112,7 @@ export function Contact() {
 
     const company = String(data.get('company') ?? '').trim().slice(0, MAX_COMPANY);
     const email = String(data.get('email') ?? '').trim();
+    const phone = String(data.get('phone') ?? '').trim().slice(0, MAX_PHONE);
     const message = String(data.get('message') ?? '').trim().slice(0, MAX_MESSAGE);
     const productName = product === 'other' ? c.other : product ? t.products[product] : '';
 
@@ -125,12 +142,13 @@ export function Contact() {
               replyto: email,
               company,
               email,
+              phone: phone || '-',
               product: productName || '-',
               message: message || '-',
               language: lang,
               botcheck: '',
             }
-          : { company, email, product: productName, message, language: lang };
+          : { company, email, phone, product: productName, message, language: lang };
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -147,7 +165,7 @@ export function Contact() {
     }
 
     /* No endpoint configured: hand the request to the visitor's email app. */
-    const body = [`${c.fields.company}: ${company}`, `${c.fields.email}: ${email}`, `${c.fields.product}: ${productName || '-'}`, '', message].join('\n');
+    const body = [`${c.fields.company}: ${company}`, `${c.fields.email}: ${email}`, `${c.fields.phone}: ${phone || '-'}`, `${c.fields.product}: ${productName || '-'}`, '', message].join('\n');
     const subject = `${c.mailSubject} - ${company}${langTag}`;
     window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setStatus('mailto');
@@ -171,32 +189,35 @@ export function Contact() {
           </div>
 
           <form
+            id="price-form"
             ref={formRef}
             onSubmit={onSubmit}
             noValidate
-            className="surface-light rounded-[1.25rem] bg-light p-5 text-navy sm:p-8"
+            className="surface-light scroll-mt-24 rounded-[1.25rem] bg-light p-5 text-navy sm:p-8"
           >
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label htmlFor="company" className="font-extrabold">
-                  {c.fields.company}
-                </label>
-                <input
-                  ref={companyRef}
-                  id="company"
-                  name="company"
-                  type="text"
-                  autoComplete="organization"
-                  maxLength={MAX_COMPANY}
-                  required
-                  placeholder={c.placeholders.company}
-                  aria-invalid={errors.company ? true : undefined}
-                  aria-describedby={errors.company ? 'company-error' : undefined}
-                  className={fieldClass}
-                />
-                {errors.company && <FieldError id="company-error">{errors.company}</FieldError>}
-              </div>
+            <div>
+              <label htmlFor="company" className="font-extrabold">
+                {c.fields.company}
+              </label>
+              <input
+                ref={companyRef}
+                id="company"
+                name="company"
+                type="text"
+                autoComplete="organization"
+                maxLength={MAX_COMPANY}
+                required
+                placeholder={c.placeholders.company}
+                aria-invalid={errors.company ? true : undefined}
+                aria-describedby={errors.company ? 'company-error' : undefined}
+                onInput={(e) => revalidate('company', e.currentTarget.value)}
+                className={fieldClass}
+              />
+              {errors.company && <FieldError id="company-error">{errors.company}</FieldError>}
+            </div>
 
+            {/* The two ways we reply, side by side: "What happens next" promises a call or an email. */}
+            <div className="mt-5 grid gap-5 sm:grid-cols-2">
               <div>
                 <label htmlFor="email" className="font-extrabold">
                   {c.fields.email}
@@ -213,15 +234,23 @@ export function Contact() {
                   placeholder={c.placeholders.email}
                   aria-invalid={errors.email ? true : undefined}
                   aria-describedby={errors.email ? 'email-error' : undefined}
+                  onInput={(e) => revalidate('email', e.currentTarget.value)}
                   className={fieldClass}
                 />
                 {errors.email && <FieldError id="email-error">{errors.email}</FieldError>}
+              </div>
+
+              <div>
+                <label htmlFor="phone" className="font-extrabold">
+                  {c.fields.phone} <Optional />
+                </label>
+                <input id="phone" name="phone" type="tel" autoComplete="tel" inputMode="tel" maxLength={MAX_PHONE} className={fieldClass} />
               </div>
             </div>
 
             <div className="mt-5">
               <label htmlFor="product" className="font-extrabold">
-                {c.fields.product}
+                {c.fields.product} <Optional />
               </label>
               <select
                 id="product"
@@ -246,7 +275,7 @@ export function Contact() {
 
             <div className="mt-5">
               <label htmlFor="message" className="font-extrabold">
-                {c.fields.message}
+                {c.fields.message} <Optional />
               </label>
               <textarea
                 id="message"
