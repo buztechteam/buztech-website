@@ -21,6 +21,10 @@ const MAX_COMPANY = 120;
 const MAX_EMAIL = 254;
 const MAX_MESSAGE = 2000;
 const MAX_PHONE = 40;
+/* The counter appears from here, so the limit is seen before maxLength cuts anything off. */
+const MESSAGE_COUNT_FROM = 1800;
+/* The email app takes a moment to open: this pause stops a double click from opening two drafts. */
+const MAILTO_PAUSE = 3000;
 
 const productIds: ProductId[] = productGroups.flatMap((group) => group.products);
 
@@ -86,6 +90,8 @@ export function Contact() {
   const [product, setProduct] = useState<ProductId | 'other' | ''>('');
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>('idle');
+  const [messageLength, setMessageLength] = useState(0);
+  const [mailtoPause, setMailtoPause] = useState(false);
 
   /* An error clears as soon as its field is filled in correctly, not only on the next submit. */
   const revalidate = (field: keyof Errors, value: string) => {
@@ -157,6 +163,7 @@ export function Contact() {
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         formRef.current?.reset();
+        setMessageLength(0);
         setProduct('');
         setStatus('success');
       } catch {
@@ -170,6 +177,8 @@ export function Contact() {
     const subject = `${c.mailSubject} - ${company}${langTag}`;
     window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setStatus('mailto');
+    setMailtoPause(true);
+    window.setTimeout(() => setMailtoPause(false), MAILTO_PAUSE);
   };
 
   return (
@@ -190,6 +199,7 @@ export function Contact() {
 
           <form
             id="price-form"
+            method="post"
             ref={formRef}
             onSubmit={onSubmit}
             noValidate
@@ -283,8 +293,15 @@ export function Contact() {
                 rows={4}
                 maxLength={MAX_MESSAGE}
                 placeholder={c.placeholders.message}
+                aria-describedby={messageLength >= MESSAGE_COUNT_FROM ? 'message-count' : undefined}
+                onInput={(e) => setMessageLength(e.currentTarget.value.length)}
                 className={`${fieldClass} resize-y`}
               />
+              {messageLength >= MESSAGE_COUNT_FROM && (
+                <p id="message-count" className={`mt-1 text-right text-sm text-navy/80 ${messageLength >= MAX_MESSAGE ? 'font-extrabold' : ''}`}>
+                  {messageLength} / {MAX_MESSAGE}
+                </p>
+              )}
             </div>
 
             {/* honeypot */}
@@ -305,11 +322,18 @@ export function Contact() {
             <div className="mt-5 flex flex-wrap items-center gap-4">
               <button
                 type="submit"
-                disabled={status === 'sending'}
+                disabled={status === 'sending' || mailtoPause}
                 className={`${btn('primaryOnLight')} disabled:opacity-60 max-sm:w-full`}
               >
                 {status === 'sending' ? c.status.sending : product === 'audit' ? t.services.audit.cta : t.cta}
               </button>
+              {/* Without JavaScript the form cannot send, so the email address takes the button's place. */}
+              <noscript>
+                <style>{'#price-form button[type=submit]{display:none}'}</style>
+                <a href={`mailto:${office.email}`} className={`${btn('primaryOnLight')} max-sm:w-full`}>
+                  {office.email}
+                </a>
+              </noscript>
               <p role="status" aria-live="polite" className="min-h-6 flex-1 font-extrabold">
                 {status === 'success' && c.status.success}
                 {status === 'mailto' && c.status.mailto}

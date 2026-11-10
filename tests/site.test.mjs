@@ -489,6 +489,26 @@ test('pages that open with price buttons mark them, so the phone bar waits', () 
   assert.doesNotMatch(html('contact/index.html'), /\sdata-hero-cta[=\s>]/, 'Contact has no price buttons above the form')
 })
 
+test('About lets tender teams request company documents, in every language', () => {
+  for (const lang of LANG_DIRS) {
+    assert.match(html(`${lang}about/index.html`), new RegExp(`href="/${lang}contact/\\?product=documents"`), `${lang}about has no documents link`)
+  }
+})
+
+test('without JavaScript the form keeps its fields out of the address bar and offers the email address', () => {
+  for (const lang of LANG_DIRS) {
+    const page = html(`${lang}contact/index.html`)
+    assert.match(page.match(/<form[^>]*>/)?.[0] ?? '', /\smethod="post"/i, `${lang}contact form is not POST`)
+    assert.match(page, /<noscript>.*?href="mailto:[^"]+@buz-cloud\.com".*?<\/noscript>/s, `${lang}contact has no email link without JavaScript`)
+  }
+})
+
+test('the Products arrow does not animate with reduced motion', () => {
+  const arrows = [...html('index.html').matchAll(/<svg[^>]*class="[^"]*size-4 transition-transform[^"]*"/g)].map((m) => m[0])
+  assert.ok(arrows.length > 0, 'no menu arrows found')
+  for (const arrow of arrows) assert.match(arrow, /motion-reduce:transition-none/)
+})
+
 test('Georgian and English name the Baku company wherever ISO appears', () => {
   assert.match(html('index.html'), /\bISO\b/, 'the Georgian site no longer shows ISO')
   for (const file of pages().filter((f) => isGeorgian(rel(f)) || rel(f).startsWith('en/'))) {

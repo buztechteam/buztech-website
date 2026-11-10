@@ -42,7 +42,7 @@ The website for LLC BUZ Tech Georgia ("BUZ Tech"). Its job is to turn visits int
 
 ## Capabilities and Constraints
 
-- **Languages:** Georgian first (`/`), English under `/en/`. Georgian words are long.
+- **Languages:** Georgian first (`/`), then English (`/en/`), Azerbaijani (`/az/`) and Russian (`/ru/`). Georgian words are long.
 - **No prices on the site,** not even "from" prices. Every pricing path ends in a quote request.
 - **CTA wording:** "მიიღეთ ფასი" / "Get a price". "Today" was dropped, and the site never promises same-day or any timed reply. The form promises a reply, not a price ("we'll get back to you").
 - **Punctuation:** a plain hyphen ( - ), never an em dash, in any text a visitor reads.

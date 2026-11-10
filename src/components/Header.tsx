@@ -141,7 +141,7 @@ function ProductsMenu() {
       >
         {t.nav.products}
         <ChevronDown
-          className={`size-4 transition-transform duration-(--dur-menu) ease-soft ${open ? 'rotate-180' : ''}`}
+          className={`size-4 transition-transform duration-(--dur-menu) ease-soft motion-reduce:transition-none ${open ? 'rotate-180' : ''}`}
         />
       </button>
 
@@ -221,7 +221,7 @@ function LangMenu() {
       >
         <span className="sr-only">{t.a11y.language}: </span>
         {current.code}
-        <ChevronDown className={`size-4 transition-transform duration-(--dur-menu) ease-soft ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`size-4 transition-transform duration-(--dur-menu) ease-soft motion-reduce:transition-none ${open ? 'rotate-180' : ''}`} />
       </button>
 
       <div

@@ -20,7 +20,7 @@ import { useLang } from './i18n/LanguageContext';
 import { initReveal } from './motion/reveal';
 import type { Dict, Lang, PageId } from './i18n/types';
 import { btn } from './components/ui';
-import { pagePath } from './routes';
+import { inquireHref, pagePath } from './routes';
 
 /**
  * What each page shows. Microsoft 365 leads; every page ends in a price request (ContactBand, or the form itself).
@@ -32,6 +32,7 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
       {t.cta}
     </a>
   );
+  const documentsAction = t.included.items.find((item) => item.icon === 'documents')?.action;
   switch (page) {
     case 'home':
       return (
@@ -95,6 +96,14 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
               <p className="mt-4 text-sm text-light/85">
                 {site.legalName} · {t.footer.taxId}: {site.taxId} · {t.footer.founded}
               </p>
+            )}
+            {documentsAction && (
+              <a
+                href={inquireHref('documents', lang)}
+                className="mt-2 inline-flex min-h-11 items-center font-extrabold text-white underline decoration-white/60 decoration-2 underline-offset-4 transition-colors duration-(--dur-hover) ease-soft hover:decoration-white"
+              >
+                {documentsAction}
+              </a>
             )}
           </PageIntro>
           <Clients />

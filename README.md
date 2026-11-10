@@ -126,7 +126,7 @@ carries the retired BUZ Group branding; take facts from it, never branding.
 
 ## Site settings (build variables, all optional)
 
-Set these in Cloudflare under Settings > Variables and Secrets (build variables), then redeploy.
+Set these in Cloudflare under Settings > Build > Build variables and secrets, then redeploy. The separate Settings > Variables and Secrets section is for runtime only, and the build cannot see it.
 
 | Variable | Effect |
 | --- | --- |
