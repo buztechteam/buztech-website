@@ -160,6 +160,7 @@ export interface Dict {
   };
   footer: {
     overview: string;
+    offices: string;
     quickLinks: string;
     contactTitle: string;
     complianceTitle: string;

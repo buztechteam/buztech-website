@@ -65,8 +65,9 @@ function InfoRow({ icon, label, children }: { icon: ReactNode; label: string; ch
   );
 }
 
+/* py + the same negative my: a taller tap target on phones without moving the text. */
 const linkOnDark =
-  'underline decoration-brand-teal decoration-2 underline-offset-4 transition-colors hover:text-brand-teal';
+  'inline-block -my-2 py-2 underline decoration-brand-teal decoration-2 underline-offset-4 transition-colors hover:text-brand-teal';
 
 /**
  * Contact page body (its h1 and lead sit in the PageIntro). The form comes first: on phones only a
@@ -174,8 +175,7 @@ export function Contact() {
   return (
     <section id="contact" className="bg-navy py-10 text-light sm:py-16 lg:py-20">
       <div className="container-x grid gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:gap-14">
-        {/* Wide screens: the form stays in view while the longer details column scrolls past it. */}
-        <div className="lg:sticky lg:top-24 lg:self-start">
+        <div>
           {/* Phones: one tap to call or write, right above the form. Wide screens show the details beside it. */}
           <div className="mb-6 grid grid-cols-2 gap-3 lg:hidden">
             <a href={office.phoneHref} className={`${btn('ghostOnDark')} gap-2`}>
@@ -297,7 +297,7 @@ export function Contact() {
 
             <p className="mt-5 text-sm text-navy/80">
               {c.privacyNote}{' '}
-              <a href={pagePath('privacy', lang)} className="font-extrabold underline decoration-deep-teal decoration-2 underline-offset-4">
+              <a href={pagePath('privacy', lang)} className="inline-block -my-3 py-3 font-extrabold underline decoration-deep-teal decoration-2 underline-offset-4">
                 {c.privacyLink}
               </a>
             </p>
@@ -395,12 +395,13 @@ export function Contact() {
               <Credentials />
             </div>
           </div>
-
-          <div className="border-t border-white/12 pt-10">
-            <h2 className="text-2xl leading-tight font-extrabold text-white">{t.included.heading}</h2>
-            <IncludedList dark className="mt-6" />
-          </div>
         </aside>
+
+        {/* Full width below both columns, so the form and the details end at about the same height. */}
+        <div className="lg:col-span-2">
+          <h2 className="text-2xl leading-tight font-extrabold text-white">{t.included.heading}</h2>
+          <IncludedList dark className="mt-6 sm:grid-cols-2 lg:grid-cols-4" />
+        </div>
       </div>
     </section>
   );

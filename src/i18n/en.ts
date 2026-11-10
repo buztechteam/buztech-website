@@ -340,7 +340,9 @@ export const en: Dict = {
   },
   footer: {
     overview:
-      'BUZ Tech is an official Microsoft CSP partner in Tbilisi. We supply Microsoft 365 licences at the best prices in Georgia, and source the rest of a company’s IT on request: laptops, servers, networking and Huawei IdeaHub. Our head office is in the Czech Republic, with branches in Georgia, Azerbaijan, Turkey, Uzbekistan and Kazakhstan.',
+      'BUZ Tech is an official Microsoft CSP partner in Tbilisi. We supply Microsoft 365 licences at the best prices in Georgia, and source the rest of a company’s IT on request.',
+    offices:
+      'Our head office is in the Czech Republic, with branches in Georgia, Azerbaijan, Turkey, Uzbekistan and Kazakhstan.',
     quickLinks: 'Quick links',
     contactTitle: 'Contact',
     complianceTitle: 'Standards and partnership',

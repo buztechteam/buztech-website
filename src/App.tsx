@@ -88,6 +88,7 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
       return (
         <>
           <PageIntro title={t.nav.about} lead={t.footer.overview}>
+            <p className="mt-3 max-w-[40rem] text-lg leading-relaxed text-pretty text-light">{t.footer.offices}</p>
             <Facts className="mt-10" />
             {/* The company details tender teams look for, not only in the footer. */}
             {showsCompanyDetails(lang) && (

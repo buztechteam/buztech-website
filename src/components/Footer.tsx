@@ -98,7 +98,7 @@ export function Footer() {
           <p className="text-pretty">
             © {__BUILD_YEAR__} {company ? site.legalName : site.name}. {f.rights}
           </p>
-          <a href={pagePath('privacy', lang)} className="underline underline-offset-4 transition-colors duration-(--dur-hover) ease-soft hover:text-brand-teal">
+          <a href={pagePath('privacy', lang)} className="-my-3 py-3 underline underline-offset-4 transition-colors duration-(--dur-hover) ease-soft hover:text-brand-teal">
             {f.privacy}
           </a>
           {social.length > 0 && (

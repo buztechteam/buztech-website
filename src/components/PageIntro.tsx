@@ -32,7 +32,7 @@ export function PageIntro({
             {trail.map((label, index) => (
               <li key={label} className="flex items-center gap-2">
                 {index === 0 ? (
-                  <a href={pagePath('home', lang)} className="underline-offset-4 hover:text-white hover:underline">
+                  <a href={pagePath('home', lang)} className="-my-3 py-3 underline-offset-4 hover:text-white hover:underline">
                     {label}
                   </a>
                 ) : (

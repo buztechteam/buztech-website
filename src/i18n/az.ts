@@ -342,7 +342,9 @@ export const az: Dict = {
   },
   footer: {
     overview:
-      'BUZ Tech rəsmi Microsoft CSP partnyorudur. Microsoft 365 lisenziyalarını ən sərfəli qiymətlərlə təqdim edirik, şirkətin qalan IT ehtiyaclarını isə sorğu əsasında qarşılayırıq: noutbuklar, serverlər, şəbəkə avadanlığı və Huawei IdeaHub. Baş ofisimiz Çexiya Respublikasındadır, filiallarımız isə Azərbaycan, Gürcüstan, Türkiyə, Özbəkistan və Qazaxıstanda fəaliyyət göstərir.',
+      'BUZ Tech rəsmi Microsoft CSP partnyorudur. Microsoft 365 lisenziyalarını ən sərfəli qiymətlərlə təqdim edirik, şirkətin qalan IT ehtiyaclarını isə sorğu əsasında qarşılayırıq.',
+    offices:
+      'Baş ofisimiz Çexiya Respublikasındadır, filiallarımız isə Azərbaycan, Gürcüstan, Türkiyə, Özbəkistan və Qazaxıstanda fəaliyyət göstərir.',
     quickLinks: 'Sürətli keçidlər',
     contactTitle: 'Əlaqə',
     complianceTitle: 'Standartlar və tərəfdaşlıq',
