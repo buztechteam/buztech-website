@@ -196,6 +196,18 @@ test('the header logo runs its light only when pointed at, never with reduced mo
   assert.match(css(), /\[data-logo-run\][^{]*\{[^}]*opacity:\s*0/)
 })
 
+test('the header logo text turns white when pointed at', () => {
+  assert.ok(html('index.html').includes('group-hover/logo:fill-white'), 'header wordmark lacks the hover class')
+  assert.ok(css().includes(String.raw`group-hover\/logo\:fill-white`), 'CSS lacks the hover rule')
+})
+
+test('the hero intro starts before its fallback shows the logo', () => {
+  const source = (file) => readFileSync(new URL('../' + file, import.meta.url), 'utf8')
+  const start = Number(source('src/components/HeroLogo.tsx').match(/INTRO_LATEST_START_MS = (\d+)/)?.[1])
+  const fallback = Number(source('src/index.css').match(/hero-art-fallback 0s ([\d.]+)s/)?.[1]) * 1000
+  assert.ok(start > 0 && start < fallback, `intro may start at ${start}ms, fallback shows the logo at ${fallback}ms`)
+})
+
 test('selected text is Brand Teal', () => {
   assert.match(css(), /::selection\s*\{[^}]*background-color:\s*var\(--color-brand-teal\)/)
 })

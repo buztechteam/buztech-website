@@ -2,17 +2,13 @@ import { useEffect, useId, useRef } from 'react';
 import { GEAR_PATH, WING_RADIUS, WINGS } from './buzLogoPaths';
 import { HERO_VIEWBOX, WING_LEFT, startHeroLogo } from '../motion/heroLogo';
 
-const INTRO_KEY = 'buz-hero-intro';
+/** Must stay below the fallback delay in index.css (`hero-art-fallback`), or the shown logo would vanish and redraw. */
+const INTRO_LATEST_START_MS = 3800;
 
-/** Was the arrival already played in this tab? (Storage can be blocked: then just play it.) */
-function introSeen(): boolean {
-  try {
-    if (sessionStorage.getItem(INTRO_KEY)) return true;
-    sessionStorage.setItem(INTRO_KEY, '1');
-  } catch {
-    /* no storage: play it */
-  }
-  return false;
+/** Did the visitor come back with the browser's Back or Forward button? Then the logo is simply there. */
+function cameBack(): boolean {
+  const [entry] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+  return entry?.type === 'back_forward';
 }
 
 /**
@@ -29,8 +25,8 @@ export function HeroLogo() {
   useEffect(() => {
     if (!art.current) return;
     const still = !matchMedia('(prefers-reduced-motion: no-preference)').matches;
-    // played once per tab; skipped too if a slow load already showed the logo at rest
-    const intro = !still && document.documentElement.classList.contains('motion') && performance.now() < 2400 && !introSeen();
+    // played on every visit to the home page, except Back/Forward or a load so slow the logo already shows at rest
+    const intro = !still && document.documentElement.classList.contains('motion') && performance.now() < INTRO_LATEST_START_MS && !cameBack();
     return startHeroLogo(art.current, { intro, still });
   }, []);
 

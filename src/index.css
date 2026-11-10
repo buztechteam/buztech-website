@@ -267,7 +267,7 @@
 
 /*
   Gated by .motion: the art waits for the script that plays its arrival (hidden only until
-  then, and shown anyway after 2.5 s should the script never run). Without .motion the logo
+  then, and shown anyway after 4 s should the script never run). Without .motion the logo
   simply renders at rest.
 */
 @keyframes hero-art-fallback {
@@ -278,6 +278,6 @@
 @media (prefers-reduced-motion: no-preference) {
   .motion [data-hero-art]:not([data-live]) {
     opacity: 0;
-    animation: hero-art-fallback 0s 2.5s forwards;
+    animation: hero-art-fallback 0s 4s forwards;
   }
 }

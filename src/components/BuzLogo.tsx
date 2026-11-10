@@ -57,6 +57,10 @@ const wordmarkTransform: Record<Exclude<BuzLogoLayout, 'icon'>, string> = {
   stacked: `translate(${STACK_X} ${STACK_Y}) scale(${STACK_SCALE})`,
 };
 
+/** The header logo's BUZ TECH turns white while pointed at or focused with the keyboard. */
+const wordmarkHover =
+  'transition-[fill] duration-(--dur-hover) ease-soft group-hover/logo:fill-white in-focus-visible:fill-white';
+
 function Mark({ variant, liveId }: { variant: BuzLogoVariant; liveId?: string }) {
   return (
     <>
@@ -147,13 +151,13 @@ export default function BuzLogo({
       height={height ?? (width == null ? 40 : undefined)}
       role="img"
       aria-label="BUZ Tech"
-      className={live ? `logo-live ${className ?? ''}` : className}
+      className={live ? `logo-live group/logo ${className ?? ''}` : className}
       onPointerEnter={live ? play : undefined}
       onAnimationEnd={live ? done : undefined}
     >
       <Mark variant={variant} liveId={live ? liveId : undefined} />
       {layout !== 'icon' && (
-        <g transform={wordmarkTransform[layout]} className={accentFill[variant]}>
+        <g transform={wordmarkTransform[layout]} className={live ? `${accentFill[variant]} ${wordmarkHover}` : accentFill[variant]}>
           <path d={BUZ_PATH} />
           <path d={TECH_PATH} fillRule="evenodd" />
         </g>
