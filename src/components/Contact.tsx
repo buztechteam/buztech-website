@@ -51,7 +51,7 @@ function FieldError({ id, children }: { id: string; children: ReactNode }) {
   );
 }
 
-/* Company and email are required; every other field says it is optional. */
+/* Company and email are required. Only the phone field says it is optional (owner's choice, 2026-11-11). */
 function Optional() {
   const { t } = useLang();
   return <span className="font-medium text-navy/70">({t.contact.optional})</span>;
@@ -260,7 +260,7 @@ export function Contact() {
 
             <div className="mt-5">
               <label htmlFor="product" className="font-extrabold">
-                {c.fields.product} <Optional />
+                {c.fields.product}
               </label>
               <select
                 id="product"
@@ -285,7 +285,7 @@ export function Contact() {
 
             <div className="mt-5">
               <label htmlFor="message" className="font-extrabold">
-                {c.fields.message} <Optional />
+                {c.fields.message}
               </label>
               <textarea
                 id="message"
