@@ -126,7 +126,7 @@ carries the retired BUZ Group branding; take facts from it, never branding.
 
 ## Site settings (build variables, all optional)
 
-Set these in Cloudflare under Settings > Build > Build variables and secrets, then redeploy. The separate Settings > Variables and Secrets section is for runtime only, and the build cannot see it. `VITE_WEB3FORMS_KEY` is already set in `.env.production`; a Cloudflare build variable with the same name overrides it.
+Set these in Cloudflare under Settings > Build > Build variables and secrets, then redeploy. The separate Settings > Variables and Secrets section is for runtime only, and the build cannot see it. `VITE_WEB3FORMS_KEY` and `VITE_CF_ANALYTICS_TOKEN` are already set in `.env.production`; a Cloudflare build variable with the same name overrides either. The analytics token is tied to the workers.dev address, so replace it once the real domain is live.
 
 | Variable | Effect |
 | --- | --- |

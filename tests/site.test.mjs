@@ -508,6 +508,31 @@ test('the price form sends through Web3Forms: the build carries an access key', 
   )
 })
 
+test('the price form marks only the phone field as optional, in every language', () => {
+  for (const lang of LANG_DIRS) {
+    const page = html(`${lang}contact/index.html`)
+    const label = (id) => page.match(new RegExp(`<label for="${id}"[^>]*>([\\s\\S]*?)</label>`))?.[1] ?? ''
+    assert.match(label('phone'), /\(/, `${lang}contact: the phone label lost its optional mark`)
+    for (const id of ['product', 'message']) {
+      assert.ok(label(id), `${lang}contact has no ${id} label`)
+      assert.doesNotMatch(label(id), /\(/, `${lang}contact: the ${id} label still says optional`)
+    }
+  }
+})
+
+test('every page loads Cloudflare Web Analytics, and the privacy page says so', () => {
+  for (const file of pages()) {
+    assert.match(
+      readFileSync(file, 'utf8'),
+      /<script[^>]+src="https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js"[^>]+data-cf-beacon="[^"]*token/,
+      `${rel(file)} has no analytics script (VITE_CF_ANALYTICS_TOKEN in .env.production)`,
+    )
+  }
+  for (const lang of LANG_DIRS) {
+    assert.match(html(`${lang}privacy/index.html`), /Cloudflare Web Analytics/, `${lang}privacy does not mention the analytics`)
+  }
+})
+
 test('without JavaScript the form keeps its fields out of the address bar and offers the email address', () => {
   for (const lang of LANG_DIRS) {
     const page = html(`${lang}contact/index.html`)
