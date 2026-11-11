@@ -4,20 +4,30 @@ import { revealProps } from '../motion/reveal';
 import { ArrowRight, Check } from './icons';
 import { btn, h2Class, leadClass } from './ui';
 
-/** The company facts (2018 · 5 countries), on Navy cells: the About intro. */
-export function Facts({ className = '' }: { className?: string }) {
+/**
+ * Where the group is, by name: the head office and the branch countries, under a hairline in the About intro.
+ * Names instead of a "5 countries" tile: the list is the fact.
+ */
+export function Presence({ className = '' }: { className?: string }) {
   const { t } = useLang();
+  const p = t.footer.presence;
+  const place = 'text-xl leading-snug font-extrabold text-white sm:text-2xl';
   return (
-    /* Phone: one compact row per fact (Georgian labels like "საქართველოში" are too long for columns). */
-    <dl {...revealProps(0)} className={`grid gap-px overflow-hidden rounded-xl border border-white/12 bg-white/12 ${t.services.facts.length > 1 ? 'sm:grid-cols-2' : ''} ${className}`}>
-      {t.services.facts.map((fact) => (
-        <div key={fact.label} className="flex items-center gap-4 bg-navy px-5 py-4 sm:flex-col sm:items-start sm:gap-1 sm:p-8">
-          <dd className="order-1 w-20 shrink-0 text-3xl leading-none font-extrabold text-white sm:w-auto sm:text-5xl">
-            {fact.value}
-          </dd>
-          <dt className="order-2 text-light/85 sm:mt-2">{fact.label}</dt>
-        </div>
-      ))}
+    <dl {...revealProps(0)} className={`grid max-w-[46rem] gap-x-14 gap-y-6 border-t border-white/25 pt-6 sm:grid-cols-[auto_1fr] ${className}`}>
+      <div>
+        <dt className="text-sm text-light/85">{p.hqLabel}</dt>
+        <dd className={`mt-1 ${place}`}>{p.hq}</dd>
+      </div>
+      <div>
+        <dt className="text-sm text-light/85">{p.branchesLabel}</dt>
+        <dd className="mt-1">
+          <ul className={`flex flex-wrap gap-x-6 gap-y-1 ${place}`}>
+            {p.branches.map((country) => (
+              <li key={country}>{country}</li>
+            ))}
+          </ul>
+        </dd>
+      </div>
     </dl>
   );
 }

@@ -66,6 +66,7 @@ export const az: Dict = {
     'windows-office': 'Windows və Office lisenziyaları',
     azure: 'Azure',
     entra: 'Entra ID',
+    dynamics: 'Dynamics 365',
     audit: 'Pulsuz lisenziya auditi',
     laptops: 'Noutbuklar və kompüterlər',
     servers: 'Serverlər və məlumat saxlama sistemləri',
@@ -104,8 +105,12 @@ export const az: Dict = {
       ],
     },
     onRequest: {
-      heading: 'Qalan hər şey - sorğu əsasında',
+      heading: 'Qalan hər şey - sorğu əsasında',
       lead: 'Noutbuklar, server və ya iclas otağı üçün lövhə də lazımdır? Nəyə ehtiyacınız olduğunu bizə bildirin - biz tədarük edəcəyik.',
+    },
+    friends: {
+      heading: 'Satışdan sonra dost qalırıq',
+      photoAlt: 'Texnologiya tədbirində bejli iki kişi',
     },
     proof: {
       heading: 'Beynəlxalq IT inteqrator',
@@ -183,8 +188,8 @@ export const az: Dict = {
       ],
     },
     cloud: {
-      heading: 'Azure və Entra ID',
-      lead: 'Bulud və giriş.',
+      heading: 'Azure, Entra ID və Dynamics 365',
+      lead: 'Bulud, giriş və biznes tətbiqləri.',
       items: {
         azure: {
           text: 'Microsoft-un bulud platforması: serverlər, yaddaş, ehtiyat nüsxələr və AI xidmətləri.',
@@ -193,6 +198,10 @@ export const az: Dict = {
         entra: {
           text: 'Bütün komandanız üçün daxil olma və giriş hüquqları - bir yerdə.',
           specs: ['Vahid giriş (SSO)', 'Çoxfaktorlu autentifikasiya (MFA)', 'Şərti giriş'],
+        },
+        dynamics: {
+          text: 'Microsoft-un biznes tətbiqləri: müştərilər, satış və maliyyə - bir sistemdə.',
+          specs: ['Satış və müştəri xidməti', 'Maliyyə və Business Central', 'Lisenziyalar, quraşdırma sorğu əsasında'],
         },
       },
     },
@@ -256,7 +265,6 @@ export const az: Dict = {
         text: 'Noutbuklar, serverlər, şəbəkə avadanlığı və Huawei IdeaHub - sizin üçün tapır və çatdırırıq.',
       },
     ],
-    facts: [{ value: '5', label: 'ölkədə fəaliyyət göstəririk' }],
     stepsHeading: 'Necə işləyirik',
     steps: [
       { title: 'Sorğu', text: 'Zəng edin, WhatsApp-da yazın və ya formu göndərin.' },
@@ -343,8 +351,7 @@ export const az: Dict = {
   footer: {
     overview:
       'BUZ Tech rəsmi Microsoft CSP partnyorudur. Microsoft 365 lisenziyalarını ən sərfəli qiymətlərlə təqdim edirik, şirkətin qalan IT ehtiyaclarını isə sorğu əsasında qarşılayırıq.',
-    offices:
-      'Baş ofisimiz Çexiya Respublikasındadır, filiallarımız isə Azərbaycan, Gürcüstan, Türkiyə, Özbəkistan və Qazaxıstanda fəaliyyət göstərir.',
+    presence: { hqLabel: 'Baş ofis', hq: 'Çexiya', branchesLabel: 'Filiallar', branches: ['Azərbaycan', 'Gürcüstan', 'Türkiyə', 'Özbəkistan', 'Qazaxıstan'] },
     quickLinks: 'Sürətli keçidlər',
     contactTitle: 'Əlaqə',
     complianceTitle: 'Standartlar və tərəfdaşlıq',

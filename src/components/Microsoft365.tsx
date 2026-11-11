@@ -118,7 +118,7 @@ function MicrosoftExtras() {
   );
 }
 
-function AzureEntra() {
+function OtherMicrosoft() {
   const { t } = useLang();
   const c = t.m365.cloud;
   return (
@@ -126,9 +126,9 @@ function AzureEntra() {
       <div className="container-x">
         <h2 {...revealProps(0)} className={h2Class}>{c.heading}</h2>
         <p {...revealProps(1)} className={`${leadClass} text-navy/85`}>{c.lead}</p>
-        <ul className="mt-8 grid gap-4 sm:mt-10 md:grid-cols-2 md:gap-5">
-          {(['azure', 'entra'] as const).map((id, i) => (
-            <li key={id} {...revealProps(i)} className={`flex flex-col rounded-xl border border-navy/12 bg-white p-5 sm:p-7 ${cardStatic}`}>
+        <ul className="mt-8 grid gap-4 sm:mt-10 md:grid-cols-2 md:gap-5 lg:grid-cols-3">
+          {(['azure', 'entra', 'dynamics'] as const).map((id, i) => (
+            <li key={id} {...revealProps(i)} className={`flex flex-col rounded-xl border border-navy/12 bg-white p-5 sm:p-7 md:max-lg:last:col-span-2 ${cardStatic}`}>
               <h3 className="text-2xl leading-tight font-extrabold">{t.products[id]}</h3>
               <p className="mt-2 text-pretty text-navy/85">{c.items[id].text}</p>
               <SpecList specs={c.items[id].specs} iconClass="text-deep-teal" />
@@ -168,7 +168,7 @@ export function Microsoft365() {
     <>
       <BusinessPlans />
       <MicrosoftExtras />
-      <AzureEntra />
+      <OtherMicrosoft />
       <QuoteIncludes />
     </>
   );

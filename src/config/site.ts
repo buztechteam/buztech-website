@@ -72,7 +72,7 @@ export const showsCompanyDetails = (lang: Lang) => lang === 'ge' || lang === 'en
 export const productGroups: { id: 'microsoft' | 'equipment' | 'company'; products: ProductId[] }[] = [
   {
     id: 'microsoft',
-    products: ['m365', 'business-basic', 'business-standard', 'business-premium', 'e3', 'e5', 'copilot', 'windows-office', 'azure', 'entra', 'audit'],
+    products: ['m365', 'business-basic', 'business-standard', 'business-premium', 'e3', 'e5', 'copilot', 'windows-office', 'azure', 'entra', 'dynamics', 'audit'],
   },
   { id: 'equipment', products: ['laptops', 'servers', 'networking', 'printers', 'ideahub'] },
   { id: 'company', products: ['documents'] },

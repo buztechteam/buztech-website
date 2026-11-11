@@ -21,6 +21,7 @@ export type ProductId =
   | MicrosoftExtraId
   | 'azure'
   | 'entra'
+  | 'dynamics'
   | 'audit'
   | EquipmentId
   | 'ideahub'
@@ -75,6 +76,8 @@ export interface Dict {
     /** Teaser rows: what is on the Microsoft 365 page. */
     m365: { heading: string; lead: string; compare: string; rows: { name: string; text: string }[] };
     onRequest: { heading: string; lead: string };
+    /** The owner's line ("we are friends after they buy from us"), beside a real photo. */
+    friends: { heading: string; photoAlt: string };
     /** cspText says in plain words what being a Microsoft CSP partner means for the buyer. */
     /** since is a Georgian-company fact: absent in AZ and RU. */
     proof: { heading: string; credentials: string; partner: string; cspText: string; since?: string; countries: string };
@@ -90,7 +93,7 @@ export interface Dict {
     };
     extras: { heading: string; lead: string; items: Record<MicrosoftExtraId, string> };
     terms: { heading: string; items: { term: string; text: string }[] };
-    cloud: { heading: string; lead: string; items: Record<'azure' | 'entra', { text: string; specs: string[] }> };
+    cloud: { heading: string; lead: string; items: Record<'azure' | 'entra' | 'dynamics', { text: string; specs: string[] }> };
   };
   equipment: {
     lead: string;
@@ -105,7 +108,6 @@ export interface Dict {
     lead: string;
     audit: { title: string; text: string; points: string[]; cta: string };
     items: ({ id: ServiceId } & Item)[];
-    facts: { value: string; label: string }[];
     stepsHeading: string;
     steps: Item[];
   };
@@ -160,7 +162,8 @@ export interface Dict {
   };
   footer: {
     overview: string;
-    offices: string;
+    /** Where the group is: head office and branch countries, as names (About). */
+    presence: { hqLabel: string; hq: string; branchesLabel: string; branches: string[] };
     quickLinks: string;
     contactTitle: string;
     complianceTitle: string;

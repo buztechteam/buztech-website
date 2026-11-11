@@ -509,6 +509,15 @@ test('the Products arrow does not animate with reduced motion', () => {
   for (const arrow of arrows) assert.match(arrow, /motion-reduce:transition-none/)
 })
 
+test('the Microsoft 365 page offers Dynamics 365, and the form can ask for it, in every language', () => {
+  for (const lang of LANG_DIRS) {
+    const page = html(`${lang}microsoft-365/index.html`)
+    assert.match(page, /<h3[^>]*>Dynamics 365<\/h3>/, `${lang}microsoft-365 has no Dynamics 365 card`)
+    assert.match(page, new RegExp(`href="/${lang}contact/\\?product=dynamics"`), `${lang}microsoft-365 has no Dynamics 365 price link`)
+    assert.match(html(`${lang}contact/index.html`), /<option value="dynamics"/, `${lang}contact has no Dynamics 365 option`)
+  }
+})
+
 test('Georgian and English name the Baku company wherever ISO appears', () => {
   assert.match(html('index.html'), /\bISO\b/, 'the Georgian site no longer shows ISO')
   for (const file of pages().filter((f) => isGeorgian(rel(f)) || rel(f).startsWith('en/'))) {

@@ -62,6 +62,7 @@ export const en: Dict = {
     'windows-office': 'Windows and Office licences',
     azure: 'Azure',
     entra: 'Entra ID',
+    dynamics: 'Dynamics 365',
     audit: 'Free licence audit',
     laptops: 'Laptops and PCs',
     servers: 'Servers and storage',
@@ -99,6 +100,10 @@ export const en: Dict = {
     onRequest: {
       heading: 'Everything else, on request',
       lead: 'Need laptops, a server or a meeting-room board too? Tell us what you need - we’ll source it.',
+    },
+    friends: {
+      heading: 'After the sale, we stay friends',
+      photoAlt: 'Two men wearing event badges at a technology event',
     },
     proof: {
       heading: 'An international IT integrator',
@@ -177,8 +182,8 @@ export const en: Dict = {
       ],
     },
     cloud: {
-      heading: 'Azure and Entra ID',
-      lead: 'Cloud and sign-in.',
+      heading: 'Azure, Entra ID and Dynamics 365',
+      lead: 'Cloud, sign-in and business applications.',
       items: {
         azure: {
           text: 'Microsoft’s cloud: servers, storage, backup and AI services.',
@@ -187,6 +192,10 @@ export const en: Dict = {
         entra: {
           text: 'Sign-in and access for your whole team, in one place.',
           specs: ['Single sign-on (SSO)', 'Multi-factor authentication (MFA)', 'Conditional access'],
+        },
+        dynamics: {
+          text: 'Microsoft’s business applications: customers, sales and finance in one system.',
+          specs: ['Sales and Customer Service', 'Finance and Business Central', 'Licences, with setup on request'],
         },
       },
     },
@@ -249,10 +258,6 @@ export const en: Dict = {
         title: 'Equipment supply',
         text: 'Laptops, servers, networking and Huawei IdeaHub, sourced for you and delivered with a VAT invoice.',
       },
-    ],
-    facts: [
-      { value: '2018', label: 'in Georgia since' },
-      { value: '5', label: 'countries of operation' },
     ],
     stepsHeading: 'How we work',
     steps: [
@@ -341,8 +346,7 @@ export const en: Dict = {
   footer: {
     overview:
       'BUZ Tech is an official Microsoft CSP partner in Tbilisi. We supply Microsoft 365 licences at the best prices in Georgia, and source the rest of a company’s IT on request.',
-    offices:
-      'Our head office is in the Czech Republic, with branches in Georgia, Azerbaijan, Turkey, Uzbekistan and Kazakhstan.',
+    presence: { hqLabel: 'Head office', hq: 'Czech Republic', branchesLabel: 'Branches', branches: ['Georgia', 'Azerbaijan', 'Turkey', 'Uzbekistan', 'Kazakhstan'] },
     quickLinks: 'Quick links',
     contactTitle: 'Contact',
     complianceTitle: 'Standards and partnership',

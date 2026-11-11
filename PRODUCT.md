@@ -49,7 +49,7 @@ The website for LLC BUZ Tech Georgia ("BUZ Tech"). Its job is to turn visits int
 - **Third-party names:** only Microsoft and Huawei may appear. There is no approval to name any other vendor or distributor (no Dell, HPE, Lenovo, Zyxel, TP-Link, MUK or ERC), so there is no "partners" section.
 - **Planned page set (agreed direction):**
   - Home, Microsoft-led
-  - Microsoft 365: plans, with Azure and Entra ID inside
+  - Microsoft 365: plans, with Azure, Entra ID and Dynamics 365 inside
   - IT equipment: everything else, generic, no unapproved brands
   - Huawei IdeaHub: its own page
   - Services, About, Contact, Privacy

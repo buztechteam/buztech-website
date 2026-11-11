@@ -8,14 +8,14 @@ import { Events } from './components/Events';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
-import { M365Teaser } from './components/Home';
+import { AfterSale, M365Teaser, OnRequest } from './components/Home';
 import { Microsoft365, PriceActions } from './components/Microsoft365';
 import { PageIntro } from './components/PageIntro';
 import { Privacy } from './components/Privacy';
 import { ProductLinks } from './components/ProductLinks';
 import { QUICK_BAR_SPACE, QuickContactBar } from './components/QuickContactBar';
 import { Services, StepsSection } from './components/Services';
-import { Facts, Proof } from './components/TrustStrip';
+import { Presence, Proof } from './components/TrustStrip';
 import { useLang } from './i18n/LanguageContext';
 import { initReveal } from './motion/reveal';
 import type { Dict, Lang, PageId } from './i18n/types';
@@ -39,12 +39,8 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
         <>
           <Hero />
           <M365Teaser />
-          <ProductLinks
-            ids={['it-equipment', 'ideahub']}
-            heading={t.home.onRequest.heading}
-            lead={t.home.onRequest.lead}
-            prominent
-          />
+          <OnRequest />
+          <AfterSale />
           <Proof />
         </>
       );
@@ -89,8 +85,7 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
       return (
         <>
           <PageIntro title={t.nav.about} lead={t.footer.overview}>
-            <p className="mt-3 max-w-[40rem] text-lg leading-relaxed text-pretty text-light">{t.footer.offices}</p>
-            <Facts className="mt-10" />
+            <Presence className="mt-10" />
             {/* The company details tender teams look for, not only in the footer. */}
             {showsCompanyDetails(lang) && (
               <p className="mt-4 text-sm text-light/85">
