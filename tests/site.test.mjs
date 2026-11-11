@@ -495,6 +495,19 @@ test('About lets tender teams request company documents, in every language', () 
   }
 })
 
+test('the price form sends through Web3Forms: the build carries an access key', () => {
+  const js = walk(join(dist, 'assets'))
+    .filter((f) => f.endsWith('.js'))
+    .map((f) => readFileSync(f, 'utf8'))
+    .join('\n')
+  assert.ok(js.includes('https://api.web3forms.com/submit'), 'the Web3Forms endpoint is missing from the bundle')
+  assert.match(
+    js,
+    /[`"'][0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}[`"']/,
+    'no Web3Forms key in the build (.env.production), so the form would only open the email app',
+  )
+})
+
 test('without JavaScript the form keeps its fields out of the address bar and offers the email address', () => {
   for (const lang of LANG_DIRS) {
     const page = html(`${lang}contact/index.html`)

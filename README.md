@@ -112,7 +112,7 @@ white text (2.2:1), so a Navy scrim fades across the text column.
 2. **Client names and logos.** None are shown until each client agrees.
 3. **ISO for the Georgian company.** The certificates supplied in November 2026 are held by "BUZ Tech" LLC in Baku (valid to 20 May 2027). To show ISO as LLC BUZ Tech Georgia's, it needs its own certificates or must be added to their scope.
 4. **IdeaHub photo.** The IdeaHub page shows Huawei's official S2 image (`public/products/ideahub-s2.jpg`, approved by Huawei); there are no own S2 photos. To use your own later, replace the file or point `ideahubImage` at it.
-5. **Form delivery.** Create a free Web3Forms key (enter info-ge@buz-cloud.com, the key arrives by email) and set it as `VITE_WEB3FORMS_KEY`. Requests then go only to that inbox. Without a key the form opens the visitor's email app. See `.env.example`.
+5. **Form delivery.** Done: the Web3Forms key is in `.env.production`. Requests go only to the inbox the key was created for. To change the inbox, create a new key for it and replace the value, and keep the privacy page ("Who receives it") in step. Without a key the form opens the visitor's email app.
 6. **LinkedIn.** `site.social.linkedin` renders in the footer only when set.
 
 **Event photos** (About us, `eventPhotos` in `config/site.ts`, captions under `events` in `i18n`): each is
@@ -126,7 +126,7 @@ carries the retired BUZ Group branding; take facts from it, never branding.
 
 ## Site settings (build variables, all optional)
 
-Set these in Cloudflare under Settings > Build > Build variables and secrets, then redeploy. The separate Settings > Variables and Secrets section is for runtime only, and the build cannot see it.
+Set these in Cloudflare under Settings > Build > Build variables and secrets, then redeploy. The separate Settings > Variables and Secrets section is for runtime only, and the build cannot see it. `VITE_WEB3FORMS_KEY` is already set in `.env.production`; a Cloudflare build variable with the same name overrides it.
 
 | Variable | Effect |
 | --- | --- |
