@@ -7,6 +7,14 @@
   "compatibility_date": "2026-10-23",
   // Only "/" runs this script first: it sends a first visit to the visitor's language (worker/index.js).
   "main": "./worker/index.js",
+  // The site lives at buztech.ge only. www.buztech.ge is attached too, and a Cloudflare redirect rule
+  // sends it to buztech.ge. The workers.dev address and preview addresses are off: one address, no copies.
+  "routes": [
+    { "pattern": "buztech.ge", "custom_domain": true },
+    { "pattern": "www.buztech.ge", "custom_domain": true }
+  ],
+  "workers_dev": false,
+  "preview_urls": false,
   "observability": {
     "enabled": true
   },

@@ -6,8 +6,12 @@
 # - connect-src: the price form (Web3Forms) and analytics. A VITE_FORM_ENDPOINT on another
 #   domain must be added here too.
 # - style-src 'unsafe-inline': React style attributes carry CSS variables (--i, --d).
-# No HSTS here: set it in Cloudflare once the custom domain is live.
+# X-Robots-Tag: the site is private (shared by link, never advertised), so no search engine may list
+# any file. Every page also carries the same rule as a meta tag (vite.config.ts).
+# Strict-Transport-Security: browsers use HTTPS only for buztech.ge and its subdomains.
 /*
+  X-Robots-Tag: noindex, nofollow
+  Strict-Transport-Security: max-age=15552000; includeSubDomains
   Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-CFUZQLULwLPlcSFIxnzaIHgooH/e1fACiz/OQxBlvoM=' https://static.cloudflareinsights.com; connect-src 'self' https://api.web3forms.com https://cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

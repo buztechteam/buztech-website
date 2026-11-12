@@ -225,6 +225,24 @@ const headersBlock = () => {
 }
 const csp = () => headersBlock().find((l) => l.startsWith('Content-Security-Policy:')) ?? ''
 
+test('the site is private: every page and file says noindex, no sitemap, AI crawlers kept out', () => {
+  assert.ok(headersBlock().includes('X-Robots-Tag: noindex, nofollow'), '_headers lacks X-Robots-Tag: noindex, nofollow for /*')
+  for (const file of pages()) {
+    const metas = readFileSync(file, 'utf8').match(/<meta name="robots"[^>]*>/g) ?? []
+    assert.equal(metas.length, 1, `${rel(file)} has ${metas.length} robots meta tags`)
+    assert.match(metas[0], /content="noindex, nofollow"/, `${rel(file)}: ${metas[0]}`)
+  }
+  assert.ok(!existsSync(join(dist, 'sitemap.xml')), 'dist/sitemap.xml exists: the site is private')
+  const robots = html('robots.txt')
+  assert.doesNotMatch(robots, /sitemap/i, 'robots.txt points to a sitemap')
+  assert.match(robots, /User-agent: \*\r?\nAllow: \//, 'robots.txt must let search engines in, so they can read the noindex')
+  for (const bot of ['GPTBot', 'ClaudeBot', 'CCBot', 'Google-Extended', 'PerplexityBot']) {
+    assert.match(robots, new RegExp(`User-agent: ${bot}\\b`), `robots.txt does not name ${bot}`)
+  }
+  assert.match(robots, /PerplexityBot[\s\S]*Disallow: \//, 'robots.txt does not keep AI crawlers out')
+  assert.ok(headersBlock().some((l) => /^Strict-Transport-Security: max-age=\d{7,}/.test(l)), '_headers lacks HSTS')
+})
+
 test('security headers are published', () => {
   const block = headersBlock().join('\n')
   for (const h of [

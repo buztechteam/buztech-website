@@ -3,8 +3,9 @@
  * in every language, so each address loads with its content, title and description in place.
  *   dist/index.html            Georgian home      dist/en/index.html, dist/az/, dist/ru/   other homes
  *   dist/services/index.html   Georgian services  dist/en/services/index.html ...
- * With VITE_SITE_URL set it also adds canonical / hreflang links, og:url and sitemap.xml.
- * It also writes dist/404.html, dist/en/404.html ... ("page not found", noindex), which Cloudflare
+ * With VITE_SITE_URL set it also adds canonical / hreflang links and og:url. There is no sitemap: the
+ * site is private and every page says noindex (vite.config.ts).
+ * It also writes dist/404.html, dist/en/404.html ... ("page not found"), which Cloudflare
  * serves with a 404 status for unknown addresses (not_found_handling: "404-page" in wrangler.jsonc).
  */
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
@@ -73,7 +74,6 @@ async function write(relPath, content) {
   console.log(`prerendered /${relPath.replace(/^\/+/, '').replace(/index\.html$/, '')}`);
 }
 
-const urls = [];
 for (const lang of langs) {
   for (const page of pages) {
     const route = pagePath(page, lang);
@@ -85,21 +85,11 @@ for (const lang of langs) {
         ...langs.map((l) => `<link rel="alternate" hreflang="${htmlLang[l]}" href="${siteUrl}${pagePath(page, l)}" />`),
         `<link rel="alternate" hreflang="x-default" href="${siteUrl}${pagePath(page, 'ge')}" />`,
       );
-      urls.push(`${siteUrl}${route}`);
     }
     await write(`${route}index.html`, pageHtml(page, lang, head));
   }
   /* Cloudflare serves the nearest 404.html: /en/anything gets the English one. */
-  await write(`${pagePath('home', lang)}404.html`, pageHtml('notFound', lang, ['<meta name="robots" content="noindex" />']));
-}
-
-if (siteUrl) {
-  const body = urls.map((u) => `  <url><loc>${u}</loc></url>`).join('\n');
-  await writeFile(
-    path.join(dist, 'sitemap.xml'),
-    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`,
-  );
-  console.log(`sitemap.xml: ${urls.length} addresses`);
+  await write(`${pagePath('home', lang)}404.html`, pageHtml('notFound', lang, []));
 }
 
 await rm(ssrDir, { recursive: true, force: true });

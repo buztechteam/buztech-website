@@ -45,7 +45,7 @@ To add a page: add its id to `PageId` (`i18n/types.ts`) and `pages` (`routes.ts`
 and its body in `App.tsx`.
 
 Unknown addresses get a "page not found" page: the build also writes `dist/404.html` and `dist/en/404.html`
-(`noindex`, not in the sitemap), and `wrangler.jsonc` tells Cloudflare to serve the nearest one with a 404 status.
+(`noindex`, like every page), and `wrangler.jsonc` tells Cloudflare to serve the nearest one with a 404 status.
 
 On phones a quick-contact bar (call, WhatsApp, price request) stays at the bottom of every page except Contact
 (`QuickContactBar.tsx`).
@@ -60,6 +60,19 @@ using `wrangler.jsonc`. Keep that file: without it Wrangler auto-configures the 
 plugin and rebuilds, and the pre-render step then fails (`Cannot find module .../dist-ssr/entry-server.js`).
 Wrangler is pinned in `devDependencies`, so deploys don't pull a new version on every build.
 
+The site lives at **https://buztech.ge** (bought at CleanNet, nameservers on Cloudflare). `wrangler.jsonc` attaches
+buztech.ge and www.buztech.ge to the Worker; a Cloudflare redirect rule sends www to buztech.ge. The old
+workers.dev address and preview addresses are switched off.
+
+**The site is private** (owner, 12 November 2026). It is not advertised: buz-group.com stays the public site, and
+buztech.ge is the link the team gives customers who ask for a website. So:
+- every page and file says `noindex, nofollow` (a meta tag from `vite.config.ts` and `X-Robots-Tag` in `public/_headers`),
+  and there is no sitemap; `robots.txt` lets search engines in only so they can read that, and keeps AI crawlers out;
+- Cloudflare's "Block AI bots" is on for the zone;
+- don't add the link to the Google Business Profile, LinkedIn or any directory.
+
+Link previews (WhatsApp, Telegram, email) still show the card. `npm test` fails if a page loses its noindex.
+
 `npm test` builds the site and checks the output in `dist/`: one h1 per page and no skipped heading levels, links that
 resolve, the redirects, the motion gating, the security headers, the form limits, and the positioning rules below.
 
@@ -71,7 +84,7 @@ allows only what the site uses: its own files, Web3Forms (the price form) and Cl
 - The inline script at the top of `index.html` (it turns animation on) is allowed by its hash. If you change it, update
   the `sha256-…` value in `_headers`; `npm test` fails until they match.
 - A `VITE_FORM_ENDPOINT` on another domain must be added to `connect-src`, or the browser blocks the request.
-- HSTS is not sent yet: turn it on in Cloudflare once the custom domain is live.
+- HSTS is on (`Strict-Transport-Security`, six months, subdomains included). The same block sends `X-Robots-Tag: noindex, nofollow`.
 - After a deploy, open the live site's console: a CSP error there usually means a Cloudflare feature (Rocket Loader,
   email obfuscation) injected a script. Turn that feature off or allow it in the policy.
 
@@ -126,13 +139,13 @@ carries the retired BUZ Group branding; take facts from it, never branding.
 
 ## Site settings (build variables, all optional)
 
-Set these in Cloudflare under Settings > Build > Build variables and secrets, then redeploy. The separate Settings > Variables and Secrets section is for runtime only, and the build cannot see it. `VITE_WEB3FORMS_KEY` and `VITE_CF_ANALYTICS_TOKEN` are already set in `.env.production`; a Cloudflare build variable with the same name overrides either. The analytics token is tied to the workers.dev address, so replace it once the real domain is live.
+Set these in Cloudflare under Settings > Build > Build variables and secrets, then redeploy. The separate Settings > Variables and Secrets section is for runtime only, and the build cannot see it. `VITE_WEB3FORMS_KEY` and `VITE_CF_ANALYTICS_TOKEN` are already set in `.env.production`; a Cloudflare build variable with the same name overrides either. `VITE_SITE_URL` is `https://buztech.ge`. The analytics token was made for buztech.ge and works only there.
 
 | Variable | Effect |
 | --- | --- |
 | `VITE_WEB3FORMS_KEY` | form submissions delivered by email through Web3Forms |
 | `VITE_FORM_ENDPOINT` | alternative to Web3Forms: any endpoint that accepts a JSON POST; add its domain to `connect-src` in `public/_headers` |
-| `VITE_SITE_URL` | per-page canonical and hreflang links, og:url, og:image, `sitemap.xml` with all 16 addresses, sitemap line in `robots.txt` (e.g. `https://buztech.ge`) |
+| `VITE_SITE_URL` | per-page canonical and hreflang links, og:url and og:image for link previews (`https://buztech.ge`); no sitemap, the site is private |
 | `VITE_CF_ANALYTICS_TOKEN` | Cloudflare Web Analytics (cookie-free); the privacy text mentions it automatically |
 
 The social preview image is `public/og-image.png` (1200x630). Privacy policy copy lives in `i18n/ge.ts` / `en.ts` under `privacy`;
