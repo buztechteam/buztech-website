@@ -110,7 +110,10 @@ export const az: Dict = {
     },
     friends: {
       heading: 'Satışdan sonra dost qalırıq',
-      photoAlt: 'Texnologiya tədbirində bejli iki kişi',
+      people: {
+        irakli: { name: 'İrakli Mçedlişvili', role: 'Baş direktor' },
+        soso: { name: 'Soso Rtveliaşvili', role: 'Biznesin inkişafı üzrə menecer' },
+      },
     },
     proof: {
       heading: 'Beynəlxalq IT inteqrator',

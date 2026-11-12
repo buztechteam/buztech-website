@@ -30,6 +30,7 @@ export type ServiceId = 'setup' | 'support' | 'supply';
 /** Event photos on About us, in order (eventPhotos in config/site.ts). */
 export type EventId = 'antalya' | 'conference' | 'club';
 export type DistributorPhotoId = 'guests' | 'certificates';
+export type TeamId = 'irakli' | 'soso';
 
 type Item = { title: string; text: string };
 /** Which icon an included item shows; keyed, so a language can drop an item (AZ/RU have no GEL invoice). */
@@ -77,8 +78,8 @@ export interface Dict {
     /** Teaser rows: what is on the Microsoft 365 page. */
     m365: { heading: string; lead: string; compare: string; rows: { name: string; text: string }[] };
     onRequest: { heading: string; lead: string };
-    /** The owner's line ("we are friends after they buy from us"), beside a real photo. */
-    friends: { heading: string; photoAlt: string };
+    /** The owner's line ("we are friends after they buy from us"), beside the two people a client deals with, by name. */
+    friends: { heading: string; people: Record<TeamId, { name: string; role: string }> };
     /** cspText says in plain words what being a Microsoft CSP partner means for the buyer. */
     /** since is a Georgian-company fact: absent in AZ and RU. */
     proof: { heading: string; credentials: string; partner: string; cspText: string; since?: string; countries: string };

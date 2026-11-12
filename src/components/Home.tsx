@@ -1,5 +1,6 @@
 import { equipment, ideahubImage } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
+import type { TeamId } from '../i18n/types';
 import { revealProps } from '../motion/reveal';
 import { inquireHref, pagePath } from '../routes';
 import { BoardIllustration } from './BoardIllustration';
@@ -107,27 +108,42 @@ export function OnRequest() {
   );
 }
 
+/** The people shown on Home, in order (portraits live in /public/team). */
+const team: TeamId[] = ['irakli', 'soso'];
+
 /**
- * Home page: the owner's own line ("we are friends after they buy from us") beside a real photo,
- * with what staying in touch means in practice. Leads to Services.
+ * Home page: the owner's own line ("we are friends after they buy from us") beside the two people
+ * a client deals with, each a real photo with a name and a role. Leads to Services.
  */
 export function AfterSale() {
   const { lang, t } = useLang();
+  const people = t.home.friends.people;
   return (
     <section className="surface-light bg-light py-20 text-navy lg:py-24">
       <div className="container-x grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-        <img
-          {...revealProps(0)}
-          src="/events/people-960.webp"
-          srcSet="/events/people-480.webp 480w, /events/people-960.webp 960w"
-          sizes="(min-width: 1024px) 36rem, 100vw"
-          alt={t.home.friends.photoAlt}
-          width={960}
-          height={720}
-          loading="lazy"
-          decoding="async"
-          className="aspect-[4/3] h-auto w-full rounded-[1.25rem] bg-navy/10 object-cover"
-        />
+        <ul {...revealProps(0)} className="grid grid-cols-2 gap-4 sm:gap-5">
+          {team.map((id) => (
+            <li key={id}>
+              <figure>
+                <img
+                  src={`/team/${id}-720.webp`}
+                  srcSet={`/team/${id}-360.webp 360w, /team/${id}-720.webp 720w`}
+                  sizes="(min-width: 1024px) 17rem, 45vw"
+                  alt={people[id].name}
+                  width={720}
+                  height={960}
+                  loading="lazy"
+                  decoding="async"
+                  className="aspect-[3/4] h-auto w-full rounded-[1.25rem] bg-navy/10 object-cover"
+                />
+                <figcaption className="mt-3">
+                  <span className="block leading-snug font-extrabold">{people[id].name}</span>
+                  <span className="mt-0.5 block text-sm text-navy/80">{people[id].role}</span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
         <div>
           <h2 {...revealProps(1)} className={h2Class}>{t.home.friends.heading}</h2>
           <p {...revealProps(2)} className={`${leadClass} text-navy/85`}>{t.services.lead}</p>

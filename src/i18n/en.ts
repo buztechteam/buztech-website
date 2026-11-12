@@ -103,7 +103,10 @@ export const en: Dict = {
     },
     friends: {
       heading: 'After the sale, we stay friends',
-      photoAlt: 'Two men wearing event badges at a technology event',
+      people: {
+        irakli: { name: 'Irakli Mtchedlishvili', role: 'General Director' },
+        soso: { name: 'Soso Rtveliashvili', role: 'Business Development Manager' },
+      },
     },
     proof: {
       heading: 'An international IT integrator',
