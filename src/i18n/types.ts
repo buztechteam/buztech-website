@@ -143,10 +143,10 @@ export interface Dict {
     email: string;
     /** Short labels for the call / WhatsApp row above the form on phones. */
     call: string;
-    fields: { company: string; email: string; phone: string; product: string; message: string };
+    fields: { company: string; email: string; phone: string; product: string; quantity: string; message: string };
     /** After the label of every field that is not required. */
     optional: string;
-    placeholders: { company: string; email: string; message: string };
+    placeholders: { company: string; email: string; quantity: string; message: string };
     selectPlaceholder: string;
     /** Option groups in the product list. */
     groups: { microsoft: string; equipment: string; company: string };
@@ -155,8 +155,14 @@ export interface Dict {
     other: string;
     required: string;
     invalidEmail: string;
-    status: { sending: string; success: string; mailto: string; error: string };
-    mailSubject: string;
+    /** error: {email} marks where the office's address goes; it becomes a mail link. */
+    status: { sending: string; mailto: string; error: string };
+    /** Email subject per kind of request. Opened from a product link, the form shows it above the fields. */
+    mailSubject: { price: string; audit: string; documents: string };
+    /** The send button when "Company documents for a tender" is chosen. */
+    documentsCta: string;
+    /** The panel that replaces the form once a request is sent. No time promise. */
+    thanks: { heading: string; text: string; urgent: string; again: string };
     privacyNote: string;
     privacyLink: string;
   };

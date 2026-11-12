@@ -531,7 +531,7 @@ test('the price form marks only the phone field as optional, in every language',
     const page = html(`${lang}contact/index.html`)
     const label = (id) => page.match(new RegExp(`<label for="${id}"[^>]*>([\\s\\S]*?)</label>`))?.[1] ?? ''
     assert.match(label('phone'), /\(/, `${lang}contact: the phone label lost its optional mark`)
-    for (const id of ['product', 'message']) {
+    for (const id of ['product', 'quantity', 'message']) {
       assert.ok(label(id), `${lang}contact has no ${id} label`)
       assert.doesNotMatch(label(id), /\(/, `${lang}contact: the ${id} label still says optional`)
     }
@@ -548,6 +548,27 @@ test('every page loads Cloudflare Web Analytics, and the privacy page says so', 
   }
   for (const lang of LANG_DIRS) {
     assert.match(html(`${lang}privacy/index.html`), /Cloudflare Web Analytics/, `${lang}privacy does not mention the analytics`)
+  }
+})
+
+test('Georgian copy: no comma after "მაგ.", and no word mixing Georgian and Russian letters', () => {
+  for (const lang of ['ge', 'en', 'az', 'ru']) {
+    const text = readFileSync(new URL(`../src/i18n/${lang}.ts`, import.meta.url), 'utf8')
+    assert.doesNotMatch(text, /მაგ.,/, `src/i18n/${lang}.ts: "მაგ." takes no comma`)
+    const mixed = text.match(/[ა-ჿ]+[Ѐ-ӿ][Ѐ-ӿა-ჿ]*|[Ѐ-ӿ]+[ა-ჿ][Ѐ-ӿა-ჿ]*/g)
+    assert.equal(mixed, null, `src/i18n/${lang}.ts mixes Georgian and Russian letters: ${mixed}`)
+  }
+})
+
+test('the price form fields have outlines of at least 3:1 (Navy at 50% or more)', () => {
+  for (const lang of LANG_DIRS) {
+    const fields = html(`${lang}contact/index.html`).match(/<(?:input|select|textarea)\b[^>]*class="[^"]*"/g) ?? []
+    const styled = fields.filter((f) => /border-navy\/\d+/.test(f))
+    assert.ok(styled.length >= 6, `${lang}contact: only ${styled.length} styled fields`)
+    for (const f of styled) {
+      const pct = Number(f.match(/border-navy\/(\d+)/)[1])
+      assert.ok(pct >= 50, `${lang}contact: faint field outline border-navy/${pct}`)
+    }
   }
 })
 

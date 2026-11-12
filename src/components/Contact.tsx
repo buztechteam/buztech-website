@@ -6,7 +6,7 @@ import { pagePath } from '../routes';
 import { Building, Mail, Phone, Pin, WhatsApp } from './icons';
 import { IncludedList } from './Included';
 import { Credentials } from './TrustStrip';
-import { btn } from './ui';
+import { btn, textCta } from './ui';
 
 type Status = 'idle' | 'sending' | 'success' | 'mailto' | 'error';
 interface Errors {
@@ -21,6 +21,7 @@ const MAX_COMPANY = 120;
 const MAX_EMAIL = 254;
 const MAX_MESSAGE = 2000;
 const MAX_PHONE = 40;
+const MAX_QUANTITY = 60;
 /* The counter appears from here, so the limit is seen before maxLength cuts anything off. */
 const MESSAGE_COUNT_FROM = 1800;
 /* The email app takes a moment to open: this pause stops a double click from opening two drafts. */
@@ -35,9 +36,31 @@ const productIds: ProductId[] = productGroups.flatMap((group) => group.products)
 const optionLabel = (group: string, name: string) => (group === 'microsoft' ? name.replace(/^Microsoft 365 (?=[A-Z])/, '') : name);
 const isProductId = (value: string): value is ProductId => (productIds as string[]).includes(value);
 
-/* Placeholders at Navy/70 on white: 6:1, above the 4.5:1 that text needs. */
+type Selection = ProductId | 'other' | '';
+type RequestKind = 'price' | 'audit' | 'documents';
+/* The free audit and tender documents are not price requests: they get their own button, subject and line. */
+const kindOf = (product: Selection): RequestKind => (product === 'audit' || product === 'documents' ? product : 'price');
+
+/* The error text marks the office's address with {email}; it becomes a mail link. */
+function withEmail(text: string, email: string) {
+  const [before, after = ''] = text.split('{email}');
+  return (
+    <>
+      {before}
+      <a href={`mailto:${email}`} className="underline decoration-deep-teal decoration-2 underline-offset-4">
+        {email}
+      </a>
+      {after}
+    </>
+  );
+}
+
+/*
+  Outlines at Navy/50: 3.1:1 on the Light form, 3.4:1 against the white fill (WCAG 1.4.11 asks 3:1).
+  Placeholders at Navy/70 on white: 6:1, above the 4.5:1 that text needs.
+*/
 const fieldClass =
-  'mt-2 w-full rounded-lg border border-navy/30 bg-white px-4 py-3 text-base text-navy placeholder:text-navy/70 aria-invalid:border-2 aria-invalid:border-navy';
+  'mt-2 w-full rounded-lg border border-navy/50 bg-white px-4 py-3 text-base text-navy placeholder:text-navy/70 aria-invalid:border-2 aria-invalid:border-navy';
 
 /* A tinted strip with the mark: the palette has no red, so an error stands out by shape and weight. */
 function FieldError({ id, children }: { id: string; children: ReactNode }) {
@@ -87,7 +110,14 @@ export function Contact() {
   const formRef = useRef<HTMLFormElement>(null);
   const companyRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
-  const [product, setProduct] = useState<ProductId | 'other' | ''>('');
+  const thanksRef = useRef<HTMLHeadingElement>(null);
+  const [product, setProduct] = useState<Selection>('');
+  /* True when a price link brought the visitor here (?product): the form then says what is being requested. */
+  const [fromLink, setFromLink] = useState(false);
+  /* What the last request said, for the thank-you panel (null after the honeypot). */
+  const [sent, setSent] = useState<{ company: string; product: string; quantity: string } | null>(null);
+  const [again, setAgain] = useState(0);
+  const kind = kindOf(product);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>('idle');
   const [messageLength, setMessageLength] = useState(0);
@@ -104,8 +134,31 @@ export function Contact() {
   /* Price buttons link here with ?product=<id>; pre-select it when it is a known option. */
   useEffect(() => {
     const requested = new URLSearchParams(window.location.search).get('product');
-    if (requested && isProductId(requested)) setProduct(requested);
+    if (requested && isProductId(requested)) {
+      setProduct(requested);
+      setFromLink(true);
+    }
   }, []);
+
+  /* The thank-you panel replaces the form: focus its heading so it is read out. */
+  useEffect(() => {
+    if (status === 'success') thanksRef.current?.focus();
+  }, [status]);
+
+  /* "Send another request" brings back an empty form, ready to type in. */
+  useEffect(() => {
+    if (again > 0) companyRef.current?.focus();
+  }, [again]);
+
+  const startAgain = () => {
+    setProduct('');
+    setFromLink(false);
+    setMessageLength(0);
+    setErrors({});
+    setSent(null);
+    setStatus('idle');
+    setAgain((n) => n + 1);
+  };
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -113,6 +166,7 @@ export function Contact() {
 
     /* Honeypot: real visitors never see or fill this field. */
     if (String(data.get('website') ?? '') !== '') {
+      setSent(null);
       setStatus('success');
       return;
     }
@@ -120,6 +174,7 @@ export function Contact() {
     const company = String(data.get('company') ?? '').trim().slice(0, MAX_COMPANY);
     const email = String(data.get('email') ?? '').trim();
     const phone = String(data.get('phone') ?? '').trim().slice(0, MAX_PHONE);
+    const quantity = String(data.get('quantity') ?? '').trim().slice(0, MAX_QUANTITY);
     const message = String(data.get('message') ?? '').trim().slice(0, MAX_MESSAGE);
     const productName = product === 'other' ? c.other : product ? t.products[product] : '';
 
@@ -137,6 +192,7 @@ export function Contact() {
       return;
     }
 
+    const subject = `${c.mailSubject[kind]} - ${company}${langTag}`;
     const endpoint = site.web3formsKey ? 'https://api.web3forms.com/submit' : site.formEndpoint;
     if (endpoint) {
       setStatus('sending');
@@ -144,27 +200,26 @@ export function Contact() {
         const payload = site.web3formsKey
           ? {
               access_key: site.web3formsKey,
-              subject: `${c.mailSubject} - ${company}${langTag}`,
+              subject,
               from_name: `${site.name} website`,
               replyto: email,
               company,
               email,
               phone: phone || '-',
               product: productName || '-',
+              quantity: quantity || '-',
               message: message || '-',
               language: lang,
               botcheck: '',
             }
-          : { company, email, phone, product: productName, message, language: lang };
+          : { company, email, phone, product: productName, quantity, message, language: lang };
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify(payload),
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        formRef.current?.reset();
-        setMessageLength(0);
-        setProduct('');
+        setSent({ company, product: productName, quantity });
         setStatus('success');
       } catch {
         setStatus('error');
@@ -173,8 +228,7 @@ export function Contact() {
     }
 
     /* No endpoint configured: hand the request to the visitor's email app. */
-    const body = [`${c.fields.company}: ${company}`, `${c.fields.email}: ${email}`, `${c.fields.phone}: ${phone || '-'}`, `${c.fields.product}: ${productName || '-'}`, '', message].join('\n');
-    const subject = `${c.mailSubject} - ${company}${langTag}`;
+    const body = [`${c.fields.company}: ${company}`, `${c.fields.email}: ${email}`, `${c.fields.phone}: ${phone || '-'}`, `${c.fields.product}: ${productName || '-'}`, `${c.fields.quantity}: ${quantity || '-'}`, '', message].join('\n');
     window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setStatus('mailto');
     setMailtoPause(true);
@@ -197,6 +251,45 @@ export function Contact() {
             </a>
           </div>
 
+          {status === 'success' ? (
+            <div id="price-form" className="surface-light scroll-mt-24 rounded-[1.25rem] bg-light p-5 text-navy sm:p-8">
+              <h2 ref={thanksRef} tabIndex={-1} className="text-2xl leading-tight font-extrabold text-balance outline-none">
+                {c.thanks.heading}
+              </h2>
+              <p className="mt-3 text-pretty text-navy/80">{c.thanks.text}</p>
+              {sent && (
+                <dl className="mt-6 space-y-3 border-t border-navy/15 pt-6">
+                  {[
+                    [c.fields.company, sent.company],
+                    [c.fields.product, sent.product],
+                    [c.fields.quantity, sent.quantity],
+                  ]
+                    .filter(([, value]) => value)
+                    .map(([label, value]) => (
+                      <div key={label}>
+                        <dt className="text-sm text-navy/75">{label}</dt>
+                        <dd className="font-extrabold break-words">{value}</dd>
+                      </div>
+                    ))}
+                </dl>
+              )}
+              <p className="mt-6 font-extrabold">{c.thanks.urgent}</p>
+              {/* Phones already have call and WhatsApp right above the card. */}
+              <div className="mt-3 hidden flex-wrap gap-3 lg:flex">
+                <a href={office.phoneHref} className={`${btn('outlineOnLight')} gap-2`}>
+                  <Phone className="size-5" />
+                  {c.call}
+                </a>
+                <a href={office.whatsappHref} target="_blank" rel="noopener noreferrer" className={`${btn('outlineOnLight')} gap-2`}>
+                  <WhatsApp className="size-5" />
+                  WhatsApp
+                </a>
+              </div>
+              <button type="button" onClick={startAgain} className={`${textCta} mt-6`}>
+                {c.thanks.again}
+              </button>
+            </div>
+          ) : (
           <form
             id="price-form"
             method="post"
@@ -205,6 +298,11 @@ export function Contact() {
             noValidate
             className="surface-light scroll-mt-24 rounded-[1.25rem] bg-light p-5 text-navy sm:p-8"
           >
+            {fromLink && product && product !== 'other' && (
+              <p className="mb-6 border-b border-navy/15 pb-5 text-xl leading-snug font-extrabold text-balance">
+                {kind === 'price' ? `${c.mailSubject.price}: ${t.products[product]}` : c.mailSubject[kind]}
+              </p>
+            )}
             <div>
               <label htmlFor="company" className="font-extrabold">
                 {c.fields.company}
@@ -258,7 +356,10 @@ export function Contact() {
               </div>
             </div>
 
-            <div className="mt-5">
+            {/* What and how many: the two facts a quote starts from. Neither is required. Side by side only
+                where the longest choice ("Microsoft 365 - not sure which plan") still fits. */}
+            <div className="mt-5 grid gap-5 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+              <div>
               <label htmlFor="product" className="font-extrabold">
                 {c.fields.product}
               </label>
@@ -266,7 +367,7 @@ export function Contact() {
                 id="product"
                 name="product"
                 value={product}
-                onChange={(e) => setProduct(e.target.value as ProductId | 'other' | '')}
+                onChange={(e) => setProduct(e.target.value as Selection)}
                 className={fieldClass}
               >
                 <option value="">{c.selectPlaceholder}</option>
@@ -281,6 +382,13 @@ export function Contact() {
                 ))}
                 <option value="other">{c.other}</option>
               </select>
+              </div>
+              <div>
+                <label htmlFor="quantity" className="font-extrabold">
+                  {c.fields.quantity}
+                </label>
+                <input id="quantity" name="quantity" type="text" maxLength={MAX_QUANTITY} placeholder={c.placeholders.quantity} className={fieldClass} />
+              </div>
             </div>
 
             <div className="mt-5">
@@ -325,7 +433,7 @@ export function Contact() {
                 disabled={status === 'sending' || mailtoPause}
                 className={`${btn('primaryOnLight')} disabled:opacity-60 max-sm:w-full`}
               >
-                {status === 'sending' ? c.status.sending : product === 'audit' ? t.services.audit.cta : t.cta}
+                {status === 'sending' ? c.status.sending : kind === 'audit' ? t.services.audit.cta : kind === 'documents' ? c.documentsCta : t.cta}
               </button>
               {/* Without JavaScript the form cannot send, so the email address takes the button's place. */}
               <noscript>
@@ -335,12 +443,12 @@ export function Contact() {
                 </a>
               </noscript>
               <p role="status" aria-live="polite" className="min-h-6 flex-1 font-extrabold">
-                {status === 'success' && c.status.success}
                 {status === 'mailto' && c.status.mailto}
-                {status === 'error' && c.status.error}
+                {status === 'error' && withEmail(c.status.error, office.email)}
               </p>
             </div>
           </form>
+          )}
 
           {/* What happens after sending, without a time promise. */}
           <div className="mt-8">

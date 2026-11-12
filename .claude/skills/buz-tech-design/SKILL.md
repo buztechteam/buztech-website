@@ -49,7 +49,7 @@ simply don't exist.
 - **Two weights only:** `font-medium` (500) and `font-extrabold` (800).
 - **Fonts:** Inter for Latin and numbers, Noto Sans Georgian for Georgian. Inter has no Georgian
   glyphs, so the stack `Inter, Noto Sans Georgian` picks the right face per script.
-- **Brand gradient** (`bg-brand-gradient`) is for the hero with the all-white logo only.
+- **Brand gradient** (`bg-brand-gradient`) is for the hero and the inner-page header bands (`PageIntro`) only, always under a Navy scrim with white text.
 - **Focus rings** are 3px with a 3px offset. Brand Teal on dark (default), Deep Teal on light
   sections (`surface-light`), Navy on the teal band (`surface-teal`). Put the surface class on the
   section.
@@ -62,6 +62,8 @@ simply don't exist.
   - No prices, "from" prices or reply times. Proof is real or absent: no invented numbers, testimonials or logos.
   - No client names (no approval): kind, sector and country only. ISO stays a quiet footer line.
   - A plain hyphen ( - ), never an em dash, in visible copy.
+  - Georgian "მაგ." takes no comma after it (owner, 12 November 2026), and a Georgian word never mixes in a
+    look-alike Russian letter (в for ვ). `npm test` checks both.
 
 ## Motion: "B+"
 
@@ -86,6 +88,10 @@ visitor points at responds, content eases in once, then everything rests. **Noth
 - **Header logo** (`BuzLogo live`): pointed at with a mouse, a light runs along each wing into its dot and the dot flashes white, once, then rests (owner-approved, like the hero). BUZ TECH turns white while pointed at. It presses to .97 like buttons.
 - **Page changes** cross-fade, while the header and the phone bar stay in place.
 - **Never:** bounce, overshoot, 3D tilt, shimmer, floating, pulsing, particles, constant motion.
+- **One exception, approved by the owner (12 November 2026): the hero's living logo** (`src/motion/heroLogo.ts`).
+  Its slowly flowing gradient (WebGL), the heartbeat every 7 s, and the glow and give when it is pressed stay as
+  they are. It pauses off-screen and in hidden tabs, and is a still picture under reduced motion. Nothing else on
+  the site may loop, pulse, glow or bounce, and nothing may copy it.
 
 ### Where the gates live (content must never depend on motion to be visible)
 
