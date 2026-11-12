@@ -295,6 +295,14 @@ export const en: Dict = {
       },
     },
   },
+  distributor: {
+    heading: 'Huawei eKit distributor in Georgia',
+    lead: "BUZ Tech Georgia signed a Gold distribution agreement with Huawei for eKit, Huawei's product line for small and medium businesses. We marked the signing with an event for customers from different sectors.",
+    photos: {
+      guests: { caption: 'With guests at the event', alt: 'Four men in suits with event badges in a conference room' },
+      certificates: { caption: 'Certificates presented at the event', alt: 'Three people holding two framed certificates in front of a Huawei IdeaHub banner' },
+    },
+  },
   contact: {
     heading: 'Contact us',
     lead: 'Tell us your company and what you need - we’ll get back to you.',

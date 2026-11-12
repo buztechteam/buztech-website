@@ -29,6 +29,7 @@ export type ProductId =
 export type ServiceId = 'setup' | 'support' | 'supply';
 /** Event photos on About us, in order (eventPhotos in config/site.ts). */
 export type EventId = 'antalya' | 'conference' | 'club';
+export type DistributorPhotoId = 'guests' | 'certificates';
 
 type Item = { title: string; text: string };
 /** Which icon an included item shows; keyed, so a language can drop an item (AZ/RU have no GEL invoice). */
@@ -125,6 +126,12 @@ export interface Dict {
     heading: string;
     lead: string;
     items: Record<EventId, { title: string; place: string; alt: string }>;
+  };
+  /** About us: the Huawei eKit distribution agreement and two photos from the event that marked it. Nobody is named. */
+  distributor: {
+    heading: string;
+    lead: string;
+    photos: Record<DistributorPhotoId, { caption: string; alt: string }>;
   };
   contact: {
     heading: string;

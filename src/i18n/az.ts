@@ -301,6 +301,14 @@ export const az: Dict = {
       },
     },
   },
+  distributor: {
+    heading: 'Gürcüstanda Huawei eKit distribütoru',
+    lead: 'BUZ Tech Georgia Huawei ilə eKit xətti üzrə Gold distribusiya müqaviləsi imzalayıb. eKit Huawei\u2011in kiçik və orta biznes üçün məhsul xəttidir. İmzalanmanı müxtəlif sektorlardan olan müştərilər üçün tədbirlə qeyd etdik.',
+    photos: {
+      guests: { caption: 'Tədbirdə qonaqlarla', alt: 'Konfrans zalında kostyumlu və bejli dörd kişi' },
+      certificates: { caption: 'Tədbirdə təqdim olunan sertifikatlar', alt: 'Huawei IdeaHub banneri qarşısında iki çərçivəli sertifikat tutan üç nəfər' },
+    },
+  },
   contact: {
     heading: 'Bizimlə əlaqə',
     lead: 'Şirkətinizi və nəyə ehtiyacınız olduğunu bildirin - sizinlə əlaqə saxlayacağıq.',
