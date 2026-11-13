@@ -225,21 +225,28 @@ const headersBlock = () => {
 }
 const csp = () => headersBlock().find((l) => l.startsWith('Content-Security-Policy:')) ?? ''
 
-test('the site is private: every page and file says noindex, no sitemap, AI crawlers kept out', () => {
-  assert.ok(headersBlock().includes('X-Robots-Tag: noindex, nofollow'), '_headers lacks X-Robots-Tag: noindex, nofollow for /*')
+test('search engines get Georgian and English; Azerbaijani, Russian and 404 pages say noindex', () => {
+  assert.ok(!headersBlock().some((l) => l.startsWith('X-Robots-Tag')), '_headers hides every file from search engines')
+  const robotsMeta = (file) => readFileSync(file, 'utf8').match(/<meta name="robots" content="([^"]*)"/)?.[1] ?? ''
+  const indexable = []
   for (const file of pages()) {
-    const metas = readFileSync(file, 'utf8').match(/<meta name="robots"[^>]*>/g) ?? []
-    assert.equal(metas.length, 1, `${rel(file)} has ${metas.length} robots meta tags`)
-    assert.match(metas[0], /content="noindex, nofollow"/, `${rel(file)}: ${metas[0]}`)
+    const r = rel(file)
+    if (/^(az|ru)\//.test(r) || r.endsWith('404.html')) assert.match(robotsMeta(file), /noindex/, `${r} should stay out of search`)
+    else {
+      assert.equal(robotsMeta(file), '', `${r} must be indexable`)
+      indexable.push(r)
+    }
   }
-  assert.ok(!existsSync(join(dist, 'sitemap.xml')), 'dist/sitemap.xml exists: the site is private')
+  const locs = [...html('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])
+  assert.equal(locs.length, indexable.length, `sitemap.xml lists ${locs.length} addresses, ${indexable.length} pages are indexable`)
+  for (const loc of locs) assert.match(loc, /^https:\/\/buztech\.ge\/(?!az\/|ru\/)/, `sitemap.xml lists ${loc}`)
   const robots = html('robots.txt')
-  assert.doesNotMatch(robots, /sitemap/i, 'robots.txt points to a sitemap')
-  assert.match(robots, /User-agent: \*\r?\nAllow: \//, 'robots.txt must let search engines in, so they can read the noindex')
-  for (const bot of ['GPTBot', 'ClaudeBot', 'CCBot', 'Google-Extended', 'PerplexityBot']) {
-    assert.match(robots, new RegExp(`User-agent: ${bot}\\b`), `robots.txt does not name ${bot}`)
-  }
-  assert.match(robots, /PerplexityBot[\s\S]*Disallow: \//, 'robots.txt does not keep AI crawlers out')
+  assert.match(robots, /User-agent: \*\r?\nAllow: \//, 'robots.txt must let every crawler in')
+  assert.doesNotMatch(robots, /Disallow/, 'robots.txt blocks a crawler')
+  assert.match(robots, /Sitemap: https:\/\/buztech\.ge\/sitemap\.xml/, 'robots.txt does not point to the sitemap')
+  const home = html('index.html')
+  assert.match(home, /"@type":"WebSite","name":"BUZ Tech"/, 'the home page does not name the site for search results')
+  assert.match(home, /"@type":"Organization"[^<]*"url":"https:\/\/buztech\.ge\/"/, 'the Organization data has no url')
   assert.ok(headersBlock().some((l) => /^Strict-Transport-Security: max-age=\d{7,}/.test(l)), '_headers lacks HSTS')
 })
 
@@ -451,15 +458,15 @@ test('every language has its own lang, og:locale, 404 page and language menu', (
   }
 })
 
-test('with a site address, every page lists all four languages for search engines', () => {
+test('with a site address, Georgian and English pages point to each other for search engines, and only to each other', () => {
   const home = html('index.html')
-  // hreflang links are written only when VITE_SITE_URL is set (the custom domain is still to come)
+  // hreflang links are written only when VITE_SITE_URL is set
   if (!/rel="canonical"/.test(home)) return
   for (const file of pages().filter((f) => !f.endsWith('404.html'))) {
     const text = readFileSync(file, 'utf8')
-    for (const lang of ['ka', 'en', 'az', 'ru', 'x-default']) {
-      assert.match(text, new RegExp(`hreflang="${lang}"`), `${rel(file)} lacks hreflang ${lang}`)
-    }
+    const alternates = [...text.matchAll(/<link rel="alternate" hreflang="([^"]+)"/g)].map((m) => m[1]).sort()
+    if (/^(az|ru)\//.test(rel(file))) assert.deepEqual(alternates, [], `${rel(file)} has hreflang links`)
+    else assert.deepEqual(alternates, ['en', 'ka', 'x-default'], `${rel(file)} hreflang`)
   }
 })
 

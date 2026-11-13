@@ -3,9 +3,9 @@
  * in every language, so each address loads with its content, title and description in place.
  *   dist/index.html            Georgian home      dist/en/index.html, dist/az/, dist/ru/   other homes
  *   dist/services/index.html   Georgian services  dist/en/services/index.html ...
- * With VITE_SITE_URL set it also adds canonical / hreflang links and og:url. There is no sitemap: the
- * site is private and every page says noindex (vite.config.ts).
- * It also writes dist/404.html, dist/en/404.html ... ("page not found"), which Cloudflare
+ * With VITE_SITE_URL set it also adds canonical / hreflang links, og:url and sitemap.xml.
+ * Only Georgian and English go to search engines (INDEXED); Azerbaijani and Russian say noindex.
+ * It also writes dist/404.html, dist/en/404.html ... ("page not found", noindex), which Cloudflare
  * serves with a 404 status for unknown addresses (not_found_handling: "404-page" in wrangler.jsonc).
  */
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
@@ -22,6 +22,11 @@ const env = loadEnv('production', root, 'VITE_');
 const siteUrl = (env.VITE_SITE_URL ?? '').replace(/\/+$/, '');
 
 const OG_LOCALE = { ge: 'ka_GE', en: 'en_US', az: 'az_AZ', ru: 'ru_RU' };
+/*
+ * The languages search engines may list (owner, 12 November 2026). Azerbaijani and Russian wait for a
+ * native speaker's read: they say noindex, stay out of the sitemap and out of the hreflang links.
+ */
+const INDEXED = ['ge', 'en'];
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 const template = await readFile(path.join(dist, 'index.html'), 'utf8');
@@ -49,6 +54,22 @@ const bakuLd = (lang) =>
     areaServed: ['Georgia', 'Azerbaijan', 'Turkey', 'Uzbekistan', 'Kazakhstan'],
   })}</script>`;
 
+/* Georgian and English pages: the company data from index.html, plus its address and logo. */
+const georgiaLd = () => {
+  const data = JSON.parse(template.match(LD_BLOCK)[0].replace(/^<script[^>]*>|<\/script>$/g, ''));
+  return `<script type="application/ld+json">${JSON.stringify({ ...data, ...(siteUrl && { url: `${siteUrl}/`, logo: `${siteUrl}/icon-512.png` }) })}</script>`;
+};
+
+/* On the home page: the site's name, so search results can show "BUZ Tech" rather than the address. */
+const websiteLd = () =>
+  `<script type="application/ld+json">${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'BUZ Tech',
+    alternateName: 'BUZ Tech Georgia',
+    url: `${siteUrl}/`,
+  })}</script>`;
+
 /** Fills the template for one page; `extraHead` lines go into the page-head block. */
 function pageHtml(page, lang, extraHead) {
   const { html, meta } = render(page, lang);
@@ -60,7 +81,7 @@ function pageHtml(page, lang, extraHead) {
     `<meta property="og:description" content="${esc(meta.description)}" />`,
     ...extraHead,
   ];
-  const base = lang === 'az' || lang === 'ru' ? template.replace(LD_BLOCK, bakuLd(lang)) : template;
+  const base = template.replace(LD_BLOCK, () => (lang === 'az' || lang === 'ru' ? bakuLd(lang) : georgiaLd()));
   return base
     .replace(/<html lang="[^"]*">/, `<html lang="${htmlLang[lang]}">`)
     .replace(HEAD_BLOCK, head.join('\n    '))
@@ -74,22 +95,36 @@ async function write(relPath, content) {
   console.log(`prerendered /${relPath.replace(/^\/+/, '').replace(/index\.html$/, '')}`);
 }
 
+const urls = [];
 for (const lang of langs) {
+  const indexed = INDEXED.includes(lang);
   for (const page of pages) {
     const route = pagePath(page, lang);
-    const head = [];
+    const head = indexed ? [] : ['<meta name="robots" content="noindex, follow" />'];
     if (siteUrl) {
-      head.push(
-        `<link rel="canonical" href="${siteUrl}${route}" />`,
-        `<meta property="og:url" content="${siteUrl}${route}" />`,
-        ...langs.map((l) => `<link rel="alternate" hreflang="${htmlLang[l]}" href="${siteUrl}${pagePath(page, l)}" />`),
-        `<link rel="alternate" hreflang="x-default" href="${siteUrl}${pagePath(page, 'ge')}" />`,
-      );
+      head.push(`<link rel="canonical" href="${siteUrl}${route}" />`, `<meta property="og:url" content="${siteUrl}${route}" />`);
+      if (indexed) {
+        head.push(
+          ...INDEXED.map((l) => `<link rel="alternate" hreflang="${htmlLang[l]}" href="${siteUrl}${pagePath(page, l)}" />`),
+          `<link rel="alternate" hreflang="x-default" href="${siteUrl}${pagePath(page, 'ge')}" />`,
+        );
+        urls.push(`${siteUrl}${route}`);
+      }
+      if (page === 'home' && lang === 'ge') head.push(websiteLd());
     }
     await write(`${route}index.html`, pageHtml(page, lang, head));
   }
   /* Cloudflare serves the nearest 404.html: /en/anything gets the English one. */
-  await write(`${pagePath('home', lang)}404.html`, pageHtml('notFound', lang, []));
+  await write(`${pagePath('home', lang)}404.html`, pageHtml('notFound', lang, ['<meta name="robots" content="noindex" />']));
+}
+
+if (siteUrl) {
+  const body = urls.map((u) => `  <url><loc>${u}</loc></url>`).join('\n');
+  await writeFile(
+    path.join(dist, 'sitemap.xml'),
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`,
+  );
+  console.log(`sitemap.xml: ${urls.length} addresses`);
 }
 
 await rm(ssrDir, { recursive: true, force: true });

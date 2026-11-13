@@ -45,7 +45,7 @@ To add a page: add its id to `PageId` (`i18n/types.ts`) and `pages` (`routes.ts`
 and its body in `App.tsx`.
 
 Unknown addresses get a "page not found" page: the build also writes `dist/404.html` and `dist/en/404.html`
-(`noindex`, like every page), and `wrangler.jsonc` tells Cloudflare to serve the nearest one with a 404 status.
+(`noindex`, not in the sitemap), and `wrangler.jsonc` tells Cloudflare to serve the nearest one with a 404 status.
 
 On phones a quick-contact bar (call, WhatsApp, price request) stays at the bottom of every page except Contact
 (`QuickContactBar.tsx`).
@@ -64,14 +64,12 @@ The site lives at **https://buztech.ge** (bought at CleanNet, nameservers on Clo
 buztech.ge and www.buztech.ge to the Worker; a Cloudflare redirect rule sends www to buztech.ge. The old
 workers.dev address and preview addresses are switched off.
 
-**The site is private** (owner, 12 November 2026). It is not advertised: buz-group.com stays the public site, and
-buztech.ge is the link the team gives customers who ask for a website. So:
-- every page and file says `noindex, nofollow` (a meta tag from `vite.config.ts` and `X-Robots-Tag` in `public/_headers`),
-  and there is no sitemap; `robots.txt` lets search engines in only so they can read that, and keeps AI crawlers out;
-- Cloudflare's "Block AI bots" is on for the zone;
-- don't add the link to the Google Business Profile, LinkedIn or any directory.
-
-Link previews (WhatsApp, Telegram, email) still show the card. `npm test` fails if a page loses its noindex.
+**Search engines** (owner, 12 November 2026). buztech.ge is meant to be found, beside buz-group.com, which stays
+online. Only the Georgian and English pages go to search engines: `sitemap.xml` lists them, and their hreflang
+links name only each other. The Azerbaijani and Russian pages say `noindex` until a native speaker has read them
+(`INDEXED` in `scripts/prerender.mjs`). Every crawler is allowed, AI ones included, and Cloudflare blocks none.
+The home page names the site "BUZ Tech" for search results (WebSite data) and every Georgian and English page
+carries the company's details with its address and logo (Organization data). `npm test` checks all of this.
 
 `npm test` builds the site and checks the output in `dist/`: one h1 per page and no skipped heading levels, links that
 resolve, the redirects, the motion gating, the security headers, the form limits, and the positioning rules below.
@@ -84,7 +82,7 @@ allows only what the site uses: its own files, Web3Forms (the price form) and Cl
 - The inline script at the top of `index.html` (it turns animation on) is allowed by its hash. If you change it, update
   the `sha256-…` value in `_headers`; `npm test` fails until they match.
 - A `VITE_FORM_ENDPOINT` on another domain must be added to `connect-src`, or the browser blocks the request.
-- HSTS is on (`Strict-Transport-Security`, six months, subdomains included). The same block sends `X-Robots-Tag: noindex, nofollow`.
+- HSTS is on (`Strict-Transport-Security`, six months, subdomains included).
 - After a deploy, open the live site's console: a CSP error there usually means a Cloudflare feature (Rocket Loader,
   email obfuscation) injected a script. Turn that feature off or allow it in the policy.
 
@@ -145,7 +143,7 @@ Set these in Cloudflare under Settings > Build > Build variables and secrets, th
 | --- | --- |
 | `VITE_WEB3FORMS_KEY` | form submissions delivered by email through Web3Forms |
 | `VITE_FORM_ENDPOINT` | alternative to Web3Forms: any endpoint that accepts a JSON POST; add its domain to `connect-src` in `public/_headers` |
-| `VITE_SITE_URL` | per-page canonical and hreflang links, og:url and og:image for link previews (`https://buztech.ge`); no sitemap, the site is private |
+| `VITE_SITE_URL` | per-page canonical and hreflang links, og:url, og:image, `sitemap.xml` (Georgian and English pages) and the sitemap line in `robots.txt` (`https://buztech.ge`) |
 | `VITE_CF_ANALYTICS_TOKEN` | Cloudflare Web Analytics (cookie-free); the privacy text mentions it automatically |
 
 The social preview image is `public/og-image.png` (1200x630). Privacy policy copy lives in `i18n/ge.ts` / `en.ts` under `privacy`;
