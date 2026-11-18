@@ -230,6 +230,14 @@ export const en: Dict = {
     specs: ['Interactive whiteboard', 'Video conferencing', 'Wireless presentation', 'For meeting rooms and learning spaces'],
     ask: 'Not sure which size fits your room? Contact us and we’ll help.',
     photoAlt: 'Huawei IdeaHub S2 on the wall of an office',
+    installed: {
+      heading: 'Set up in your room',
+      lead: 'We deliver the board, set it up on site and show your team how to use it.',
+      photos: {
+        setup: { caption: "Setting up an IdeaHub S2 in a client's office", alt: 'A man setting up a Huawei IdeaHub S2 on a mobile stand in an office' },
+        training: { caption: "Training the client's team", alt: 'Two men in front of a Huawei IdeaHub S2 as it starts up' },
+      },
+    },
   },
   services: {
     heading: 'Services',
@@ -262,6 +270,15 @@ export const en: Dict = {
         text: 'Laptops, servers, networking and Huawei IdeaHub, sourced for you and delivered with a VAT invoice.',
       },
     ],
+    inPerson: {
+      heading: 'We come to you',
+      lead: 'We meet clients in person, set things up on site and train their teams.',
+      photos: {
+        meeting: { caption: 'Meeting a client', alt: 'Three people at a table with a laptop' },
+        setup: { caption: 'Setting up a Huawei IdeaHub S2', alt: 'A man setting up a Huawei IdeaHub S2 on a mobile stand in an office' },
+        'team-training': { caption: "Training a client's team", alt: "A man presenting to a client's team in a meeting room" },
+      },
+    },
     stepsHeading: 'How we work',
     steps: [
       { title: 'Request', text: 'Call, write on WhatsApp or send the form.' },

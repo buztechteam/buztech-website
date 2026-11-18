@@ -3,6 +3,7 @@ import { useLang } from '../i18n/LanguageContext';
 import { revealProps } from '../motion/reveal';
 import { inquireHref } from '../routes';
 import { BoardIllustration } from './BoardIllustration';
+import { PhotoBlock } from './PhotoBlock';
 import { PriceLink } from './Microsoft365';
 import { SpecList } from './SpecList';
 import { Steps } from './Services';
@@ -87,6 +88,13 @@ export function IdeaHub() {
             </div>
           )}
         </article>
+        {/* Our own photos: the board set up and handed over in a client's office. */}
+        <PhotoBlock
+          className="mt-16 lg:mt-20"
+          heading={copy.installed.heading}
+          lead={copy.installed.lead}
+          photos={(['setup', 'training'] as const).map((id) => ({ id, src: `/work/${id}`, ...copy.installed.photos[id] }))}
+        />
       </div>
     </section>
   );

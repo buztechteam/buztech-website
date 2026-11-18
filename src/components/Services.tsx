@@ -2,6 +2,7 @@ import { useLang } from '../i18n/LanguageContext';
 import { revealProps } from '../motion/reveal';
 import { inquireHref } from '../routes';
 import { ClipboardCheck } from './icons';
+import { PhotoBlock } from './PhotoBlock';
 import { SpecList } from './SpecList';
 import { btn } from './ui';
 
@@ -91,6 +92,22 @@ export function StepsSection() {
       <div className="container-x">
         <Steps heading={t.services.stepsHeading} steps={t.services.steps} level={2} />
       </div>
+    </section>
+  );
+}
+
+/** Services page: what working with us looks like, in our own photos from client visits. Nobody is named. */
+export function InPerson() {
+  const { t } = useLang();
+  const p = t.services.inPerson;
+  return (
+    <section className="surface-light bg-white py-16 text-navy lg:py-20">
+      <PhotoBlock
+        className="container-x"
+        heading={p.heading}
+        lead={p.lead}
+        photos={(['meeting', 'setup', 'team-training'] as const).map((id) => ({ id, src: `/work/${id}`, ...p.photos[id] }))}
+      />
     </section>
   );
 }

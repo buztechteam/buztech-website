@@ -2,6 +2,7 @@ import { eventPhotos } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import type { DistributorPhotoId } from '../i18n/types';
 import { revealProps } from '../motion/reveal';
+import { PhotoBlock } from './PhotoBlock';
 import { h2Class, leadClass } from './ui';
 
 /**
@@ -62,30 +63,13 @@ export function Distributor() {
   const d = t.distributor;
   return (
     <section id="huawei-ekit" className="surface-light bg-light py-20 text-navy lg:py-24">
-      <div className="container-x">
-        <h2 {...revealProps(0)} className={h2Class}>{d.heading}</h2>
-        <p {...revealProps(1)} className={`${leadClass} text-navy/85`}>{d.lead}</p>
-        <ul {...revealProps(2)} className="mt-10 grid gap-6 sm:grid-cols-2 sm:gap-5">
-          {distributorPhotos.map((id) => (
-            <li key={id}>
-              <figure>
-                <img
-                  src={`/events/ekit-${id}-960.webp`}
-                  srcSet={`/events/ekit-${id}-480.webp 480w, /events/ekit-${id}-960.webp 960w`}
-                  sizes="(min-width: 1280px) 36rem, (min-width: 640px) 50vw, 100vw"
-                  alt={d.photos[id].alt}
-                  width={960}
-                  height={640}
-                  loading="lazy"
-                  decoding="async"
-                  className="aspect-[3/2] h-auto w-full rounded-xl bg-navy/10 object-cover"
-                />
-                <figcaption className="mt-3 text-navy/80">{d.photos[id].caption}</figcaption>
-              </figure>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <PhotoBlock
+        className="container-x"
+        heading={d.heading}
+        lead={d.lead}
+        ratio="3/2"
+        photos={distributorPhotos.map((id) => ({ id, src: `/events/ekit-${id}`, ...d.photos[id] }))}
+      />
     </section>
   );
 }

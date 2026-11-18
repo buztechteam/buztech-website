@@ -14,7 +14,7 @@ import { PageIntro } from './components/PageIntro';
 import { Privacy } from './components/Privacy';
 import { ProductLinks } from './components/ProductLinks';
 import { QUICK_BAR_SPACE, QuickContactBar } from './components/QuickContactBar';
-import { Services, StepsSection } from './components/Services';
+import { InPerson, Services, StepsSection } from './components/Services';
 import { Presence, Proof } from './components/TrustStrip';
 import { useLang } from './i18n/LanguageContext';
 import { initReveal } from './motion/reveal';
@@ -77,6 +77,7 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
         <>
           <PageIntro title={t.services.heading} lead={t.services.lead} />
           <Services />
+          <InPerson />
           <StepsSection />
           <ProductLinks />
         </>

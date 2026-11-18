@@ -236,6 +236,14 @@ export const az: Dict = {
     specs: ['İnteraktiv lövhə', 'Videokonfrans', 'Simsiz təqdimat', 'İclas otaqları və tədris məkanları üçün'],
     ask: 'Otağınıza hansı ölçünün uyğun olduğunu bilmirsiniz? Bizimlə əlaqə saxlayın, kömək edək.',
     photoAlt: 'Ofis divarında Huawei IdeaHub S2',
+    installed: {
+      heading: 'Otağınızda quraşdırırıq',
+      lead: 'Lövhəni çatdırır, yerində quraşdırır və komandanıza ondan necə istifadə etməyi göstəririk.',
+      photos: {
+        setup: { caption: 'Müştəri ofisində IdeaHub S2\u2011nin quraşdırılması', alt: 'Ofisdə mobil dayaq üzərində Huawei IdeaHub S2 quraşdıran kişi' },
+        training: { caption: 'Müştəri komandasına təlim', alt: 'İşə düşən Huawei IdeaHub S2 qarşısında iki kişi' },
+      },
+    },
   },
   services: {
     heading: 'Xidmətlər',
@@ -268,6 +276,15 @@ export const az: Dict = {
         text: 'Noutbuklar, serverlər, şəbəkə avadanlığı və Huawei IdeaHub - sizin üçün tapır və çatdırırıq.',
       },
     ],
+    inPerson: {
+      heading: 'Sizə gəlirik',
+      lead: 'Müştərilərlə şəxsən görüşür, hər şeyi yerində quraşdırır və komandalarına təlim keçirik.',
+      photos: {
+        meeting: { caption: 'Müştəri ilə görüş', alt: 'Noutbuklu masa arxasında üç nəfər' },
+        setup: { caption: 'Huawei IdeaHub S2\u2011nin quraşdırılması', alt: 'Ofisdə mobil dayaq üzərində Huawei IdeaHub S2 quraşdıran kişi' },
+        'team-training': { caption: 'Müştəri komandasına təlim', alt: 'İclas otağında müştəri komandasına təqdimat edən kişi' },
+      },
+    },
     stepsHeading: 'Necə işləyirik',
     steps: [
       { title: 'Sorğu', text: 'Zəng edin, WhatsApp-da yazın və ya formu göndərin.' },

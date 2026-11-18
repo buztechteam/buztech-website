@@ -31,6 +31,8 @@ export type ServiceId = 'setup' | 'support' | 'supply';
 export type EventId = 'antalya' | 'conference' | 'club';
 export type DistributorPhotoId = 'guests' | 'certificates';
 export type TeamId = 'irakli' | 'soso';
+/** Caption and description of one real photo. */
+export type PhotoCopy = { caption: string; alt: string };
 
 type Item = { title: string; text: string };
 /** Which icon an included item shows; keyed, so a language can drop an item (AZ/RU have no GEL invoice). */
@@ -104,12 +106,21 @@ export interface Dict {
     howHeading: string;
     how: Item[];
   };
-  ideahub: { tagline: string; specs: string[]; ask: string; photoAlt: string };
+  ideahub: {
+    tagline: string;
+    specs: string[];
+    ask: string;
+    photoAlt: string;
+    /** Our own photos of a board set up in a client's office, under the product card. */
+    installed: { heading: string; lead: string; photos: Record<'setup' | 'training', PhotoCopy> };
+  };
   services: {
     heading: string;
     lead: string;
     audit: { title: string; text: string; points: string[]; cta: string };
     items: ({ id: ServiceId } & Item)[];
+    /** What working with us looks like, in our own photos from client visits. Nobody is named. */
+    inPerson: { heading: string; lead: string; photos: Record<'meeting' | 'setup' | 'team-training', PhotoCopy> };
     stepsHeading: string;
     steps: Item[];
   };
