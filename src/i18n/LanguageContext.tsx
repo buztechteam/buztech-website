@@ -1,12 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, type ReactNode } from 'react';
 import { htmlLang, pageMeta } from '../routes';
-import { az } from './az';
-import { en } from './en';
-import { ge } from './ge';
-import { ru } from './ru';
 import type { Dict, Lang, PageId } from './types';
-
-export const dictionaries: Record<Lang, Dict> = { ge, en, az, ru };
 
 interface LanguageValue {
   lang: Lang;
@@ -17,16 +11,20 @@ interface LanguageValue {
 
 const LanguageContext = createContext<LanguageValue | null>(null);
 
-export function LanguageProvider({ lang, page, children }: { lang: Lang; page: PageId; children: ReactNode }) {
-  const value = useMemo<LanguageValue>(() => ({ lang, t: dictionaries[lang], page }), [lang, page]);
+/**
+ * `t` is the page's dictionary: the build passes it from dictionaries.ts, the browser loads it first
+ * (loadDictionary.ts), so the first render in the browser equals the pre-rendered HTML.
+ */
+export function LanguageProvider({ lang, page, t, children }: { lang: Lang; page: PageId; t: Dict; children: ReactNode }) {
+  const value = useMemo<LanguageValue>(() => ({ lang, t, page }), [lang, t, page]);
 
   /* Pre-rendered pages already carry these; this keeps the dev server in step. */
   useEffect(() => {
-    const meta = pageMeta(page, dictionaries[lang]);
+    const meta = pageMeta(page, t);
     document.documentElement.lang = htmlLang[lang];
     document.title = meta.title;
     document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
-  }, [lang, page]);
+  }, [lang, page, t]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

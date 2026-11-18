@@ -80,8 +80,11 @@ export interface Dict {
     /** Teaser rows: what is on the Microsoft 365 page. */
     m365: { heading: string; lead: string; compare: string; rows: { name: string; text: string }[] };
     onRequest: { heading: string; lead: string };
-    /** The owner's line ("we are friends after they buy from us"), beside the two people a client deals with, by name. */
-    friends: { heading: string; people: Record<TeamId, { name: string; role: string }> };
+    /**
+     * The owner's line ("we are friends after they buy from us"), beside the two people a client deals with, by name.
+     * The lead asks visitors to contact those people directly (owner: "that's why we tell them to contact us").
+     */
+    friends: { heading: string; lead: string; people: Record<TeamId, { name: string; role: string }> };
     /** cspText says in plain words what being a Microsoft CSP partner means for the buyer. */
     /** since is a Georgian-company fact: absent in AZ and RU. */
     proof: { heading: string; credentials: string; partner: string; cspText: string; since?: string; countries: string };
@@ -139,7 +142,7 @@ export interface Dict {
     lead: string;
     items: Record<EventId, { title: string; place: string; alt: string }>;
   };
-  /** About us: the Huawei eKit distribution agreement and two photos from the event that marked it. Nobody is named. */
+  /** About us: the Huawei eKit customer event and two photos from it, with no distributor claim. Nobody is named. */
   distributor: {
     heading: string;
     lead: string;
@@ -148,6 +151,8 @@ export interface Dict {
   contact: {
     heading: string;
     lead: string;
+    /** Heading of the teal price band that closes every page but Contact; its button keeps the one CTA wording. */
+    bandHeading: string;
     /** Heading of the details column beside the form. */
     detailsTitle: string;
     entity: string;
@@ -165,12 +170,13 @@ export interface Dict {
     fields: { company: string; email: string; phone: string; product: string; quantity: string; message: string };
     /** After the label of every field that is not required. */
     optional: string;
-    placeholders: { company: string; email: string; quantity: string; message: string };
+    /** documents: the message placeholder when tender documents are chosen (no quantity field then). */
+    placeholders: { company: string; email: string; quantity: string; message: string; documents: string };
     selectPlaceholder: string;
     /** Option groups in the product list. */
     groups: { microsoft: string; equipment: string; company: string };
-    /** Under the form: what happens after sending, with no times. */
-    next: { heading: string; steps: string[] };
+    /** Under the form: what happens after sending, with no times. documentsSteps replace steps for tender documents. */
+    next: { heading: string; steps: string[]; documentsSteps: string[] };
     other: string;
     required: string;
     invalidEmail: string;

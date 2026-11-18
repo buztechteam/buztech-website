@@ -3,7 +3,7 @@ import { offices, officeFor, productGroups, showsCompanyDetails, site } from '..
 import { useLang } from '../i18n/LanguageContext';
 import type { ProductId } from '../i18n/types';
 import { pagePath } from '../routes';
-import { Building, Mail, Phone, Pin, WhatsApp } from './icons';
+import { Building, Check, Mail, Phone, Pin, WhatsApp } from './icons';
 import { IncludedList } from './Included';
 import { Credentials } from './TrustStrip';
 import { btn, textCta } from './ui';
@@ -114,10 +114,16 @@ export function Contact() {
   const [product, setProduct] = useState<Selection>('');
   /* True when a price link brought the visitor here (?product): the form then says what is being requested. */
   const [fromLink, setFromLink] = useState(false);
-  /* What the last request said, for the thank-you panel (null after the honeypot). */
-  const [sent, setSent] = useState<{ company: string; product: string; quantity: string } | null>(null);
+  /*
+    What the last request said, for the thank-you panel (null after the honeypot). The email and phone are shown
+    back too, so a mistyped address can still be noticed and corrected by phone or WhatsApp.
+  */
+  const [sent, setSent] = useState<{ company: string; email: string; phone: string; product: string; quantity: string } | null>(null);
   const [again, setAgain] = useState(0);
   const kind = kindOf(product);
+  /* Tender documents are not counted: no quantity field, their own placeholder, hint and next steps. */
+  const documents = kind === 'documents';
+  const documentsHint = t.included.items.find((item) => item.icon === 'documents')?.text;
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>('idle');
   const [messageLength, setMessageLength] = useState(0);
@@ -219,7 +225,7 @@ export function Contact() {
           body: JSON.stringify(payload),
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        setSent({ company, product: productName, quantity });
+        setSent({ company, email, phone, product: productName, quantity });
         setStatus('success');
       } catch {
         setStatus('error');
@@ -253,14 +259,20 @@ export function Contact() {
 
           {status === 'success' ? (
             <div id="price-form" className="surface-light scroll-mt-24 rounded-[1.25rem] bg-light p-5 text-navy sm:p-8">
-              <h2 ref={thanksRef} tabIndex={-1} className="text-2xl leading-tight font-extrabold text-balance outline-none">
-                {c.thanks.heading}
+              <h2 ref={thanksRef} tabIndex={-1} className="flex items-start gap-3 text-2xl leading-tight font-extrabold outline-none">
+                {/* One quiet success cue: a Deep Teal check, still. */}
+                <span aria-hidden="true" data-sent-mark className="grid size-9 shrink-0 place-items-center rounded-full bg-white text-deep-teal">
+                  <Check className="size-5" strokeWidth={3} />
+                </span>
+                <span className="min-w-0 self-center text-balance">{c.thanks.heading}</span>
               </h2>
               <p className="mt-3 text-pretty text-navy/80">{c.thanks.text}</p>
               {sent && (
                 <dl className="mt-6 space-y-3 border-t border-navy/15 pt-6">
                   {[
                     [c.fields.company, sent.company],
+                    [c.fields.email, sent.email],
+                    [c.fields.phone, sent.phone],
                     [c.fields.product, sent.product],
                     [c.fields.quantity, sent.quantity],
                   ]
@@ -357,18 +369,21 @@ export function Contact() {
             </div>
 
             {/* What and how many: the two facts a quote starts from. Neither is required. Side by side only
-                where the longest choice ("Microsoft 365 - not sure which plan") still fits. */}
-            <div className="mt-5 grid gap-5 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+                where the longest choice ("Microsoft 365 - not sure which plan") still fits. Tender documents
+                are not counted, so the quantity field goes and the hint says which documents there are. */}
+            <div className={`mt-5 grid gap-5 ${documents ? '' : 'xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]'}`}>
               <div>
               <label htmlFor="product" className="font-extrabold">
                 {c.fields.product}
               </label>
+              {/* h-12.5: a select ignores line-height, so it is held at the 50px of the text fields beside it. */}
               <select
                 id="product"
                 name="product"
                 value={product}
                 onChange={(e) => setProduct(e.target.value as Selection)}
-                className={fieldClass}
+                aria-describedby={documents && documentsHint ? 'documents-hint' : undefined}
+                className={`${fieldClass} h-12.5`}
               >
                 <option value="">{c.selectPlaceholder}</option>
                 {productGroups.map((group) => (
@@ -382,13 +397,20 @@ export function Contact() {
                 ))}
                 <option value="other">{c.other}</option>
               </select>
+              {documents && documentsHint && (
+                <p id="documents-hint" className="mt-2 text-sm text-pretty text-navy/80">
+                  {documentsHint}
+                </p>
+              )}
               </div>
-              <div>
-                <label htmlFor="quantity" className="font-extrabold">
-                  {c.fields.quantity}
-                </label>
-                <input id="quantity" name="quantity" type="text" maxLength={MAX_QUANTITY} placeholder={c.placeholders.quantity} className={fieldClass} />
-              </div>
+              {!documents && (
+                <div>
+                  <label htmlFor="quantity" className="font-extrabold">
+                    {c.fields.quantity}
+                  </label>
+                  <input id="quantity" name="quantity" type="text" maxLength={MAX_QUANTITY} placeholder={c.placeholders.quantity} className={fieldClass} />
+                </div>
+              )}
             </div>
 
             <div className="mt-5">
@@ -400,7 +422,7 @@ export function Contact() {
                 name="message"
                 rows={4}
                 maxLength={MAX_MESSAGE}
-                placeholder={c.placeholders.message}
+                placeholder={documents ? c.placeholders.documents : c.placeholders.message}
                 aria-describedby={messageLength >= MESSAGE_COUNT_FROM ? 'message-count' : undefined}
                 onInput={(e) => setMessageLength(e.currentTarget.value.length)}
                 className={`${fieldClass} resize-y`}
@@ -431,7 +453,7 @@ export function Contact() {
               <button
                 type="submit"
                 disabled={status === 'sending' || mailtoPause}
-                className={`${btn('primaryOnLight')} disabled:opacity-60 max-sm:w-full`}
+                className={`${btn('primaryOnLight')} disabled:opacity-60 max-sm:w-full text-center max-sm:whitespace-normal`}
               >
                 {status === 'sending' ? c.status.sending : kind === 'audit' ? t.services.audit.cta : kind === 'documents' ? c.documentsCta : t.cta}
               </button>
@@ -450,11 +472,11 @@ export function Contact() {
           </form>
           )}
 
-          {/* What happens after sending, without a time promise. */}
+          {/* What happens after sending, without a time promise. Tender documents get no offer or invoice. */}
           <div className="mt-8">
             <h2 className="text-lg font-extrabold text-white">{c.next.heading}</h2>
             <ol className="mt-3 space-y-2">
-              {c.next.steps.map((step, i) => (
+              {(documents ? c.next.documentsSteps : c.next.steps).map((step, i) => (
                 <li key={step} className="flex gap-3 text-light/85">
                   <span aria-hidden="true" className="grid size-6 shrink-0 place-items-center rounded-full bg-white/10 text-sm font-extrabold text-brand-teal">
                     {i + 1}

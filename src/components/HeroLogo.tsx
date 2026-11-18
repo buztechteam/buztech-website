@@ -1,6 +1,5 @@
 import { useEffect, useId, useRef } from 'react';
-import { GEAR_PATH, WING_RADIUS, WINGS } from './buzLogoPaths';
-import { HERO_VIEWBOX, WING_LEFT, startHeroLogo } from '../motion/heroLogo';
+import { GEAR_PATH, HERO_VIEWBOX, WING_LEFT, WING_RADIUS, WINGS } from './buzLogoPaths';
 
 /** Must stay below the fallback delay in index.css (`hero-art-fallback`), or the shown logo would vanish and redraw. */
 const INTRO_LATEST_START_MS = 3800;
@@ -23,11 +22,27 @@ export function HeroLogo() {
   const id = useId().replace(/[^\w-]/g, '');
 
   useEffect(() => {
-    if (!art.current) return;
-    const still = !matchMedia('(prefers-reduced-motion: no-preference)').matches;
-    // played on every visit to the home page, except Back/Forward or a load so slow the logo already shows at rest
-    const intro = !still && document.documentElement.classList.contains('motion') && performance.now() < INTRO_LATEST_START_MS && !cameBack();
-    return startHeroLogo(art.current, { intro, still });
+    const el = art.current;
+    if (!el) return;
+    let cancelled = false;
+    let stop: (() => void) | undefined;
+    /*
+     * The animation is its own chunk, so only the home pages download it (they preload it: scripts/prerender.mjs).
+     * Should it fail to load, the logo simply stays at rest (the CSS fallback in index.css shows it).
+     */
+    import('../motion/heroLogo')
+      .then(({ startHeroLogo }) => {
+        if (cancelled) return;
+        const still = !matchMedia('(prefers-reduced-motion: no-preference)').matches;
+        // played on every visit to the home page, except Back/Forward or a load so slow the logo already shows at rest
+        const intro = !still && document.documentElement.classList.contains('motion') && performance.now() < INTRO_LATEST_START_MS && !cameBack();
+        stop = startHeroLogo(el, { intro, still });
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+      stop?.();
+    };
   }, []);
 
   const { x, y, w, h } = HERO_VIEWBOX;

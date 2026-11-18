@@ -74,7 +74,9 @@ export function IdeaHub() {
                Not lazy: it sits near the top of the page. */
             <div className="bg-navy max-lg:aspect-video">
               <img
-                src={ideahubImage}
+                src={`${ideahubImage}-800.webp`}
+                srcSet={`${ideahubImage}-480.webp 480w, ${ideahubImage}-800.webp 800w`}
+                sizes="(min-width: 1024px) 36rem, 100vw"
                 alt={copy.photoAlt}
                 width={800}
                 height={450}

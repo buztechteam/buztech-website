@@ -15,7 +15,7 @@ import { Privacy } from './components/Privacy';
 import { ProductLinks } from './components/ProductLinks';
 import { QUICK_BAR_SPACE, QuickContactBar } from './components/QuickContactBar';
 import { InPerson, Services, StepsSection } from './components/Services';
-import { Presence, Proof } from './components/TrustStrip';
+import { MicrosoftPartner, Presence, Proof } from './components/TrustStrip';
 import { useLang } from './i18n/LanguageContext';
 import { initReveal } from './motion/reveal';
 import type { Dict, Lang, PageId } from './i18n/types';
@@ -103,6 +103,8 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
             )}
           </PageIntro>
           <Clients />
+          {/* Microsoft first: the CSP partnership (and the tender documents) before the Huawei eKit section. */}
+          <MicrosoftPartner />
           <Distributor />
           <Events />
         </>

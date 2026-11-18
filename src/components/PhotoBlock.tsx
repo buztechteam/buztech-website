@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { revealProps } from '../motion/reveal';
 import { h2Class, leadClass } from './ui';
 
@@ -11,7 +12,7 @@ const ratios = {
 
 /**
  * A heading, a lead and a row of real photos with captions. The caller wraps it in its section,
- * so it can sit inside a section that already has its own background.
+ * so it can sit inside a section that already has its own background. `children` sit under the lead (a price link).
  */
 export function PhotoBlock({
   heading,
@@ -19,12 +20,14 @@ export function PhotoBlock({
   photos,
   ratio = '4/3',
   className = '',
+  children,
 }: {
   heading: string;
   lead: string;
   photos: Photo[];
   ratio?: keyof typeof ratios;
   className?: string;
+  children?: ReactNode;
 }) {
   const r = ratios[ratio];
   const three = photos.length > 2;
@@ -32,7 +35,8 @@ export function PhotoBlock({
     <div className={className}>
       <h2 {...revealProps(0)} className={h2Class}>{heading}</h2>
       <p {...revealProps(1)} className={`${leadClass} text-navy/85`}>{lead}</p>
-      <ul {...revealProps(2)} className={`mt-10 grid gap-6 sm:grid-cols-2 sm:gap-5 ${three ? 'lg:grid-cols-3' : ''}`}>
+      {children && <div {...revealProps(2)}>{children}</div>}
+      <ul {...revealProps(children ? 3 : 2)} className={`mt-10 grid gap-6 sm:grid-cols-2 sm:gap-5 ${three ? 'lg:grid-cols-3' : ''}`}>
         {photos.map((photo) => (
           <li key={photo.id}>
             <figure>

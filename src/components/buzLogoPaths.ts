@@ -41,6 +41,14 @@ export const WINGS = [
   { bar: 'M69 228H516.8V269H101.1L66.8 231.5Z', cx: 516.8, cy: 248.6 },
   { bar: 'M134.4 299.7H439.9V340.6H166.4L133.2 302.6Z', cx: 439.9, cy: 320.3 },
 ];
+/** Left end of each wing bar (the chamfered tip), matching WINGS. */
+export const WING_LEFT = [2, 66.8, 133.2];
+
+/**
+ * The hero logo's viewBox, in icon units: the icon (706 x 508) with room for the pieces to move.
+ * Here rather than in src/motion/heroLogo.ts, so the hero's markup does not pull in its animation code.
+ */
+export const HERO_VIEWBOX = { x: -60, y: -50, w: 826, h: 608 };
 
 /** "BUZ" (top line of the wordmark). */
 export const BUZ_PATH =

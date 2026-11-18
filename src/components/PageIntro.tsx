@@ -25,7 +25,7 @@ export function PageIntro({
     <section className="relative isolate overflow-hidden bg-brand-gradient text-white">
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 from-navy/80 via-navy/45 to-navy/10 max-lg:bg-linear-to-b lg:bg-linear-to-r"
+        className="absolute inset-0 -z-10 from-navy/80 via-navy/45 to-navy/10 max-lg:bg-linear-to-b max-lg:to-navy/30 lg:bg-linear-to-r"
       />
       <div className="container-x relative py-12 sm:py-16">
         {/*
@@ -65,7 +65,8 @@ export function PageIntro({
             {trail.map((label, index) => (
               <li key={label} className="flex items-center gap-2">
                 {index === 0 ? (
-                  <a href={pagePath('home', lang)} className="-my-3 py-3 underline-offset-4 hover:text-white hover:underline">
+                  /* 44px to tap; the negative margin keeps the trail its usual height. */
+                  <a href={pagePath('home', lang)} className="-my-3 inline-flex min-h-11 items-center underline-offset-4 hover:text-white hover:underline">
                     {label}
                   </a>
                 ) : (

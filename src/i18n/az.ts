@@ -99,7 +99,7 @@ export const az: Dict = {
       compare: 'Planları müqayisə edin',
       rows: [
         { name: 'Business Basic, Standard, Premium', text: '300 istifadəçiyədək şirkətlər üçün' },
-        { name: 'E3 və E5', text: 'Böyük təşkilatlar üçün, istifadəçi limiti olmadan' },
+        { name: 'E3 və E5', text: '300-dən çox istifadəçi üçün - E5 Microsoft-un ən qabaqcıl təhlükəsizliyini əlavə edir' },
         { name: 'Copilot', text: 'Word, Excel, Outlook və Teams daxilində AI köməkçisi' },
         { name: 'Windows və Office', text: 'Kompüterləriniz üçün lisenziyalar' },
       ],
@@ -110,6 +110,7 @@ export const az: Dict = {
     },
     friends: {
       heading: 'Satışdan sonra dost qalırıq',
+      lead: 'Bizə ehtiyacınız olanda birbaşa zəng edin və ya yazın.',
       people: {
         irakli: { name: 'İrakli Mçedlişvili', role: 'Baş direktor' },
         soso: { name: 'Soso Rtveliaşvili', role: 'Biznesin inkişafı üzrə menecer' },
@@ -294,7 +295,7 @@ export const az: Dict = {
     ],
   },
   clients: {
-    heading: 'Müştərilərimiz',
+    heading: 'Müştərilərimiz kimlərdir',
     lead: 'BUZ Tech baş ofisi Çexiya Respublikasında yerləşən beynəlxalq IT inteqratordur. Azərbaycan, Gürcüstan, Türkiyə, Özbəkistan və Qazaxıstanda həm özəl, həm də dövlət sektoru ilə işləyirik.',
     more: 'Müştərilərimiz arasında Microsoft həlləri ilə işləyən dövlət qurumları, həmçinin Azərbaycan, Gürcüstan, Türkiyə, Özbəkistan və Qazaxıstanın aparıcı dövlət və özəl şirkətləri var.',
     sectorsHeading: 'İşlədiyimiz sektorlar',
@@ -322,8 +323,8 @@ export const az: Dict = {
     },
   },
   distributor: {
-    heading: 'Gürcüstanda Huawei eKit distribütoru',
-    lead: 'BUZ Tech Georgia Huawei ilə eKit xətti üzrə Gold distribusiya müqaviləsi imzalayıb. eKit Huawei\u2011in kiçik və orta biznes üçün məhsul xəttidir. İmzalanmanı müxtəlif sektorlardan olan müştərilər üçün tədbirlə qeyd etdik.',
+    heading: 'Huawei eKit tədbiri',
+    lead: 'eKit Huawei\u2011in kiçik və orta biznes üçün məhsul xəttidir. Ona həsr olunmuş tədbiri müxtəlif sektorlardan olan müştərilər üçün keçirdik.',
     photos: {
       guests: { caption: 'Tədbirdə qonaqlarla', alt: 'Konfrans zalında kostyumlu və bejli dörd kişi' },
       certificates: { caption: 'Tədbirdə təqdim olunan sertifikatlar', alt: 'Huawei IdeaHub banneri qarşısında iki çərçivəli sertifikat tutan üç nəfər' },
@@ -332,6 +333,7 @@ export const az: Dict = {
   contact: {
     heading: 'Bizimlə əlaqə',
     lead: 'Şirkətinizi və nəyə ehtiyacınız olduğunu bildirin - sizinlə əlaqə saxlayacağıq.',
+    bandHeading: 'Lisenziya və ya IT avadanlığı lazımdır?',
     detailsTitle: 'Əlaqə məlumatları',
     entity: 'Hüquqi şəxs',
     location: 'Ünvan',
@@ -353,6 +355,7 @@ export const az: Dict = {
       email: 'name@company.az',
       quantity: 'Məs., 25 istifadəçi',
       message: 'Məsələn: hazırkı planınız və ya nəyi dəyişmək istəyirsiniz',
+      documents: 'Tender üçün hansı sənədlər lazımdır?',
     },
     optional: 'istəyə bağlı',
     selectPlaceholder: 'Seçin',
@@ -363,6 +366,11 @@ export const az: Dict = {
         'Sorğunuza baxırıq.',
         'Təfərrüatları razılaşdırmaq üçün sizinlə telefon və ya e-poçt vasitəsilə əlaqə saxlayırıq.',
         'Təklifimizi alırsınız, təsdiqinizdən sonra isə sifarişi icra edirik.',
+      ],
+      documentsSteps: [
+        'Sorğunuza baxırıq.',
+        'Hansı sənədlərin lazım olduğunu dəqiqləşdirmək üçün sizinlə telefon və ya e-poçt vasitəsilə əlaqə saxlayırıq.',
+        'Sənədləri hazırlayır və sizə göndəririk.',
       ],
     },
     other: 'Digər',
@@ -401,7 +409,7 @@ export const az: Dict = {
     sections: [
       {
         heading: 'Nə toplayırıq',
-        body: 'Formada şirkətinizin adını, e-poçtunuzu, istəsəniz telefon nömrənizi, nəyə ehtiyacınız olduğunu və mesajınızı qeyd edirsiniz. Vebsayt başqa heç bir şəxsi məlumat tələb etmir.',
+        body: 'Formada şirkətinizin adını, e-poçtunuzu, istəsəniz telefon nömrənizi, nəyə ehtiyacınız olduğunu, miqdarı və mesajınızı qeyd edirsiniz. Vebsayt başqa heç bir şəxsi məlumat tələb etmir.',
       },
       {
         heading: 'Nə üçün istifadə edirik',

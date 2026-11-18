@@ -95,11 +95,12 @@ export const equipment: EquipmentId[] = ['laptops', 'servers', 'networking', 'pr
 export const equipmentBrands: Partial<Record<EquipmentId, string[]>> = {};
 
 /**
- * The Huawei IdeaHub photo (files live in /public/products). Now Huawei's official IdeaHub S2 image from
+ * The Huawei IdeaHub photo, as a path without its width: /products/ideahub-s2-480.webp and -800.webp (16:9, metadata
+ * stripped; 800 is the original's width, so nothing is upscaled). Huawei's official IdeaHub S2 image from
  * e.huawei.com, used with Huawei's approval (owner, October 2026) until the owner's own S2 photos arrive.
  * Set it to undefined and an illustration is shown instead.
  */
-export const ideahubImage: string | undefined = '/products/ideahub-s2.jpg';
+export const ideahubImage: string | undefined = '/products/ideahub-s2';
 
 /**
  * Event photos on About us, in order. Each is /events/<id>-480.webp and -960.webp (4:3, metadata stripped).

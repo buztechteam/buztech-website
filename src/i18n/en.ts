@@ -92,7 +92,7 @@ export const en: Dict = {
       compare: 'Compare plans',
       rows: [
         { name: 'Business Basic, Standard, Premium', text: 'For companies up to 300 users' },
-        { name: 'E3 and E5', text: 'For larger organisations, with no user limit' },
+        { name: 'E3 and E5', text: 'For over 300 users - E5 adds Microsoft’s most advanced security' },
         { name: 'Copilot', text: 'The AI assistant in Word, Excel, Outlook and Teams' },
         { name: 'Windows and Office', text: 'Licences for your computers' },
       ],
@@ -103,6 +103,7 @@ export const en: Dict = {
     },
     friends: {
       heading: 'After the sale, we stay friends',
+      lead: 'Call or write to us directly whenever you need us.',
       people: {
         irakli: { name: 'Irakli Mtchedlishvili', role: 'General Director' },
         soso: { name: 'Soso Rtveliashvili', role: 'Business Development Manager' },
@@ -288,7 +289,7 @@ export const en: Dict = {
     ],
   },
   clients: {
-    heading: 'Our clients',
+    heading: 'Who our clients are',
     lead: 'BUZ Tech is an international IT integrator headquartered in the Czech Republic. We work in Georgia, Azerbaijan, Turkey, Uzbekistan and Kazakhstan, with both the private and the public sector.',
     more: 'Our clients include public bodies running on Microsoft solutions, and leading state and private companies in Georgia, Azerbaijan, Turkey, Uzbekistan and Kazakhstan.',
     sectorsHeading: 'Sectors we work with',
@@ -316,8 +317,8 @@ export const en: Dict = {
     },
   },
   distributor: {
-    heading: 'Huawei eKit distributor in Georgia',
-    lead: "BUZ Tech Georgia signed a Gold distribution agreement with Huawei for eKit, Huawei's product line for small and medium businesses. We marked the signing with an event for customers from different sectors.",
+    heading: 'Huawei eKit event',
+    lead: "eKit is Huawei's product line for small and medium businesses. We held an event about it for customers from different sectors.",
     photos: {
       guests: { caption: 'With guests at the event', alt: 'Four men in suits with event badges in a conference room' },
       certificates: { caption: 'Certificates presented at the event', alt: 'Three people holding two framed certificates in front of a Huawei IdeaHub banner' },
@@ -326,6 +327,7 @@ export const en: Dict = {
   contact: {
     heading: 'Contact us',
     lead: 'Tell us your company and what you need - we’ll get back to you.',
+    bandHeading: 'Need licences or IT equipment?',
     detailsTitle: 'Contact details',
     entity: 'Legal entity',
     location: 'Location',
@@ -344,10 +346,11 @@ export const en: Dict = {
       message: 'Message',
     },
     placeholders: {
-      company: 'e.g., Your Company LLC',
+      company: 'e.g. Your Company LLC',
       email: 'name@company.ge',
       quantity: 'e.g. 25 users',
       message: 'For example: your current plan, or what you want to change',
+      documents: 'Which documents does the tender need?',
     },
     optional: 'optional',
     selectPlaceholder: 'Choose',
@@ -359,10 +362,15 @@ export const en: Dict = {
         'We contact you by phone or email to agree the details.',
         'You receive an offer, then a VAT invoice in GEL once you confirm.',
       ],
+      documentsSteps: [
+        'We review your request.',
+        'We contact you by phone or email to agree which documents you need.',
+        'We prepare the documents and send them to you.',
+      ],
     },
     other: 'Something else',
     required: 'Fill in this field',
-    invalidEmail: 'Enter a valid email, e.g., name@company.ge',
+    invalidEmail: 'Enter a valid email, e.g. name@company.ge',
     status: {
       sending: 'Sending…',
       mailto: 'Your email app has opened. Press “Send” there to finish the request.',
@@ -399,7 +407,7 @@ export const en: Dict = {
     sections: [
       {
         heading: 'What we collect',
-        body: 'In the form you give your company name, email, a phone number if you wish, what you need and a message. The website asks for no other personal data.',
+        body: 'In the form you give your company name, email, a phone number if you wish, what you need, how many and a message. The website asks for no other personal data.',
       },
       {
         heading: 'What we use it for',

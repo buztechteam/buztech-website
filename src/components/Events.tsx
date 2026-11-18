@@ -2,6 +2,7 @@ import { eventPhotos } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import type { DistributorPhotoId } from '../i18n/types';
 import { revealProps } from '../motion/reveal';
+import { PriceLink } from './Microsoft365';
 import { PhotoBlock } from './PhotoBlock';
 import { h2Class, leadClass } from './ui';
 
@@ -18,35 +19,44 @@ export function Events() {
       <div className="container-x">
         <h2 {...revealProps(0)} className={h2Class}>{e.heading}</h2>
         <p {...revealProps(1)} className={`${leadClass} text-navy/85`}>{e.lead}</p>
-        <ul
+        {/*
+          The row that swipes is a focusable, named region, so a keyboard can scroll it too (the photos hold no links).
+          Its edges meet the screen's edges below lg, so the focus ring is drawn inside them there.
+        */}
+        <div
           {...revealProps(2)}
-          className="-mx-5 mt-10 flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:scroll-px-8 sm:px-8 lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-5 lg:overflow-visible lg:px-0 lg:pb-0"
+          tabIndex={0}
+          role="region"
+          aria-label={e.heading}
+          className="-mx-5 mt-10 snap-x snap-mandatory scroll-px-5 overflow-x-auto px-5 pb-2 max-lg:focus-visible:-outline-offset-3 sm:-mx-8 sm:scroll-px-8 sm:px-8 lg:mx-0 lg:overflow-visible lg:px-0 lg:pb-0"
         >
-          {eventPhotos.map((id) => {
-            const item = e.items[id];
-            return (
-              <li key={id} className="w-[85%] max-w-[26rem] shrink-0 snap-start lg:w-auto lg:max-w-none">
-                <figure>
-                  <img
-                    src={`/events/${id}-960.webp`}
-                    srcSet={`/events/${id}-480.webp 480w, /events/${id}-960.webp 960w`}
-                    sizes="(min-width: 1024px) 24rem, 85vw"
-                    alt={item.alt}
-                    width={960}
-                    height={720}
-                    loading="lazy"
-                    decoding="async"
-                    className="aspect-[4/3] h-auto w-full rounded-xl bg-navy/10 object-cover"
-                  />
-                  <figcaption className="mt-4">
-                    <span className="block text-lg leading-snug font-extrabold text-balance">{item.title}</span>
-                    <span className="mt-1 block text-navy/80">{item.place}</span>
-                  </figcaption>
-                </figure>
-              </li>
-            );
-          })}
-        </ul>
+          <ul className="flex gap-4 lg:grid lg:grid-cols-3 lg:gap-5">
+            {eventPhotos.map((id) => {
+              const item = e.items[id];
+              return (
+                <li key={id} className="w-[85%] max-w-[26rem] shrink-0 snap-start lg:w-auto lg:max-w-none">
+                  <figure>
+                    <img
+                      src={`/events/${id}-960.webp`}
+                      srcSet={`/events/${id}-480.webp 480w, /events/${id}-960.webp 960w`}
+                      sizes="(min-width: 1024px) 24rem, 85vw"
+                      alt={item.alt}
+                      width={960}
+                      height={720}
+                      loading="lazy"
+                      decoding="async"
+                      className="aspect-[4/3] h-auto w-full rounded-xl bg-navy/10 object-cover"
+                    />
+                    <figcaption className="mt-4">
+                      <span className="block text-lg leading-snug font-extrabold text-balance">{item.title}</span>
+                      <span className="mt-1 block text-navy/80">{item.place}</span>
+                    </figcaption>
+                  </figure>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </section>
   );
@@ -55,8 +65,10 @@ export function Events() {
 const distributorPhotos: DistributorPhotoId[] = ['guests', 'certificates'];
 
 /**
- * About page: the Huawei eKit distribution agreement, said once, above two photos from the event that marked it.
+ * About page: the Huawei eKit customer event and two photos from it. No distributor claim: BUZ Tech is no longer
+ * the exclusive eKit distributor (owner, 18 November 2026).
  * Our own event, so it stands apart from the conferences we only attended. Nobody is named.
+ * eKit is mostly networking for small and mid-size companies, so its price link asks for networking.
  */
 export function Distributor() {
   const { t } = useLang();
@@ -69,7 +81,9 @@ export function Distributor() {
         lead={d.lead}
         ratio="3/2"
         photos={distributorPhotos.map((id) => ({ id, src: `/events/ekit-${id}`, ...d.photos[id] }))}
-      />
+      >
+        <PriceLink product="networking" className="mt-4" />
+      </PhotoBlock>
     </section>
   );
 }

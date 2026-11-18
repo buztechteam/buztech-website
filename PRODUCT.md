@@ -59,7 +59,7 @@ The website for LLC BUZ Tech Georgia ("BUZ Tech"). Its job is to turn visits int
 - **IT equipment categories:** laptops and PCs, servers and storage, networking, printers and more. No brand names until the boss approves product names.
 - **Price requests** go to an email inbox (Web3Forms key pending). No CRM. The owner edits the site with Claude; there is no CMS.
 - **Hosting:** static pre-rendered site on Cloudflare Workers at https://buztech.ge, protected by security headers.
-- **Searchable in Georgian and English** (owner, 12 November 2026): buztech.ge should be found on Google, ideally first for "BUZ Tech", while buz-group.com stays online. The Azerbaijani and Russian pages stay out of search until a native speaker has read them. AI crawlers are allowed. The link is not yet on the Google Business Profile or LinkedIn (owner: "not yet").
+- **Searchable in Georgian and English** (owner, 12 November 2026): buztech.ge should be found on Google, ideally first for "BUZ Tech", while buz-group.com stays online. The Azerbaijani and Russian pages stay out of search until a native speaker has read them. AI crawlers are allowed. No link to buztech.ge goes on the Google Business Profile, LinkedIn, Facebook or other social pages (owner, 17 November 2026): search only.
 
 ## Brand Commitments
 

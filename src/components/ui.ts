@@ -10,8 +10,11 @@ type Size = 'md' | 'sm';
   Motion "B+": everything a visitor points at responds softly. Tailwind's hover: only applies on
   devices that can hover (no "stuck" lift after a tap); motion-safe: keeps movement off under
   reduced motion, where only colours change.
+  The properties are listed, not Tailwind's `transition`: that one includes outline-color, so a focus ring
+  would fade in from the text colour instead of appearing at once.
 */
-const soft = 'transition duration-(--dur-hover) ease-soft';
+const soft =
+  'transition-[color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,translate,scale,rotate] duration-(--dur-hover) ease-soft';
 
 /* min-h-11: every button is at least 44px tall, the touch-target minimum. */
 const base = `inline-flex min-h-11 items-center justify-center rounded-lg font-extrabold leading-tight whitespace-nowrap ${soft} motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-md motion-safe:hover:shadow-navy/25 motion-safe:active:translate-y-0 motion-safe:active:scale-97`;

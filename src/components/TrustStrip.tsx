@@ -1,7 +1,7 @@
 import { useLang } from '../i18n/LanguageContext';
-import { pagePath } from '../routes';
+import { inquireHref, pagePath } from '../routes';
 import { revealProps } from '../motion/reveal';
-import { ArrowRight, Check } from './icons';
+import { ArrowRight, Check, FileCheck } from './icons';
 import { btn, h2Class, leadClass } from './ui';
 
 /**
@@ -48,17 +48,54 @@ export function Credentials() {
   );
 }
 
-/** The sectors we work with, as a plain list in columns (no client names: there is no approval to show them). */
+/**
+ * The sectors we work with, as plain text in columns (no client names: there is no approval to show them).
+ * No rules and no bold, so it never reads like the linked rows of a list that leads somewhere.
+ */
 export function Sectors({ dark = false }: { dark?: boolean }) {
   const { t } = useLang();
   return (
-    <ul className="grid grid-cols-2 gap-x-8 gap-y-3 sm:grid-cols-3 lg:grid-cols-4">
+    <ul className={`grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-3 sm:gap-x-8 lg:grid-cols-4 ${dark ? 'text-light/85' : 'text-navy/85'}`}>
+      {/* A long word (Горнодобывающая) is hyphenated or wrapped on a 320px phone instead of widening the page. */}
       {t.clients.sectors.map((sector) => (
-        <li key={sector} className={`border-t pt-3 font-extrabold ${dark ? 'border-white/12 text-white' : 'border-navy/15'}`}>
+        <li key={sector} className="min-w-0 hyphens-auto break-words">
           {sector}
         </li>
       ))}
     </ul>
+  );
+}
+
+/**
+ * About page: the Microsoft CSP partnership, the first partnership on the page and on Navy, so it carries more weight
+ * than the Huawei eKit section after it. Beside it, what tender teams come for: the documents, and a button that asks for them.
+ */
+export function MicrosoftPartner() {
+  const { lang, t } = useLang();
+  const p = t.home.proof;
+  const documents = t.included.items.find((item) => item.icon === 'documents');
+  return (
+    <section id="microsoft-csp" className="bg-navy py-20 text-light lg:py-24">
+      <div className="container-x grid gap-14 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
+        <div className="flex flex-col items-start">
+          <h2 {...revealProps(0)} className={`${h2Class} text-white`}>{p.partner}</h2>
+          <p {...revealProps(1)} className={`${leadClass} text-light/85`}>{p.cspText}</p>
+          <a {...revealProps(2)} href={inquireHref('m365', lang)} className={`${btn('primary')} mt-8`}>
+            {t.cta}
+          </a>
+        </div>
+        {documents?.action && (
+          <div {...revealProps(3)} className="flex flex-col items-start lg:border-l lg:border-white/12 lg:pl-12">
+            <FileCheck className="size-8 text-brand-teal" />
+            <h3 className="mt-4 text-xl font-extrabold text-balance text-white">{documents.title}</h3>
+            <p className="mt-3 text-pretty text-light/85">{documents.text}</p>
+            <a href={inquireHref('documents', lang)} className={`${btn('ghostOnDark')} mt-8`}>
+              {documents.action}
+            </a>
+          </div>
+        )}
+      </div>
+    </section>
   );
 }
 

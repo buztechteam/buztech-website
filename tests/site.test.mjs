@@ -609,3 +609,152 @@ test('Georgian and English name the Baku company wherever ISO appears', () => {
     if (/\bISO\b/.test(text)) assert.match(text, /BUZ Tech LLC, (Baku|ბაქო)/, `${rel(file)} shows ISO without its holder`)
   }
 })
+
+/** Source text of a project file (for behaviour that only shows after JavaScript runs). */
+const source = (file) => readFileSync(new URL('../' + file, import.meta.url), 'utf8')
+/** The label text of a form field on a built Contact page. */
+const fieldLabel = (page, id) =>
+  page.match(new RegExp(`<label for="${id}"[^>]*>([\\s\\S]*?)</label>`))?.[1].replace(/<[^>]+>/g, '').trim() ?? ''
+
+test('a tender-documents request drops the quantity field and gets its own placeholder, hint and next steps', () => {
+  const contact = source('src/components/Contact.tsx')
+  // the quantity field only renders when the request is not for documents
+  assert.match(contact, /\{!documents && \(\s*<div>\s*<label htmlFor="quantity"/, 'the quantity field is not hidden for documents')
+  assert.match(contact, /documents \? c\.placeholders\.documents : c\.placeholders\.message/, 'documents keep the price placeholder')
+  assert.match(contact, /documents \? c\.next\.documentsSteps : c\.next\.steps/, 'documents keep the offer and invoice steps')
+  assert.match(contact, /id="documents-hint"/, 'documents get no hint about which documents exist')
+  for (const lang of ['ge', 'en', 'az', 'ru']) {
+    const steps = source(`src/i18n/${lang}.ts`).match(/documentsSteps: \[([\s\S]*?)\]/)?.[1] ?? ''
+    assert.ok(steps.trim(), `src/i18n/${lang}.ts has no documents steps`)
+    assert.doesNotMatch(
+      steps,
+      /invoice|ინვოის|შეთავაზ|offer|təklif|sifariş|предложени|заказ/i,
+      `src/i18n/${lang}.ts: the documents steps still promise an offer or an invoice`,
+    )
+  }
+  // without a pre-selected product (the pre-rendered page) the quantity field is there
+  for (const lang of LANG_DIRS) {
+    assert.match(html(`${lang}contact/index.html`), /<input[^>]*\sid="quantity"/, `${lang}contact lost its quantity field`)
+  }
+})
+
+test('the thank-you panel shows back the email and the phone, under a still Deep Teal check', () => {
+  const contact = source('src/components/Contact.tsx')
+  const list = contact.slice(contact.indexOf('{sent && ('), contact.indexOf('</dl>'))
+  for (const field of ['company', 'email', 'phone', 'product', 'quantity']) {
+    assert.ok(list.includes(`[c.fields.${field}, sent.${field}]`), `the thank-you list lacks the ${field}`)
+  }
+  assert.match(list, /\.filter\(\(\[, value\]\) => value\)/, 'an empty answer (no phone) is not left out')
+  const mark = contact.match(/<span[^>]*data-sent-mark[^>]*>/)?.[0] ?? ''
+  assert.match(mark, /text-deep-teal/, 'the success mark is not Deep Teal')
+  assert.doesNotMatch(mark, /animate|transition|data-reveal/, 'the success mark moves')
+})
+
+test('the privacy page lists the "how many" field among what the form collects', () => {
+  for (const lang of LANG_DIRS) {
+    const label = fieldLabel(html(`${lang}contact/index.html`), 'quantity').toLowerCase()
+    assert.ok(label, `${lang}contact has no quantity label`)
+    assert.ok(text(html(`${lang}privacy/index.html`)).toLowerCase().includes(label), `${lang}privacy does not mention "${label}"`)
+  }
+})
+
+test('English writes "e.g." without a comma', () => {
+  assert.doesNotMatch(source('src/i18n/en.ts'), /e\.g\.,/, 'src/i18n/en.ts has "e.g.,"')
+  for (const file of pages().filter((f) => rel(f).startsWith('en/'))) {
+    assert.doesNotMatch(readFileSync(file, 'utf8'), /e\.g\.,/, `${rel(file)} has "e.g.,"`)
+  }
+})
+
+test('the product select is as tall as the text fields beside it', () => {
+  for (const lang of LANG_DIRS) {
+    const select = html(`${lang}contact/index.html`).match(/<select[^>]*\sid="product"[^>]*>/)?.[0] ?? ''
+    assert.match(select, /\sclass="[^"]*\bh-12\.5\b/, `${lang}contact: the select has no fixed 50px height`)
+  }
+  assert.ok(css().includes('.h-12\\.5{'), 'no CSS for h-12.5')
+})
+
+test('Georgian source keeps every Latin word and its Georgian ending together, also in text shown only after sending', () => {
+  const split = source('src/i18n/ge.ts').match(/[A-Za-z0-9]-[ა-ჿ]+/)?.[0]
+  assert.equal(split, undefined, `src/i18n/ge.ts: "${split}" can break at its hyphen; write it with U+2011`)
+})
+
+test('About puts the Microsoft CSP partnership before Huawei eKit, with the documents request and an eKit price link', () => {
+  for (const lang of LANG_DIRS) {
+    const page = html(`${lang}about/index.html`)
+    const csp = page.indexOf('id="microsoft-csp"')
+    const ekit = page.indexOf('id="huawei-ekit"')
+    assert.ok(csp > 0 && ekit > csp, `${lang}about: Microsoft CSP does not come before Huawei eKit`)
+    const cspSection = page.slice(csp, page.indexOf('</section>', csp))
+    assert.match(cspSection, new RegExp(`href="/${lang}contact/\\?product=documents"`), `${lang}about: the CSP block has no documents request`)
+    const ekitSection = page.slice(ekit, page.indexOf('</section>', ekit))
+    assert.match(ekitSection, /\?product=networking"/, `${lang}about: the eKit section leads nowhere`)
+  }
+})
+
+test('the About photo row scrolls with a keyboard: a focusable region named after its heading', () => {
+  for (const lang of LANG_DIRS) {
+    const section = html(`${lang}about/index.html`).match(/<section[^>]*\sid="events"[\s\S]*?<\/section>/)?.[0] ?? ''
+    const heading = section.match(/<h2[^>]*>([^<]*)<\/h2>/)?.[1]
+    const row = section.match(/<div[^>]*\srole="region"[^>]*>/)?.[0] ?? ''
+    assert.match(row, /\stabindex="0"/, `${lang}about: the photo row cannot take focus`)
+    assert.ok(heading && row.includes(`aria-label="${heading}"`), `${lang}about: the photo row is not named "${heading}"`)
+    assert.match(row, /\boverflow-x-auto\b/, `${lang}about: the region is not the row that scrolls`)
+  }
+})
+
+test('Home: the price button leads the Microsoft 365 teaser, and the people section asks visitors to get in touch', () => {
+  for (const lang of LANG_DIRS) {
+    const page = html(`${lang}index.html`)
+    // the hero has its own price button; the teaser's is the last one on the page
+    const at = page.lastIndexOf('?product=m365')
+    const teaser = page.slice(page.lastIndexOf('<section', at), page.indexOf('</section>', at))
+    const price = teaser.match(new RegExp(`<a href="/${lang}contact/\\?product=m365"[^>]*>`))?.[0] ?? ''
+    assert.match(price, /bg-brand-teal/, `${lang}home: the Microsoft 365 price button is not the filled one`)
+    const compare = teaser.match(new RegExp(`<a href="/${lang}microsoft-365/"[^>]*>`))?.[0] ?? ''
+    assert.ok(compare, `${lang}home: no "Compare plans" button beside the price`)
+    assert.doesNotMatch(compare, /bg-brand-teal/, `${lang}home: "Compare plans" is still filled`)
+    const start = page.lastIndexOf('<section', page.indexOf('/team/irakli'))
+    const people = page.slice(start, page.indexOf('</section>', start))
+    assert.ok(people.indexOf('<h2') < people.indexOf('<img'), `${lang}home: the photos come before the heading`)
+    assert.match(people, new RegExp(`href="/${lang}contact/"`), `${lang}home: the people section has no price request`)
+    assert.match(people, /href="tel:/, `${lang}home: the people section has no phone`)
+    assert.match(people, /href="https:\/\/wa\.me\//, `${lang}home: the people section has no WhatsApp`)
+    assert.doesNotMatch(people, /href="\/[a-z/]*services\/"/, `${lang}home: the people section still sends visitors to Services`)
+    for (const [, alt] of people.matchAll(/<img[^>]*\salt="([^"]*)"/g)) {
+      assert.ok(!alt || !people.includes(`>${alt}</span>`), `${lang}home: a portrait repeats its caption "${alt}"`)
+    }
+  }
+})
+
+test('the teal price band has its own heading, and "Get a price" only on its button', () => {
+  for (const [lang, cta] of [['', 'მიიღეთ ფასი'], ['en/', 'Get a price'], ['az/', 'Qiymət alın'], ['ru/', 'Получить цену']]) {
+    const heading = html(`${lang}index.html`).match(/id="contact-band-title"[^>]*>([^<]*)</)?.[1] ?? ''
+    assert.ok(heading && heading !== cta, `${lang}home: the band heading is "${heading}"`)
+  }
+})
+
+test('the IdeaHub photo is WebP in two widths, without metadata, and the JPEG is gone', () => {
+  for (const page of ['index.html', 'ideahub/index.html', 'en/index.html', 'en/ideahub/index.html']) {
+    const img = html(page).match(/<img[^>]*ideahub-s2[^>]*>/)?.[0] ?? ''
+    assert.match(img, /srcset="\/products\/ideahub-s2-480\.webp 480w, \/products\/ideahub-s2-800\.webp 800w"/i, `${page}: the IdeaHub photo has no srcset`)
+    assert.match(img, /\ssizes="[^"]+"/, `${page}: the IdeaHub photo has no sizes`)
+  }
+  for (const width of [480, 800]) {
+    const bytes = readFileSync(join(dist, `products/ideahub-s2-${width}.webp`))
+    for (const marker of ['Exif', 'EXIF', 'XMP ']) assert.equal(bytes.includes(marker), false, `ideahub-s2-${width}.webp carries ${marker} metadata`)
+  }
+  assert.equal(existsSync(join(dist, 'products/ideahub-s2.jpg')), false, 'the unused JPEG is still published')
+})
+
+test('focus rings appear at once: the shared transition leaves outline-color out', () => {
+  const soft = source('src/components/ui.ts').match(/const soft =\s*'([^']*)'/)?.[1] ?? ''
+  assert.match(soft, /^transition-\[/, 'the shared transition does not list its properties')
+  assert.doesNotMatch(soft, /outline/, 'the shared transition fades the focus ring')
+  assert.match(css(), /\*,:before,:after\{outline-color:var\(--focus-color\)\}/, 'the outline colour is not pinned at rest')
+})
+
+test('phones: the Services audit card cannot widen the page, and the scrim below lg is stronger', () => {
+  assert.match(html('services/index.html'), /id="audit"[^>]*class="[^"]*grid-cols-\[minmax\(0,1fr\)\]/, 'the audit card can grow wider than a phone')
+  assert.match(source('src/components/SpecList.tsx'), /min-w-0 break-words/, 'a long checked item can widen the page')
+  assert.match(html('about/index.html'), /max-lg:to-navy\/30/, 'the phone scrim still fades to Navy/10')
+})

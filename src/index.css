@@ -1,10 +1,7 @@
 /* Fonts: exactly two families, exactly two weights each (brand rule: never more than two weights). */
-@import "@fontsource/inter/latin-500.css";
-@import "@fontsource/inter/latin-800.css";
-@import "@fontsource/inter/latin-ext-500.css";
-@import "@fontsource/inter/latin-ext-800.css";
-@import "@fontsource/inter/cyrillic-500.css";
-@import "@fontsource/inter/cyrillic-800.css";
+/* Whole-weight files: each subset carries a unicode-range, so a page downloads only the subsets its text uses. */
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/800.css";
 @import "@fontsource/noto-sans-georgian/georgian-500.css";
 @import "@fontsource/noto-sans-georgian/georgian-800.css";
 @import "tailwindcss";
@@ -229,6 +226,16 @@
   :focus-visible {
     outline: 3px solid var(--focus-color);
     outline-offset: 3px;
+  }
+
+  /*
+    At rest every element already carries its surface's focus colour as its outline colour, so a ring appears at
+    once on focus, also where Tailwind's transition-colors (which includes outline-color) would fade it in.
+  */
+  *,
+  ::before,
+  ::after {
+    outline-color: var(--focus-color);
   }
 
   @media (prefers-reduced-motion: reduce) {

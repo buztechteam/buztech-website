@@ -48,11 +48,13 @@ function siteMeta(env: Record<string, string>): Plugin {
   };
 }
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, isSsrBuild }) => {
   const env = loadEnv(mode, '.', 'VITE_');
   return {
     plugins: [react(), tailwindcss(), siteMeta(env)],
-    build: { target: 'es2022' },
+    // The client build's manifest (dist/.vite/manifest.json) names the hashed files: scripts/prerender.mjs reads it to
+    // preload each page's dictionary, the hero's script and the h1's font, then deletes it.
+    build: { target: 'es2022', manifest: !isSsrBuild },
     // The footer year, fixed when the site is built so the pre-rendered page and the browser agree
     // (a year read in the browser would differ from the built HTML after New Year: a hydration mismatch).
     define: { __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()) },

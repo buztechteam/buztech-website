@@ -4,8 +4,8 @@ import { isProductPage, pagePath, pages } from '../routes';
 import BuzLogo from './BuzLogo';
 import { Facebook, LinkedIn, WhatsApp } from './icons';
 
-/* inline-block py-1: taller tap targets on phones without changing the look. */
-const linkClass = 'inline-block py-1 text-light/85 transition-colors duration-(--dur-hover) ease-soft hover:text-brand-teal';
+/* py-3 with the same negative my: a 44px tap target on phones, while the rows keep their spacing. */
+const linkClass = 'inline-block -my-2 py-3 text-light/85 transition-colors duration-(--dur-hover) ease-soft hover:text-brand-teal';
 
 /**
  * Kept short: the logo, the pages, how to reach us and the company facts. The company overview lives on About,
@@ -32,7 +32,8 @@ export function Footer() {
     <footer className="border-t border-white/10 bg-ink text-light">
       <div className="container-x grid grid-cols-2 gap-x-6 gap-y-8 py-10 text-sm sm:gap-x-10 sm:py-12 sm:text-base lg:grid-cols-[1fr_1fr_1.3fr_1fr]">
         <div className="col-span-2 lg:col-span-1">
-          <a href={pagePath('home', lang)} aria-label={t.a11y.home} className="inline-block">
+          {/* 48px to tap, the 40px logo in the same place */}
+          <a href={pagePath('home', lang)} aria-label={t.a11y.home} className="-my-1 inline-block py-1">
             <BuzLogo className="h-10 w-auto" />
           </a>
           <p lang="en" className="mt-3 text-[0.6875rem] leading-none tracking-[0.22em] text-brand-teal uppercase">

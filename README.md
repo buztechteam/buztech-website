@@ -41,6 +41,12 @@ The language comes from the address (no browser storage), and the GE/EN switch l
 `npm run build` runs three steps: the normal client build, a server build of `entry-server.tsx`, then
 `scripts/prerender.mjs`, which writes a complete HTML file per page and language (content, title, description,
 `lang`), so every page loads with its content in place and search engines can read both languages.
+Each page downloads only its own language: `src/i18n/loadDictionary.ts` loads that dictionary before the page
+hydrates (the server build imports all four from `src/i18n/dictionaries.ts`). The prerender step reads Vite's
+manifest and adds `modulepreload` links for that dictionary (and, on home pages, the hero logo code) plus one font
+preload chosen from the h1's text and weight; `tests/perf.test.mjs` checks all of this. Inter is imported per
+weight (`@fontsource/inter/500.css`, `800.css`), whose subsets carry a `unicode-range`, so a page fetches only
+the subsets its text uses.
 To add a page: add its id to `PageId` (`i18n/types.ts`) and `pages` (`routes.ts`), give it a title in `pageMeta`,
 and its body in `App.tsx`.
 
@@ -122,7 +128,7 @@ white text (2.2:1), so a Navy scrim fades across the text column.
 1. **Brand names on the IT equipment page.** Generic until the owner approves names (`equipmentBrands` in `config/site.ts`).
 2. **Client names and logos.** None are shown until each client agrees.
 3. **ISO for the Georgian company.** The certificates supplied in November 2026 are held by "BUZ Tech" LLC in Baku (valid to 20 May 2027). To show ISO as LLC BUZ Tech Georgia's, it needs its own certificates or must be added to their scope.
-4. **IdeaHub photo.** The IdeaHub page shows Huawei's official S2 image (`public/products/ideahub-s2.jpg`, approved by Huawei); there are no own S2 photos. To use your own later, replace the file or point `ideahubImage` at it.
+4. **IdeaHub photo.** The IdeaHub page shows Huawei's official S2 image (`public/products/ideahub-s2-480.webp` and `-800.webp`, approved by Huawei); there are no own S2 photos. To use your own later, replace both files (same names, 16:9, metadata stripped) or point `ideahubImage` at new ones.
 5. **Form delivery.** Done: the Web3Forms key is in `.env.production`. Requests go only to the inbox the key was created for. To change the inbox, create a new key for it and replace the value, and keep the privacy page ("Who receives it") in step. Without a key the form opens the visitor's email app.
 6. **LinkedIn.** `site.social.linkedin` renders in the footer only when set.
 

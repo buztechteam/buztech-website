@@ -1,4 +1,4 @@
-import { GEAR_PATH, WING_RADIUS, WINGS } from '../components/buzLogoPaths';
+import { GEAR_PATH, HERO_VIEWBOX, WING_LEFT, WING_RADIUS, WINGS } from '../components/buzLogoPaths';
 
 /**
  * The hero's living logo. The pre-rendered SVG (HeroLogo.tsx) is the logo at rest; this adds:
@@ -15,10 +15,6 @@ import { GEAR_PATH, WING_RADIUS, WINGS } from '../components/buzLogoPaths';
  * picture is drawn.
  */
 
-/** The SVG's viewBox, in logo units: the icon (706 x 508) with room for the pieces to move. */
-export const HERO_VIEWBOX = { x: -60, y: -50, w: 826, h: 608 };
-/** Left end of each wing bar (the chamfered tip), matching WINGS. */
-export const WING_LEFT = [2, 66.8, 133.2];
 const OPTICAL_X = 405; // the icon's optical centre, used as the press origin
 const OPTICAL_Y = 254;
 

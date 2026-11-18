@@ -7,7 +7,8 @@ export function SpecList({ specs, iconClass, className = 'mt-5' }: { specs: stri
       {specs.map((spec) => (
         <li key={spec} className="flex gap-2.5">
           <Check className={`mt-1 size-4 shrink-0 ${iconClass}`} strokeWidth={3} />
-          <span>{spec}</span>
+          {/* min-w-0: a long Georgian word (დუბლირებული) wraps instead of widening a narrow phone page. */}
+          <span className="min-w-0 break-words">{spec}</span>
         </li>
       ))}
     </ul>

@@ -4,6 +4,7 @@ import type { TeamId } from '../i18n/types';
 import { revealProps } from '../motion/reveal';
 import { inquireHref, pagePath } from '../routes';
 import { BoardIllustration } from './BoardIllustration';
+import { ContactActions } from './ContactBand';
 import { ArrowRight } from './icons';
 import { btn, cardArrow, cardLink, h2Class, leadClass } from './ui';
 
@@ -18,13 +19,14 @@ export function M365Teaser() {
           <div className="flex flex-col items-start">
             <h2 {...revealProps(0)} className={`${h2Class} text-white`}>{m.heading}</h2>
             <p {...revealProps(1)} className={`${leadClass} text-light/85`}>{m.lead}</p>
+            {/* The price is the primary action; comparing plans is the quieter one. */}
             <div {...revealProps(2)} className="mt-8 flex flex-wrap gap-3">
-              <a href={pagePath('microsoft-365', lang)} className={`${btn('primary')} gap-2`}>
+              <a href={inquireHref('m365', lang)} className={btn('primary')}>
+                {t.cta}
+              </a>
+              <a href={pagePath('microsoft-365', lang)} className={`${btn('ghostOnDark')} gap-2`}>
                 {m.compare}
                 <ArrowRight className="size-5" />
-              </a>
-              <a href={inquireHref('m365', lang)} className={btn('ghostOnDark')}>
-                {t.cta}
               </a>
             </div>
           </div>
@@ -78,7 +80,9 @@ export function OnRequest() {
         >
           {ideahubImage ? (
             <img
-              src={ideahubImage}
+              src={`${ideahubImage}-800.webp`}
+              srcSet={`${ideahubImage}-480.webp 480w, ${ideahubImage}-800.webp 800w`}
+              sizes="(min-width: 1024px) 35rem, 100vw"
               alt={t.ideahub.photoAlt}
               width={800}
               height={450}
@@ -113,23 +117,33 @@ const team: TeamId[] = ['irakli', 'soso'];
 
 /**
  * Home page: the owner's own line ("we are friends after they buy from us") beside the two people
- * a client deals with, each a real photo with a name and a role. Leads to Services.
+ * a client deals with, each a real photo with a name and a role. It asks visitors to contact them directly
+ * (owner: "that's why we tell them to contact us"): the price request, WhatsApp and the phone.
+ * Phones read the heading and the invitation first, then the faces; from lg the photos sit on the left.
  */
 export function AfterSale() {
-  const { lang, t } = useLang();
+  const { t } = useLang();
   const people = t.home.friends.people;
   return (
     <section className="surface-light bg-light py-20 text-navy lg:py-24">
       <div className="container-x grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-        <ul {...revealProps(0)} className="grid grid-cols-2 gap-4 sm:gap-5">
+        <div>
+          <h2 {...revealProps(0)} className={h2Class}>{t.home.friends.heading}</h2>
+          <p {...revealProps(1)} className={`${leadClass} text-navy/85`}>{t.home.friends.lead}</p>
+          <div {...revealProps(2)}>
+            <ContactActions onLight className="mt-8" />
+          </div>
+        </div>
+        <ul {...revealProps(3)} className="grid grid-cols-2 gap-4 sm:gap-5 lg:order-first">
           {team.map((id) => (
             <li key={id}>
+              {/* The caption names the person, so the photo needs no text of its own. */}
               <figure>
                 <img
                   src={`/team/${id}-720.webp`}
                   srcSet={`/team/${id}-360.webp 360w, /team/${id}-720.webp 720w`}
                   sizes="(min-width: 1024px) 17rem, 45vw"
-                  alt={people[id].name}
+                  alt=""
                   width={720}
                   height={960}
                   loading="lazy"
@@ -144,14 +158,6 @@ export function AfterSale() {
             </li>
           ))}
         </ul>
-        <div>
-          <h2 {...revealProps(1)} className={h2Class}>{t.home.friends.heading}</h2>
-          <p {...revealProps(2)} className={`${leadClass} text-navy/85`}>{t.services.lead}</p>
-          <a {...revealProps(3)} href={pagePath('services', lang)} className={`${btn('outlineOnLight')} mt-8 gap-2`}>
-            {t.nav.services}
-            <ArrowRight className="size-5" />
-          </a>
-        </div>
       </div>
     </section>
   );
