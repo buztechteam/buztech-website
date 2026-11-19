@@ -54,7 +54,7 @@ export function HeroLogo() {
         ref={art}
         data-hero-art=""
         aria-hidden="true"
-        className="mx-auto w-full max-w-[34rem] cursor-pointer touch-manipulation select-none max-lg:max-w-[26rem] lg:mx-0 lg:ml-auto"
+        className="hero-art cursor-pointer touch-manipulation select-none lg:ml-auto lg:w-full lg:max-w-[34rem]"
       >
         <svg viewBox={`${x} ${y} ${w} ${h}`} data-landed="" className="hero-logo block h-auto w-full overflow-visible">
           <defs>

@@ -264,6 +264,25 @@
   }
 }
 
+/*
+  Phones and tablets: the logo leaves the page flow and sits large and faint in the lower right,
+  behind the text and cut off by the hero's edges, instead of a block of its own under the buttons.
+  The faintness is on the SVG, not the wrapper, so the wrapper's fallback animation (below) cannot undo it.
+*/
+@media (width < 64rem) {
+  .hero-art {
+    --art: min(100vw, 36rem);
+    position: absolute;
+    z-index: -1;
+    width: var(--art);
+    right: calc(var(--art) * -0.3);
+    bottom: calc(var(--art) * -0.16);
+  }
+  .hero-art .hero-logo {
+    opacity: 0.2;
+  }
+}
+
 /* The shadow comes on once the logo has landed (a filter during the reveal stalls its sweep). */
 .hero-logo {
   transition: filter 800ms ease-out;
