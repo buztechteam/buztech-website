@@ -77,6 +77,9 @@ visitor points at responds, content eases in once, then everything rests. **Noth
   - `--dur-arrive: 750ms` for arrivals and reveals
   - `--stagger: 90ms` between siblings
 - **Arrive and reveal:** rise 22px, scale .98 → 1, fade in (`@keyframes arrive`).
+  - A reveal waits only for the siblings that come on screen with it, never for its place in a row it isn't shown with (stacked cards on a phone start at once).
+  - On phones a block starts revealing as soon as it enters the screen; wider screens wait until it is 15% up. Never leave empty boxes on screen while someone scrolls.
+- **Phone bar** slides up from the bottom edge with a fade (`--dur-hover`) when a page's own price buttons leave the screen, and back down when they return; never pops in.
 - **Hover:**
   - Link cards lift 5px with a Navy shadow. The icon tile turns Brand Teal with a Navy icon. The arrow slides 7px.
   - Buttons lift 2px; pressing scales them to .97.

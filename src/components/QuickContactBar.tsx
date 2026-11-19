@@ -17,6 +17,8 @@ const iconButton =
  * Not on the Contact page, where the same details lead the page and the bar could cover the form while typing.
  * Pages that open with their own price buttons (data-hero-cta) hide it until those leave the screen, so the first
  * screen never offers the same button twice; it is hidden from the first paint, so it never flashes in and out.
+ * It slides up from the bottom edge and back down (instantly with reduced motion), rather than popping in, and it
+ * stays visible while it slides away, so it is never cut off mid-move.
  */
 export function QuickContactBar() {
   const { lang, t } = useLang();
@@ -47,7 +49,7 @@ export function QuickContactBar() {
     <nav
       aria-label={t.a11y.quickContact}
       data-cta-in-view={ctaInView}
-      className="fixed inset-x-0 bottom-0 z-30 [view-transition-name:quick-bar] border-t border-white/12 bg-ink/95 backdrop-blur md:hidden [body:has([data-hero-cta])_&[data-cta-in-view=true]]:hidden [html[data-menu-open]_&]:hidden"
+      className="fixed inset-x-0 bottom-0 z-30 [view-transition-name:quick-bar] border-t border-white/12 bg-ink/95 backdrop-blur ease-soft motion-safe:transition-[translate,opacity,visibility] motion-safe:duration-(--dur-hover) md:hidden [body:has([data-hero-cta])_&[data-cta-in-view=true]]:invisible [body:has([data-hero-cta])_&[data-cta-in-view=true]]:translate-y-full [body:has([data-hero-cta])_&[data-cta-in-view=true]]:opacity-0 [html[data-menu-open]_&]:hidden"
     >
       <div className="container-x flex items-center gap-2 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <a href={office.phoneHref} aria-label={`${t.contact.phone}: ${office.phone}`} className={iconButton}>

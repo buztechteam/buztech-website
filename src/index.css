@@ -99,9 +99,11 @@
     opacity: 0;
     transform: translateY(22px) scale(0.98);
   }
+  /* --i is the place in its group, --n the order among what came on screen together (reveal.ts): the smaller one,
+     so a card that arrives alone, as on a phone, never waits for siblings it isn't shown with. */
   .reveal-ready [data-reveal][data-in='reveal'] {
     animation: arrive var(--dur-arrive) var(--ease-soft) both;
-    animation-delay: calc(var(--i, 0) * var(--stagger));
+    animation-delay: calc(min(var(--i, 0), var(--n, 0)) * var(--stagger));
   }
 }
 

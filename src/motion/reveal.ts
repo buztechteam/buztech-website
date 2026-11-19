@@ -42,21 +42,31 @@ export function initReveal(): () => void {
 
   // When one element reveals, everything before it in the page does too: a jump (restored
   // scroll on Back, a #link) skips past them.
+  // Elements that come on screen together get --n, their order on arrival: index.css waits the smaller of --i and --n,
+  // so a row of cards still follows one another, but a card that arrives alone (as stacked cards do on a phone)
+  // doesn't wait for its place in the row.
   let next = 0;
-  const revealUpTo = (target: Element, state: 'reveal' | '') => {
-    const upTo = pending.indexOf(target);
+  const revealUpTo = (upTo: number, state: 'reveal' | '', arriving?: Set<Element>) => {
+    let n = 0;
     for (; next <= upTo; next++) {
-      pending[next].setAttribute('data-in', state);
-      io.unobserve(pending[next]);
+      const el = pending[next];
+      if (arriving?.has(el)) (el as HTMLElement).style.setProperty('--n', String(n++));
+      el.setAttribute('data-in', state);
+      io.unobserve(el);
     }
   };
 
+  // Phones stack everything in one column and are scrolled in quick flicks: a block starts rising in as soon as it
+  // enters, so the screen never shows empty boxes. Wider screens wait until it is 15% up, where the arrival is seen.
+  const phone = matchMedia('(max-width: 47.99rem)').matches;
   // threshold 0, so elements taller than the screen still reveal
   const io = new IntersectionObserver(
     (entries) => {
-      for (const entry of entries) if (entry.isIntersecting) revealUpTo(entry.target, 'reveal');
+      const arriving = new Set<Element>();
+      for (const entry of entries) if (entry.isIntersecting) arriving.add(entry.target);
+      if (arriving.size > 0) revealUpTo(Math.max(...[...arriving].map((el) => pending.indexOf(el))), 'reveal', arriving);
     },
-    { rootMargin: '0px 0px -15% 0px', threshold: 0 },
+    { rootMargin: phone ? '0px' : '0px 0px -15% 0px', threshold: 0 },
   );
   for (const el of pending) io.observe(el);
 
@@ -64,7 +74,7 @@ export function initReveal(): () => void {
   // so a focused control is never invisible.
   const onFocus = (e: FocusEvent) => {
     const el = (e.target as Element).closest?.('[data-reveal]:not([data-in])');
-    if (el) revealUpTo(el, '');
+    if (el) revealUpTo(pending.indexOf(el), '');
   };
   document.addEventListener('focusin', onFocus);
 

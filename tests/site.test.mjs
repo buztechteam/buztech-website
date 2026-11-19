@@ -851,3 +851,16 @@ test('phones: the Services audit card cannot widen the page, and the scrim below
   assert.match(source('src/components/SpecList.tsx'), /min-w-0 break-words/, 'a long checked item can widen the page')
   assert.match(html('about/index.html'), /max-lg:to-navy\/30/, 'the phone scrim still fades to Navy/10')
 })
+
+test('phones: scroll reveals never leave empty boxes, and the phone bar slides in rather than popping (19 November 2026)', () => {
+  // the owner saw empty sections fill in late while scrolling on a phone
+  const reveal = source('src/motion/reveal.ts')
+  assert.match(reveal, /rootMargin: phone \? '0px' :/, 'on phones a block still waits until it is 15% up the screen')
+  assert.match(reveal, /setProperty\('--n'/, 'a card that comes on screen alone still waits for its place in the row')
+  assert.match(css(), /min\(var\(--i,\s*0\),\s*var\(--n,\s*0\)\)/, 'the reveal delay ignores what came on screen together')
+  // the phone bar used to switch from display:none to shown, so it appeared out of nowhere
+  const bar = source('src/components/QuickContactBar.tsx')
+  assert.doesNotMatch(bar, /\[data-cta-in-view=true\]\]:hidden/, 'the phone bar still pops in')
+  assert.match(bar, /motion-safe:transition-\[translate,opacity,visibility\]/, 'the phone bar does not slide')
+  assert.match(bar, /\[data-cta-in-view=true\]\]:translate-y-full/, 'the phone bar does not rest below the screen')
+})
