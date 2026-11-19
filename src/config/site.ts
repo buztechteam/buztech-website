@@ -103,10 +103,16 @@ export const equipmentBrands: Partial<Record<EquipmentId, string[]>> = {};
 export const ideahubImage: string | undefined = '/products/ideahub-s2';
 
 /**
- * Event photos on About us, in order. Each is /events/<id>-480.webp and -960.webp (4:3, metadata stripped).
+ * The About gallery's photos, in order. Each is /events/<id>-480.webp and -960.webp, metadata stripped, shown in a
+ * 4:3 frame (the eKit photo is 3:2, so the frame trims its sides).
  * Only photos where no other company's banner or logo shows.
  */
-export const eventPhotos: EventId[] = ['antalya', 'conference', 'club'];
+export const eventPhotos: { id: EventId; height: number }[] = [
+  { id: 'antalya', height: 720 },
+  { id: 'conference', height: 720 },
+  { id: 'club', height: 720 },
+  { id: 'ekit-guests', height: 640 },
+];
 
 /** ISO standards held by the Baku company (BUZ Tech LLC), valid to 20 May 2027. A quiet footer line; GE/EN add the holder. */
 export const isoStandards = ['ISO 9001', 'ISO 27001', 'ISO 20000-1'];

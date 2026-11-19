@@ -298,6 +298,8 @@ export const en: Dict = {
   events: {
     heading: 'At industry events',
     lead: 'We attend industry conferences and partner events, in Georgia and abroad.',
+    previous: 'Previous photo',
+    next: 'Next photo',
     items: {
       antalya: {
         title: 'Cloud technology conference',
@@ -314,14 +316,11 @@ export const en: Dict = {
         place: 'Tbilisi, 2026',
         alt: 'The BUZ Tech team talking with other guests at the meetup',
       },
-    },
-  },
-  distributor: {
-    heading: 'Huawei eKit event',
-    lead: "eKit is Huawei's product line for small and medium businesses. We held an event about it for customers from different sectors.",
-    photos: {
-      guests: { caption: 'With guests at the event', alt: 'Four men in suits with event badges in a conference room' },
-      certificates: { caption: 'Certificates presented at the event', alt: 'Three people holding two framed certificates in front of a Huawei IdeaHub banner' },
+      'ekit-guests': {
+        title: 'Huawei eKit event',
+        place: 'With our guests',
+        alt: 'Four men in suits with event badges in a conference room',
+      },
     },
   },
   contact: {

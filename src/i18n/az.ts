@@ -304,6 +304,8 @@ export const az: Dict = {
   events: {
     heading: 'Sənaye tədbirlərində',
     lead: 'Sənaye konfranslarında və tərəfdaş tədbirlərində iştirak edirik - müxtəlif ölkələrdə.',
+    previous: 'Əvvəlki foto',
+    next: 'Növbəti foto',
     items: {
       antalya: {
         title: 'Bulud texnologiyaları konfransı',
@@ -320,14 +322,11 @@ export const az: Dict = {
         place: 'Tbilisi, 2026',
         alt: 'BUZ Tech komandası görüşdə digər qonaqlarla söhbət edir',
       },
-    },
-  },
-  distributor: {
-    heading: 'Huawei eKit tədbiri',
-    lead: 'eKit Huawei\u2011in kiçik və orta biznes üçün məhsul xəttidir. Ona həsr olunmuş tədbiri müxtəlif sektorlardan olan müştərilər üçün keçirdik.',
-    photos: {
-      guests: { caption: 'Tədbirdə qonaqlarla', alt: 'Konfrans zalında kostyumlu və bejli dörd kişi' },
-      certificates: { caption: 'Tədbirdə təqdim olunan sertifikatlar', alt: 'Huawei IdeaHub banneri qarşısında iki çərçivəli sertifikat tutan üç nəfər' },
+      'ekit-guests': {
+        title: 'Huawei eKit tədbiri',
+        place: 'Qonaqlarımızla',
+        alt: 'Konfrans zalında kostyumlu və bejli dörd kişi',
+      },
     },
   },
   contact: {

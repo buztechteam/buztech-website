@@ -4,7 +4,7 @@ import { Clients } from './components/Clients';
 import { Contact } from './components/Contact';
 import { ContactBand } from './components/ContactBand';
 import { Equipment, IdeaHub } from './components/Equipment';
-import { Distributor, Events } from './components/Events';
+import { Events } from './components/Events';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
@@ -103,9 +103,8 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
             )}
           </PageIntro>
           <Clients />
-          {/* Microsoft first: the CSP partnership (and the tender documents) before the Huawei eKit section. */}
+          {/* Microsoft first: the CSP partnership (and the tender documents) before the events gallery. */}
           <MicrosoftPartner />
-          <Distributor />
           <Events />
         </>
       );

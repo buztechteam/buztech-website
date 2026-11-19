@@ -153,16 +153,32 @@ test('printing never hides unrevealed content', () => {
   assert.match(media, /^@media screen and/, `hidden state not screen-only: ${media}`)
 })
 
+/** The blocks (at-rules and nesting selectors) that enclose position `at` in the minified CSS, outermost first. */
+function enclosingBlocks(c, at) {
+  const stack = []
+  let start = 0
+  for (let i = 0; i < at; i++) {
+    if (c[i] === '{') {
+      stack.push(c.slice(start, i))
+      start = i + 1
+    } else if (c[i] === '}') {
+      stack.pop()
+      start = i + 1
+    } else if (c[i] === ';') start = i + 1
+  }
+  return stack
+}
+
 test('lift effects only apply on hover-capable devices and with motion allowed', () => {
   const c = css()
   // rules that set --tw-translate-y on :hover (also group-hover's ":hover *)")
   const lifts = [...c.matchAll(/:hover(?: \*\))?\{[^}]*--tw-translate-y:/g)]
   assert.ok(lifts.length > 0, 'no hover lift rules found')
   for (const m of lifts) {
-    const before = c.slice(Math.max(0, m.index - 400), m.index)
+    const blocks = enclosingBlocks(c, m.index)
     const rule = c.slice(Math.max(0, m.index - 80), m.index + 60)
-    assert.ok(before.includes('hover:hover'), `lift outside (hover:hover): ${rule}`)
-    assert.ok(before.includes('prefers-reduced-motion:no-preference'), `lift outside motion-safe: ${rule}`)
+    assert.ok(blocks.some((b) => b.includes('hover:hover')), `lift outside (hover:hover): ${rule}`)
+    assert.ok(blocks.some((b) => b.includes('prefers-reduced-motion:no-preference')), `lift outside motion-safe: ${rule}`)
   }
 })
 
@@ -425,7 +441,7 @@ test('About shows the event photos, small and without photo metadata', () => {
     const section = html(page).match(/<section[^>]*\sid="events"[\s\S]*?<\/section>/)?.[0]
     assert.ok(section, `${page} has no events section`)
     const imgs = [...section.matchAll(/<img\s[^>]*>/g)].map((m) => m[0])
-    assert.equal(imgs.length, 3, `${page} shows ${imgs.length} event photos`)
+    assert.equal(imgs.length, 4, `${page} shows ${imgs.length} event photos`)
     for (const img of imgs) {
       assert.match(img, /\salt="[^"]+"/, `${page}: a photo has no description`)
       assert.match(img, /\sloading="lazy"/, `${page}: a photo loads before it is needed`)
@@ -680,16 +696,37 @@ test('Georgian source keeps every Latin word and its Georgian ending together, a
   assert.equal(split, undefined, `src/i18n/ge.ts: "${split}" can break at its hyphen; write it with U+2011`)
 })
 
-test('About puts the Microsoft CSP partnership before Huawei eKit, with the documents request and an eKit price link', () => {
+test('About puts the Microsoft CSP partnership first, then one events gallery that holds one Huawei eKit photo', () => {
+  // owner, 19 November 2026: the eKit event was not important enough for a section of its own; one photo stays
   for (const lang of LANG_DIRS) {
     const page = html(`${lang}about/index.html`)
     const csp = page.indexOf('id="microsoft-csp"')
-    const ekit = page.indexOf('id="huawei-ekit"')
-    assert.ok(csp > 0 && ekit > csp, `${lang}about: Microsoft CSP does not come before Huawei eKit`)
+    const events = page.indexOf('id="events"')
+    assert.ok(csp > 0 && events > csp, `${lang}about: Microsoft CSP does not come before the events gallery`)
     const cspSection = page.slice(csp, page.indexOf('</section>', csp))
     assert.match(cspSection, new RegExp(`href="/${lang}contact/\\?product=documents"`), `${lang}about: the CSP block has no documents request`)
-    const ekitSection = page.slice(ekit, page.indexOf('</section>', ekit))
-    assert.match(ekitSection, /\?product=networking"/, `${lang}about: the eKit section leads nowhere`)
+    assert.ok(!page.includes('id="huawei-ekit"'), `${lang}about: Huawei eKit has its own section again`)
+    const gallery = page.slice(events, page.indexOf('</section>', events))
+    assert.match(gallery, /\/events\/ekit-guests-960\.webp/, `${lang}about: the gallery has no eKit photo`)
+    assert.ok(!gallery.includes('ekit-certificates'), `${lang}about: the second eKit photo is back`)
+  }
+})
+
+test('the About photo row has previous and next buttons for phones and tablets, named in each language', () => {
+  // owner, 19 November 2026: a button that goes to the next photo, not only swiping
+  for (const lang of LANG_DIRS) {
+    const gallery = html(`${lang}about/index.html`).match(/<section[^>]*\sid="events"[\s\S]*?<\/section>/)?.[0] ?? ''
+    assert.match(gallery, /<div[^>]*\sid="events-row"[^>]*\srole="region"/, `${lang}about: the row has no id for its buttons`)
+    const buttons = [...gallery.matchAll(/<button\s[^>]*>/g)].map((m) => m[0])
+    assert.equal(buttons.length, 2, `${lang}about: ${buttons.length} arrow buttons`)
+    for (const b of buttons) {
+      assert.match(b, /\saria-controls="events-row"/, `${lang}about: an arrow button does not name the row`)
+      assert.match(b, /\saria-label="[^"]+"/, `${lang}about: an arrow button has no name`)
+      assert.doesNotMatch(b, /\sdisabled(=|\s|>)/, `${lang}about: an arrow button is disabled, so it would drop keyboard focus`)
+    }
+    // the page starts at the first photo: "previous" is off, "next" is on
+    assert.match(buttons[0], /\saria-disabled="true"/, `${lang}about: "previous" works at the first photo`)
+    assert.match(buttons[1], /\saria-disabled="false"/, `${lang}about: "next" is off at the first photo`)
   }
 })
 

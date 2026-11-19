@@ -27,9 +27,8 @@ export type ProductId =
   | 'ideahub'
   | 'documents';
 export type ServiceId = 'setup' | 'support' | 'supply';
-/** Event photos on About us, in order (eventPhotos in config/site.ts). */
-export type EventId = 'antalya' | 'conference' | 'club';
-export type DistributorPhotoId = 'guests' | 'certificates';
+/** The About gallery's photos, in order (eventPhotos in config/site.ts). */
+export type EventId = 'antalya' | 'conference' | 'club' | 'ekit-guests';
 export type TeamId = 'irakli' | 'soso';
 /** Caption and description of one real photo. */
 export type PhotoCopy = { caption: string; alt: string };
@@ -136,17 +135,18 @@ export interface Dict {
     sectorsHeading: string;
     sectors: string[];
   };
-  /** Captions for the event photos on About us. No person, organiser or sponsor is named. */
+  /**
+   * About us: one gallery of the events we attended and one photo from our own Huawei eKit event (owner, 19 November
+   * 2026: no separate eKit section). No person, organiser or sponsor is named. `place` is where and when, or for the
+   * eKit photo what it shows.
+   */
   events: {
     heading: string;
     lead: string;
+    /** The arrow buttons under the photo row (heard, not seen). */
+    previous: string;
+    next: string;
     items: Record<EventId, { title: string; place: string; alt: string }>;
-  };
-  /** About us: the Huawei eKit customer event and two photos from it, with no distributor claim. Nobody is named. */
-  distributor: {
-    heading: string;
-    lead: string;
-    photos: Record<DistributorPhotoId, { caption: string; alt: string }>;
   };
   contact: {
     heading: string;

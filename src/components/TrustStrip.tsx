@@ -68,7 +68,7 @@ export function Sectors({ dark = false }: { dark?: boolean }) {
 
 /**
  * About page: the Microsoft CSP partnership, the first partnership on the page and on Navy, so it carries more weight
- * than the Huawei eKit section after it. Beside it, what tender teams come for: the documents, and a button that asks for them.
+ * than the events gallery after it. Beside it, what tender teams come for: the documents, and a button that asks for them.
  */
 export function MicrosoftPartner() {
   const { lang, t } = useLang();
