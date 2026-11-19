@@ -90,7 +90,12 @@ function pageBody(page: PageId, t: Dict, lang: Lang): ReactNode {
             {/* The company details tender teams look for, not only in the footer. */}
             {showsCompanyDetails(lang) && (
               <p className="mt-4 text-sm text-light/85">
-                {site.legalName} · {t.footer.taxId}: {site.taxId} · {t.footer.founded}
+                {/* Each detail stays whole; the line breaks only between them. */}
+                <span className="whitespace-nowrap">{site.legalName}</span> ·{' '}
+                <span className="whitespace-nowrap">
+                  {t.footer.taxId}: {site.taxId}
+                </span>{' '}
+                · <span className="whitespace-nowrap">{t.footer.founded}</span>
               </p>
             )}
             {documentsAction && (

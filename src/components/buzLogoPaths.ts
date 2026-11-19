@@ -10,13 +10,6 @@
  * frame starts left of BUZ. The full logo kit and its generator: Marketing/Brand Kit/_source (master.mjs, kit.mjs).
  */
 
-export const BUZ_COLORS = {
-  teal: '#4BB2BF',
-  navy: '#112240',
-  ink: '#1C1C1E',
-  white: '#FFFFFF',
-};
-
 export const ICON_W = 706;
 export const ICON_H = 508;
 

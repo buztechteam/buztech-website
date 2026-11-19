@@ -180,7 +180,8 @@ export function Contact() {
     const company = String(data.get('company') ?? '').trim().slice(0, MAX_COMPANY);
     const email = String(data.get('email') ?? '').trim();
     const phone = String(data.get('phone') ?? '').trim().slice(0, MAX_PHONE);
-    const quantity = String(data.get('quantity') ?? '').trim().slice(0, MAX_QUANTITY);
+    // The quantity field stays in the form (hidden) for tender documents, so its text survives a change of choice; it isn't sent then.
+    const quantity = documents ? '' : String(data.get('quantity') ?? '').trim().slice(0, MAX_QUANTITY);
     const message = String(data.get('message') ?? '').trim().slice(0, MAX_MESSAGE);
     const productName = product === 'other' ? c.other : product ? t.products[product] : '';
 
@@ -310,7 +311,8 @@ export function Contact() {
             noValidate
             className="surface-light scroll-mt-24 rounded-[1.25rem] bg-light p-5 text-navy sm:p-8"
           >
-            {fromLink && product && product !== 'other' && (
+            {/* The general Microsoft 365 link (hero, Home panel, About) gets no line: "not sure which plan" would label every visitor. */}
+            {fromLink && product && product !== 'other' && product !== 'm365' && (
               <p className="mb-6 border-b border-navy/15 pb-5 text-xl leading-snug font-extrabold text-balance">
                 {kind === 'price' ? `${c.mailSubject.price}: ${t.products[product]}` : c.mailSubject[kind]}
               </p>
@@ -403,14 +405,12 @@ export function Contact() {
                 </p>
               )}
               </div>
-              {!documents && (
-                <div>
-                  <label htmlFor="quantity" className="font-extrabold">
-                    {c.fields.quantity}
-                  </label>
-                  <input id="quantity" name="quantity" type="text" maxLength={MAX_QUANTITY} placeholder={c.placeholders.quantity} className={fieldClass} />
-                </div>
-              )}
+              <div hidden={documents}>
+                <label htmlFor="quantity" className="font-extrabold">
+                  {c.fields.quantity}
+                </label>
+                <input id="quantity" name="quantity" type="text" maxLength={MAX_QUANTITY} placeholder={c.placeholders.quantity} className={fieldClass} />
+              </div>
             </div>
 
             <div className="mt-5">

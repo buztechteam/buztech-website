@@ -285,7 +285,7 @@
 
 /* The shadow comes on once the logo has landed (a filter during the reveal stalls its sweep). */
 .hero-logo {
-  transition: filter 800ms ease-out;
+  transition: filter 800ms var(--ease-soft);
 }
 .hero-logo[data-landed] {
   filter: drop-shadow(0 1.1rem 1.6rem rgb(17 34 64 / 0.35));

@@ -29,6 +29,8 @@ export function PriceLink({ product, className = '' }: { product: ProductId; cla
   return (
     <a href={inquireHref(product, lang)} className={`${textCta} ${className}`}>
       {t.cta}
+      {/* Screen readers list links out of context: the product makes each one distinct (the visible words come first). */}
+      <span className="sr-only">{`: ${t.products[product]}`}</span>
       <ArrowRight className="size-4" />
     </a>
   );

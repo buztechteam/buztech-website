@@ -180,6 +180,11 @@ function ProductsMenu() {
 function LangMenu() {
   const { lang, page, t } = useLang();
   const [open, setOpen] = useState(false);
+  /* Until the button is first pointed at, focused or pressed, the menu is display:none: otherwise its language names
+     (Русский, Azərbaycanca) make every page download Inter's Cyrillic and Latin-extended bold. Once armed it stays
+     in the layout, so it fades like the Products menu. */
+  const [armed, setArmed] = useState(false);
+  const arm = () => setArmed(true);
   const wrapRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const current = LANGS.find((l) => l.id === lang) ?? LANGS[0];
@@ -216,7 +221,13 @@ function LangMenu() {
         type="button"
         aria-expanded={open}
         aria-controls="lang-menu"
-        onClick={() => setOpen((v) => !v)}
+        onPointerEnter={arm}
+        onPointerDown={arm}
+        onFocus={arm}
+        onClick={() => {
+          arm();
+          setOpen((v) => !v);
+        }}
         className="flex min-h-11 items-center gap-1.5 rounded-lg border border-white/25 px-3 text-sm font-extrabold text-white transition-colors duration-(--dur-hover) ease-soft hover:border-white/50"
       >
         <span className="sr-only">{t.a11y.language}: </span>
@@ -227,7 +238,7 @@ function LangMenu() {
       <div
         id="lang-menu"
         data-open={open}
-        className={`absolute top-full right-0 z-10 mt-3 w-56 rounded-xl border border-white/12 bg-ink p-2 shadow-2xl ${menuMotion}`}
+        className={`absolute top-full right-0 z-10 mt-3 w-56 rounded-xl border border-white/12 bg-ink p-2 shadow-2xl ${armed ? '' : 'hidden'} ${menuMotion}`}
       >
         <ul className="grid gap-1">
           {LANGS.map((l) => (

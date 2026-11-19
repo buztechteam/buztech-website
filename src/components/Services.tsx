@@ -1,10 +1,11 @@
 import { useLang } from '../i18n/LanguageContext';
 import { revealProps } from '../motion/reveal';
-import { inquireHref } from '../routes';
-import { ClipboardCheck } from './icons';
+import { inquireHref, pagePath } from '../routes';
+import { ArrowRight, ClipboardCheck } from './icons';
+import { PriceLink } from './Microsoft365';
 import { PhotoBlock } from './PhotoBlock';
 import { SpecList } from './SpecList';
-import { btn } from './ui';
+import { btn, textCta } from './ui';
 
 /**
  * Services page: the free licence audit leads (id="audit", the target of every "free audit" link),
@@ -36,9 +37,20 @@ export function Services() {
         {/* The audit is the one boxed offer; what comes after the sale reads as plain ruled columns under it. */}
         <ul className="mt-12 grid gap-x-10 gap-y-8 md:grid-cols-3 lg:mt-14">
           {t.services.items.map((item, i) => (
-            <li key={item.id} {...revealProps(i + 1)} className="border-t-2 border-navy pt-5">
+            <li key={item.id} {...revealProps(i + 1)} className="flex flex-col items-start border-t-2 border-navy pt-5">
               <h2 className="text-2xl leading-tight font-extrabold text-balance">{item.title}</h2>
               <p className="mt-3 text-pretty text-navy/85">{item.text}</p>
+              {/* Setup and support can be asked for in the form; equipment has its own page. */}
+              <div className="mt-auto pt-4">
+                {item.id === 'supply' ? (
+                  <a href={pagePath('it-equipment', lang)} className={textCta}>
+                    {t.pages['it-equipment'].label}
+                    <ArrowRight className="size-4" />
+                  </a>
+                ) : (
+                  <PriceLink product={item.id} />
+                )}
+              </div>
             </li>
           ))}
         </ul>

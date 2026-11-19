@@ -73,6 +73,8 @@ export const az: Dict = {
     networking: 'Şəbəkə avadanlığı',
     printers: 'Printerlər və digər avadanlıq',
     ideahub: 'Huawei IdeaHub',
+    setup: 'Quraşdırma və miqrasiya',
+    support: 'Davamlı dəstək',
     documents: 'Tender üçün şirkət sənədləri',
   },
   productLinks: { heading: 'Məhsullar' },
@@ -95,7 +97,7 @@ export const az: Dict = {
   home: {
     m365: {
       heading: 'İstənilən ölçüdə şirkət üçün Microsoft 365',
-      lead: 'Kiçik komandalardan böyük korporasiyalara qədər - istənilən miqyasda biznesə uyğundur. Doğru planı seçməyə və onu quraşdırmağa kömək edirik.',
+      lead: 'Kiçik komandalardan böyük korporasiyalara qədər. Doğru planı seçməyə və onu quraşdırmağa kömək edirik.',
       compare: 'Planları müqayisə edin',
       rows: [
         { name: 'Business Basic, Standard, Premium', text: '300 istifadəçiyədək şirkətlər üçün' },
@@ -353,7 +355,7 @@ export const az: Dict = {
       company: 'məs., Şirkətiniz MMC',
       email: 'name@company.az',
       quantity: 'Məs., 25 istifadəçi',
-      message: 'Məsələn: hazırkı planınız və ya nəyi dəyişmək istəyirsiniz',
+      message: 'Məsələn: 40 Business Premium + 10 Copilot və ya nəyi dəyişmək istəyirsiniz',
       documents: 'Tender üçün hansı sənədlər lazımdır?',
     },
     optional: 'istəyə bağlı',
@@ -380,7 +382,7 @@ export const az: Dict = {
       mailto: 'E-poçt proqramınız açıldı. Sorğunu tamamlamaq üçün orada “Göndər” düyməsini basın.',
       error: 'Sorğu göndərilmədi. Yenidən cəhd edin və ya {email} ünvanına yazın.',
     },
-    mailSubject: { price: 'Qiymət sorğusu', audit: 'Pulsuz audit sorğusu', documents: 'Sənəd sorğusu' },
+    mailSubject: { price: 'Təklif sorğusu', audit: 'Pulsuz audit sorğusu', documents: 'Sənəd sorğusu' },
     documentsCta: 'Sənədləri tələb edin',
     priceCta: 'Təklif istəyin',
     thanks: {
@@ -405,7 +407,7 @@ export const az: Dict = {
   },
   privacy: {
     title: 'Məxfilik siyasəti',
-    intro: 'Bu səhifə qiymət sorğusu formasının hansı məlumatları topladığını və onlardan necə istifadə etdiyimizi izah edir.',
+    intro: 'Bu səhifə təklif sorğusu formasının hansı məlumatları topladığını və onlardan necə istifadə etdiyimizi izah edir.',
     sections: [
       {
         heading: 'Nə toplayırıq',

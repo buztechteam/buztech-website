@@ -66,7 +66,7 @@ export function PageIntro({
               <li key={label} className="flex items-center gap-2">
                 {index === 0 ? (
                   /* 44px to tap; the negative margin keeps the trail its usual height. */
-                  <a href={pagePath('home', lang)} className="-my-3 inline-flex min-h-11 items-center underline-offset-4 hover:text-white hover:underline">
+                  <a href={pagePath('home', lang)} className="-my-3 inline-flex min-h-11 min-w-11 items-center underline-offset-4 hover:text-white hover:underline">
                     {label}
                   </a>
                 ) : (

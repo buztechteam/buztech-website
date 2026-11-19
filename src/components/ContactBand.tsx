@@ -45,7 +45,7 @@ export function ContactBand() {
           </h2>
           <p className="mt-3 max-w-[34rem] text-lg leading-relaxed">{t.contact.lead}</p>
         </div>
-        <div {...revealProps(1)}>
+        <div {...revealProps(1)} className="xl:shrink-0">
           <ContactActions />
         </div>
       </div>

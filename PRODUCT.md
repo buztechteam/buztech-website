@@ -57,7 +57,7 @@ The website for LLC BUZ Tech Georgia ("BUZ Tech"). Its job is to turn visits int
   The separate Servers, Networking and Workspaces pages go away.
 - **Microsoft products to present:** Business Basic, Standard and Premium; Enterprise E3/E5; Microsoft 365 Copilot; Windows and Office licences.
 - **IT equipment categories:** laptops and PCs, servers and storage, networking, printers and more. No brand names until the boss approves product names.
-- **Price requests** go to an email inbox (Web3Forms key pending). No CRM. The owner edits the site with Claude; there is no CMS.
+- **Price requests** go to an email inbox through Web3Forms. No CRM. The owner edits the site with Claude; there is no CMS.
 - **Hosting:** static pre-rendered site on Cloudflare Workers at https://buztech.ge, protected by security headers.
 - **Searchable in Georgian and English** (owner, 12 November 2026): buztech.ge should be found on Google, ideally first for "BUZ Tech", while buz-group.com stays online. The Azerbaijani and Russian pages stay out of search until a native speaker has read them. AI crawlers are allowed. No link to buztech.ge goes on the Google Business Profile, LinkedIn, Facebook or other social pages (owner, 17 November 2026): search only.
 

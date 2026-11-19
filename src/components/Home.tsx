@@ -19,12 +19,12 @@ export function M365Teaser() {
   return (
     <section className="surface-light bg-light py-20 text-navy lg:py-24">
       <div className="container-x">
-        <div className="grid gap-10 rounded-[1.25rem] bg-navy p-6 text-light sm:p-8 lg:grid-cols-[1fr_1.1fr] lg:gap-14 lg:p-12">
+        <div className="grid gap-10 rounded-[1.25rem] bg-navy p-6 text-light sm:p-8 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:p-12">
           <div className="flex flex-col items-start">
             <h2 {...revealProps(0)} className={`${h2Class} text-white`}>{m.heading}</h2>
             <p {...revealProps(1)} className={`${leadClass} text-light/85`}>{m.lead}</p>
             {/* The price is the primary action; comparing plans is the quieter one. */}
-            <div {...revealProps(2)} className="mt-8 flex flex-wrap gap-3">
+            <div {...revealProps(2)} data-hero-cta className="mt-8 flex flex-wrap gap-3">
               <a href={inquireHref('m365', lang)} className={btn('primary')}>
                 {t.cta}
               </a>
@@ -62,8 +62,9 @@ function AuditTeaser() {
   return (
     <article
       {...revealProps(0)}
+      id="audit"
       aria-labelledby="home-audit"
-      className={`mt-6 grid grid-cols-[minmax(0,1fr)] gap-8 rounded-[1.25rem] border border-navy/12 bg-white p-5 sm:p-8 lg:grid-cols-[1fr_1.1fr] lg:gap-14 lg:p-12 ${cardStatic}`}
+      className={`mt-6 grid scroll-mt-24 grid-cols-[minmax(0,1fr)] gap-8 rounded-[1.25rem] border border-navy/12 bg-white p-5 sm:p-8 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:p-12 ${cardStatic}`}
     >
       <div className="flex flex-col items-start">
         <ClipboardCheck className="size-9 text-deep-teal" />

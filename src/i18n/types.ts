@@ -25,6 +25,8 @@ export type ProductId =
   | 'audit'
   | EquipmentId
   | 'ideahub'
+  | 'setup'
+  | 'support'
   | 'documents';
 export type ServiceId = 'setup' | 'support' | 'supply';
 /** The About gallery's photos, in order (eventPhotos in config/site.ts). */

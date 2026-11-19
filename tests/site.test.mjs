@@ -640,10 +640,11 @@ const source = (file) => readFileSync(new URL('../' + file, import.meta.url), 'u
 const fieldLabel = (page, id) =>
   page.match(new RegExp(`<label for="${id}"[^>]*>([\\s\\S]*?)</label>`))?.[1].replace(/<[^>]+>/g, '').trim() ?? ''
 
-test('a tender-documents request drops the quantity field and gets its own placeholder, hint and next steps', () => {
+test('a tender-documents request hides the quantity field and gets its own placeholder, hint and next steps', () => {
   const contact = source('src/components/Contact.tsx')
-  // the quantity field only renders when the request is not for documents
-  assert.match(contact, /\{!documents && \(\s*<div>\s*<label htmlFor="quantity"/, 'the quantity field is not hidden for documents')
+  // hidden, not removed, so what was typed survives a change of choice; a documents request doesn't send it
+  assert.match(contact, /<div hidden=\{documents\}>\s*<label htmlFor="quantity"/, 'the quantity field is not hidden for documents')
+  assert.match(contact, /const quantity = documents \? '' :/, 'a documents request still sends the quantity')
   assert.match(contact, /documents \? c\.placeholders\.documents : c\.placeholders\.message/, 'documents keep the price placeholder')
   assert.match(contact, /documents \? c\.next\.documentsSteps : c\.next\.steps/, 'documents keep the offer and invoice steps')
   assert.match(contact, /id="documents-hint"/, 'documents get no hint about which documents exist')
@@ -792,6 +793,30 @@ test('Home: the free licence audit sits under the Microsoft 365 panel, in the Se
     assert.equal(points.length, 4, `${lang}services: expected 4 audit points`)
     for (const point of points) assert.ok(block.includes(`>${point}</span>`), `${lang}home: the audit block lacks "${point}"`)
   }
+})
+
+test('final review fixes (19 November 2026): quote wording, two service choices, named price links, a lighter language menu', () => {
+  // "quote", not "price request", wherever the form is named (owner's wording of 19 November 2026)
+  for (const [file, old] of [['src/i18n/ge.ts', 'ფასის მოთხოვნ'], ['src/i18n/en.ts', 'Price request'], ['src/i18n/en.ts', 'price-request']]) {
+    assert.ok(!source(file).includes(old), `${file} still says ${old}`)
+  }
+  for (const lang of LANG_DIRS) {
+    const contact = html(`${lang}contact/index.html`)
+    for (const id of ['setup', 'support']) assert.match(contact, new RegExp(`<option value="${id}">`), `${lang}contact: no ${id} choice in the form`)
+    const services = html(`${lang}services/index.html`)
+    for (const id of ['setup', 'support']) assert.ok(services.includes(`contact/?product=${id}"`), `${lang}services: the ${id} column has no request link`)
+    // each quiet price link names its product for screen readers
+    const m365 = html(`${lang}microsoft-365/index.html`)
+    assert.match(m365, /\?product=business-basic"[^>]*>[^<]+<span class="sr-only">: [^<]*Business Basic<\/span>/, `${lang}microsoft-365: the price links all read the same`)
+    // the language menu stays out of the layout (and its fonts unloaded) until the button is first used
+    const menu = html(`${lang}index.html`).match(/<div id="lang-menu"[^>]*>/)?.[0] ?? ''
+    assert.match(menu, /class="[^"]*\bhidden\b/, `${lang}home: the language menu loads its fonts before anyone opens it`)
+    // the hero's free-audit link lands on the Home audit card
+    const home = html(`${lang}index.html`)
+    assert.ok(home.includes('href="#audit"') && /<article[^>]*id="audit"/.test(home), `${lang}home: the hero's audit link misses the audit card`)
+  }
+  // the phone bar steps aside only when half of a page's own buttons is on screen
+  assert.match(source('src/components/QuickContactBar.tsx'), /intersectionRatio >= 0\.5/, 'the phone bar hides on a sliver of the hero buttons')
 })
 
 test('the teal price band has its own heading, and the call to action only on its button', () => {

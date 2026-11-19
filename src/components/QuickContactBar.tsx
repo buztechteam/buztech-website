@@ -27,13 +27,18 @@ export function QuickContactBar() {
     const ctas = [...document.querySelectorAll('[data-hero-cta]')];
     if (ctas.length === 0) return;
     const visible = new Set<Element>();
-    const io = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) visible.add(entry.target);
-        else visible.delete(entry.target);
-      }
-      setCtaInView(visible.size > 0);
-    });
+    /* A page's own buttons count as shown only when half of them is on screen: a thin strip at the bottom edge
+       of a short phone screen is not a button anyone can use, so the bar stays until then. */
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) visible.add(entry.target);
+          else visible.delete(entry.target);
+        }
+        setCtaInView(visible.size > 0);
+      },
+      { threshold: [0, 0.5, 1] },
+    );
     for (const el of ctas) io.observe(el);
     return () => io.disconnect();
   }, []);

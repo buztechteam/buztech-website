@@ -1,5 +1,5 @@
 import { useLang } from '../i18n/LanguageContext';
-import { inquireHref, pagePath } from '../routes';
+import { inquireHref } from '../routes';
 import { Check } from './icons';
 import { HeroLogo } from './HeroLogo';
 import { arriveProps } from '../motion/reveal';
@@ -27,8 +27,9 @@ export function Hero() {
           <p {...arriveProps(1)} className="mt-6 max-w-[34rem] text-lg leading-relaxed text-pretty text-light sm:text-xl">{t.hero.lead}</p>
 
           <ul {...arriveProps(2)} className="mt-8 flex flex-wrap gap-x-7 gap-y-3 font-extrabold text-white">
-            {t.hero.points.map((point) => (
-              <li key={point} className="flex items-center gap-2.5">
+            {/* On phones the first point (the CSP partnership) is left out: the lead says it, and the price button moves up. */}
+            {t.hero.points.map((point, i) => (
+              <li key={point} className={`flex items-center gap-2.5 ${i === 0 ? 'max-sm:hidden' : ''}`}>
                 <Check className="size-5 shrink-0 text-light" strokeWidth={3} />
                 {point}
               </li>
@@ -39,7 +40,7 @@ export function Hero() {
             <a href={inquireHref('m365', lang)} className={btn('primary')}>
               {t.cta}
             </a>
-            <a href={`${pagePath('services', lang)}#audit`} className={btn('ghostOnDark')}>
+            <a href="#audit" className={btn('ghostOnDark')}>
               {t.hero.secondary}
             </a>
           </div>

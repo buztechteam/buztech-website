@@ -80,7 +80,7 @@ export function MicrosoftPartner() {
         <div className="flex flex-col items-start">
           <h2 {...revealProps(0)} className={`${h2Class} text-white`}>{p.partner}</h2>
           <p {...revealProps(1)} className={`${leadClass} text-light/85`}>{p.cspText}</p>
-          <a {...revealProps(2)} href={inquireHref('m365', lang)} className={`${btn('primary')} mt-8`}>
+          <a {...revealProps(2)} data-hero-cta href={inquireHref('m365', lang)} className={`${btn('primary')} mt-8`}>
             {t.cta}
           </a>
         </div>

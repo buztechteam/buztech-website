@@ -69,6 +69,8 @@ export const en: Dict = {
     networking: 'Networking',
     printers: 'Printers and other equipment',
     ideahub: 'Huawei IdeaHub',
+    setup: 'Setup and migration',
+    support: 'Ongoing support',
     documents: 'Company documents for a tender',
   },
   productLinks: { heading: 'Products' },
@@ -88,7 +90,7 @@ export const en: Dict = {
   home: {
     m365: {
       heading: 'Microsoft 365 for every company size',
-      lead: 'From small teams to large corporations - it fits a business of any size. We help you choose the right plan and set it up.',
+      lead: 'From small teams to large corporations. We help you choose the right plan and set it up.',
       compare: 'Compare plans',
       rows: [
         { name: 'Business Basic, Standard, Premium', text: 'For companies up to 300 users' },
@@ -102,7 +104,7 @@ export const en: Dict = {
       lead: 'Need laptops, a server or a meeting-room board too? Tell us what you need - we’ll source it.',
     },
     friends: {
-      heading: "Our partnership doesn't end with the purchase",
+      heading: 'Our partnership doesn’t end with the purchase',
       lead: 'Call or write to us directly whenever you need us.',
       people: {
         irakli: { name: 'Irakli Mtchedlishvili', role: 'General Director' },
@@ -235,7 +237,7 @@ export const en: Dict = {
       heading: 'Installed in your office',
       lead: 'We deliver the board, install it on site and show your team how to use it.',
       photos: {
-        setup: { caption: "Installing an IdeaHub S2 in a client's office", alt: 'A man setting up a Huawei IdeaHub S2 on a mobile stand in an office' },
+        setup: { caption: 'Installing an IdeaHub S2 in a client’s office', alt: 'A man setting up a Huawei IdeaHub S2 on a mobile stand in an office' },
         training: { caption: 'Team training', alt: 'Two men in front of a Huawei IdeaHub S2 as it starts up' },
       },
     },
@@ -277,7 +279,7 @@ export const en: Dict = {
       photos: {
         meeting: { caption: 'Meeting a client', alt: 'Three people at a table with a laptop' },
         setup: { caption: 'Installing a Huawei IdeaHub S2', alt: 'A man setting up a Huawei IdeaHub S2 on a mobile stand in an office' },
-        'team-training': { caption: 'Team training', alt: "A man presenting to a client's team in a meeting room" },
+        'team-training': { caption: 'Team training', alt: 'A man presenting to a client’s team in a meeting room' },
       },
     },
     stepsHeading: 'How we work',
@@ -348,7 +350,7 @@ export const en: Dict = {
       company: 'e.g. Your Company LLC',
       email: 'name@company.ge',
       quantity: 'e.g. 25 users',
-      message: 'For example: your current plan, or what you want to change',
+      message: 'For example: 40 Business Premium + 10 Copilot, or what you want to change',
       documents: 'Which documents does the tender need?',
     },
     optional: 'optional',
@@ -375,7 +377,7 @@ export const en: Dict = {
       mailto: 'Your email app has opened. Press “Send” there to finish the request.',
       error: 'The request was not sent. Try again or write to {email}.',
     },
-    mailSubject: { price: 'Price request', audit: 'Request for a free audit', documents: 'Request for documents' },
+    mailSubject: { price: 'Quote request', audit: 'Request for a free audit', documents: 'Request for documents' },
     documentsCta: 'Request documents',
     priceCta: 'Request a quote',
     thanks: {
@@ -403,7 +405,7 @@ export const en: Dict = {
   },
   privacy: {
     title: 'Privacy policy',
-    intro: 'This page explains what data the price-request form collects and how we use it.',
+    intro: 'This page explains what data the quote request form collects and how we use it.',
     sections: [
       {
         heading: 'What we collect',

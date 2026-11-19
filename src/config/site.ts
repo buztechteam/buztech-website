@@ -75,7 +75,7 @@ export const productGroups: { id: 'microsoft' | 'equipment' | 'company'; product
     products: ['m365', 'business-basic', 'business-standard', 'business-premium', 'e3', 'e5', 'copilot', 'windows-office', 'azure', 'entra', 'dynamics', 'audit'],
   },
   { id: 'equipment', products: ['laptops', 'servers', 'networking', 'printers', 'ideahub'] },
-  { id: 'company', products: ['documents'] },
+  { id: 'company', products: ['setup', 'support', 'documents'] },
 ];
 
 /** Microsoft 365 Business plans (up to 300 users), smallest first. Microsoft's names, the same in every language. */
