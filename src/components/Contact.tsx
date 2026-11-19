@@ -455,7 +455,7 @@ export function Contact() {
                 disabled={status === 'sending' || mailtoPause}
                 className={`${btn('primaryOnLight')} disabled:opacity-60 max-sm:w-full text-center max-sm:whitespace-normal`}
               >
-                {status === 'sending' ? c.status.sending : kind === 'audit' ? t.services.audit.cta : kind === 'documents' ? c.documentsCta : t.cta}
+                {status === 'sending' ? c.status.sending : kind === 'audit' ? t.services.audit.cta : kind === 'documents' ? c.documentsCta : c.priceCta}
               </button>
               {/* Without JavaScript the form cannot send, so the email address takes the button's place. */}
               <noscript>

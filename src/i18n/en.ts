@@ -378,6 +378,7 @@ export const en: Dict = {
     },
     mailSubject: { price: 'Price request', audit: 'Request for a free audit', documents: 'Request for documents' },
     documentsCta: 'Request documents',
+    priceCta: 'Get a price',
     thanks: {
       heading: 'Thank you - your request is in',
       text: 'We’ll call or email you to clarify the details.',

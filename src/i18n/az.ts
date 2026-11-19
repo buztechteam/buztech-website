@@ -383,6 +383,7 @@ export const az: Dict = {
     },
     mailSubject: { price: 'Qiymət sorğusu', audit: 'Pulsuz audit sorğusu', documents: 'Sənəd sorğusu' },
     documentsCta: 'Sənədləri tələb edin',
+    priceCta: 'Qiymət alın',
     thanks: {
       heading: 'Təşəkkür edirik - sorğunuz qəbul olundu',
       text: 'Detalları dəqiqləşdirmək üçün sizə zəng edəcəyik və ya yazacağıq.',

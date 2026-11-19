@@ -61,7 +61,7 @@ function BusinessPlans() {
             return (
               <li
                 key={plan.id}
-                className={`flex w-[85%] max-w-[26rem] shrink-0 snap-start flex-col rounded-xl border border-navy/12 bg-white p-5 sm:p-7 lg:w-auto lg:max-w-none ${cardStatic}`}
+                className={`flex w-[85%] max-w-[26rem] shrink-0 snap-start flex-col rounded-xl border border-navy/12 bg-white p-4 min-[360px]:p-5 sm:p-7 lg:w-auto lg:max-w-none ${cardStatic}`}
               >
                 <h3 className="text-2xl leading-tight font-extrabold">{plan.name}</h3>
                 <p className="mt-2 text-pretty text-navy/85">{copy.who}</p>

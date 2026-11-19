@@ -186,6 +186,8 @@ export interface Dict {
     mailSubject: { price: string; audit: string; documents: string };
     /** The send button when "Company documents for a tender" is chosen. */
     documentsCta: string;
+    /** The form's submit button for a price request (Georgian words differ from `cta`). */
+    priceCta: string;
     /** The panel that replaces the form once a request is sent. No time promise. */
     thanks: { heading: string; text: string; urgent: string; again: string };
     privacyNote: string;

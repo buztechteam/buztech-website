@@ -375,7 +375,9 @@ test('visible text uses a hyphen, not an em dash', () => {
 })
 
 test('one CTA wording in each language', () => {
-  assert.ok(html('index.html').includes('მიიღეთ ფასი'), 'Georgian home lacks მიიღეთ ფასი')
+  assert.ok(html('index.html').includes('შეთავაზების მიღება'), 'Georgian home lacks შეთავაზების მიღება')
+  assert.ok(html('contact/index.html').includes('შეთავაზების მოთხოვნა'), 'the Georgian form button lacks შეთავაზების მოთხოვნა')
+  for (const file of pages()) assert.ok(!readFileSync(file, 'utf8').includes('მიიღეთ ფასი'), `${rel(file)} still says მიიღეთ ფასი`)
   assert.ok(html('en/index.html').includes('Get a price'), 'English home lacks Get a price')
   assert.ok(html('az/index.html').includes('Qiymət alın'), 'Azerbaijani home lacks Qiymət alın')
   assert.ok(html('ru/index.html').includes('Получить цену'), 'Russian home lacks Получить цену')
@@ -727,7 +729,7 @@ test('Home: the price button leads the Microsoft 365 teaser, and the people sect
 })
 
 test('the teal price band has its own heading, and "Get a price" only on its button', () => {
-  for (const [lang, cta] of [['', 'მიიღეთ ფასი'], ['en/', 'Get a price'], ['az/', 'Qiymət alın'], ['ru/', 'Получить цену']]) {
+  for (const [lang, cta] of [['', 'შეთავაზების მიღება'], ['en/', 'Get a price'], ['az/', 'Qiymət alın'], ['ru/', 'Получить цену']]) {
     const heading = html(`${lang}index.html`).match(/id="contact-band-title"[^>]*>([^<]*)</)?.[1] ?? ''
     assert.ok(heading && heading !== cta, `${lang}home: the band heading is "${heading}"`)
   }
