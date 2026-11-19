@@ -99,7 +99,7 @@ allows only what the site uses: its own files, Web3Forms (the price form) and Cl
 | Palette only: Ink, Navy, Brand Teal, Deep Teal, Light | `@theme` in `index.css` resets Tailwind's palette, so off-brand colours cannot be used |
 | Two weights only: 500 and 800 | `@theme` resets the weight scale; only `font-medium` and `font-extrabold` exist; only those four font files are loaded |
 | Noto Sans Georgian for Georgian, Inter for Latin and numbers | font stack `Inter, Noto Sans Georgian`; Inter has no Georgian glyphs, so each script falls to the right face |
-| One primary CTA: "შეთავაზების მიღება" / "Get a price" (Georgian form button: "შეთავაზების მოთხოვნა") (no "today": a price takes time to arrive) | `cta` in the dictionaries, used by every button; `npm test` fails on დღესვე / today |
+| One primary CTA: "შეთავაზების მიღება" / "Get a quote" (form button: "შეთავაზების მოთხოვნა" / "Request a quote") (no "today": a price takes time to arrive) | `cta` in the dictionaries, used by every button; `npm test` fails on დღესვე / today |
 | Never "BUZ Group" / buzgroup.com | not present anywhere in `src/`, `index.html` or `public/` |
 | Brand gradient on the hero with the all-white logo | `bg-brand-gradient` in `index.css` |
 | Tagline `Consulting · Cloud · Tech` | `site.tagline`, shown in the header and footer |

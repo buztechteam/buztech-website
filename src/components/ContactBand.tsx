@@ -32,7 +32,7 @@ export function ContactActions({ onLight = false, className = '' }: { onLight?: 
 
 /**
  * Closes every page except Contact: the price request, WhatsApp and phone, never more than a scroll away.
- * The heading has its own words, so "Get a price" is said once, on the button.
+ * The heading has its own words, so the call to action ("Get a quote") is said once, on the button.
  */
 export function ContactBand() {
   const { t } = useLang();

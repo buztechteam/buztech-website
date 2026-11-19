@@ -44,7 +44,7 @@ The website for LLC BUZ Tech Georgia ("BUZ Tech"). Its job is to turn visits int
 
 - **Languages:** Georgian first (`/`), then English (`/en/`), Azerbaijani (`/az/`) and Russian (`/ru/`). Georgian words are long.
 - **No prices on the site,** not even "from" prices. Every pricing path ends in a quote request.
-- **CTA wording:** "შეთავაზების მიღება" / "Get a price"; the Georgian form button says "შეთავაზების მოთხოვნა" (owner, 19 November 2026; it replaced "მიიღეთ ფასი"). "Today" was dropped, and the site never promises same-day or any timed reply. The form promises a reply, not a price ("we'll get back to you").
+- **CTA wording:** "შეთავაზების მიღება" / "Get a quote"; the form button says "შეთავაზების მოთხოვნა" / "Request a quote" (owner, 19 November 2026; it replaced "მიიღეთ ფასი" / "Get a price"; AZ and RU follow in their own natural words). "Today" was dropped, and the site never promises same-day or any timed reply. The form promises a reply, not a price ("we'll get back to you").
 - **Punctuation:** a plain hyphen ( - ), never an em dash, in any text a visitor reads.
 - **Third-party names:** only Microsoft and Huawei may appear. There is no approval to name any other vendor or distributor (no Dell, HPE, Lenovo, Zyxel, TP-Link, MUK or ERC), so there is no "partners" section.
 - **Planned page set (agreed direction):**

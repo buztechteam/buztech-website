@@ -53,7 +53,7 @@ simply don't exist.
 - **Focus rings** are 3px with a 3px offset. Brand Teal on dark (default), Deep Teal on light
   sections (`surface-light`), Navy on the teal band (`surface-teal`). Put the surface class on the
   section.
-- **Copy rules:** one CTA wording, `t.cta` ("შეთავაზების მიღება" / "Get a price"; the Georgian form button is `priceCta`, "შეთავაზების მოთხოვნა"; owner, 19 November 2026). The owner dropped the brand book's "დღესვე"
+- **Copy rules:** one CTA wording, `t.cta` ("შეთავაზების მიღება" / "Get a quote"; the form button is `priceCta`, "შეთავაზების მოთხოვნა" / "Request a quote"; owner, 19 November 2026). The owner dropped the brand book's "დღესვე"
   (today): a price takes time to arrive. The name is "BUZ Tech", never "BUZ Group".
 - **Positioning rules** (`PRODUCT.md`, checked by `npm test`):
   - Microsoft 365 leads every page; hardware is "everything else, on request".

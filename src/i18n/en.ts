@@ -29,7 +29,7 @@ export const en: Dict = {
     about: 'About us',
     contact: 'Contact',
   },
-  cta: 'Get a price',
+  cta: 'Get a quote',
   hero: {
     title: 'Microsoft 365 licences at the best prices in Georgia',
     lead: 'Licences, setup and support from an official Microsoft CSP partner in Tbilisi.',
@@ -98,11 +98,11 @@ export const en: Dict = {
       ],
     },
     onRequest: {
-      heading: 'Everything else, on request',
+      heading: 'Other IT solutions, on request',
       lead: 'Need laptops, a server or a meeting-room board too? Tell us what you need - we’ll source it.',
     },
     friends: {
-      heading: 'After the sale, we stay friends',
+      heading: "Our partnership doesn't end with the purchase",
       lead: 'Call or write to us directly whenever you need us.',
       people: {
         irakli: { name: 'Irakli Mtchedlishvili', role: 'General Director' },
@@ -206,20 +206,20 @@ export const en: Dict = {
   },
   equipment: {
     lead: 'Need hardware too? Send us the specification and we’ll source it on the best terms, VAT included.',
-    heading: 'What we can source',
+    heading: 'What we offer',
     items: {
       laptops: 'Business laptops, desktops and monitors, for one employee or a whole office.',
       servers: 'Servers, storage and backup, sized to your company.',
       networking: 'Switches, Wi-Fi access points, routers and firewalls.',
       printers: 'Printers, peripherals, accessories - and anything else your office needs.',
     },
-    howHeading: 'How sourcing works',
+    howHeading: 'How ordering works',
     how: [
       {
         title: 'Tell us what you need',
         text: 'A model, a spec, or just the job it has to do. Call, write on WhatsApp or send the form.',
       },
-      { title: 'We find the best price', text: 'We request prices from our suppliers and come back with an offer.' },
+      { title: 'We pick the best offer', text: 'We request prices from our suppliers and come back with an offer.' },
       {
         title: 'Delivered with a VAT invoice',
         text: 'Delivered to your office, with a VAT invoice in GEL and the manufacturer’s warranty.',
@@ -232,17 +232,17 @@ export const en: Dict = {
     ask: 'Not sure which size fits your room? Contact us and we’ll help.',
     photoAlt: 'Huawei IdeaHub S2 on the wall of an office',
     installed: {
-      heading: 'Set up in your room',
-      lead: 'We deliver the board, set it up on site and show your team how to use it.',
+      heading: 'Installed in your office',
+      lead: 'We deliver the board, install it on site and show your team how to use it.',
       photos: {
-        setup: { caption: "Setting up an IdeaHub S2 in a client's office", alt: 'A man setting up a Huawei IdeaHub S2 on a mobile stand in an office' },
-        training: { caption: "Training the client's team", alt: 'Two men in front of a Huawei IdeaHub S2 as it starts up' },
+        setup: { caption: "Installing an IdeaHub S2 in a client's office", alt: 'A man setting up a Huawei IdeaHub S2 on a mobile stand in an office' },
+        training: { caption: 'Team training', alt: 'Two men in front of a Huawei IdeaHub S2 as it starts up' },
       },
     },
   },
   services: {
     heading: 'Services',
-    lead: 'A free licence audit before you buy. Setup, support and renewal reminders after. We stay in touch.',
+    lead: 'A free licence audit before you buy. After it: setup, renewal reminders and ongoing support.',
     audit: {
       title: 'Free licence audit',
       text: 'We review the Microsoft licences you already have and show you what to keep, change or cancel. Free, with no obligation.',
@@ -272,12 +272,12 @@ export const en: Dict = {
       },
     ],
     inPerson: {
-      heading: 'We come to you',
+      heading: 'On-site service',
       lead: 'We meet clients in person, set things up on site and train their teams.',
       photos: {
         meeting: { caption: 'Meeting a client', alt: 'Three people at a table with a laptop' },
-        setup: { caption: 'Setting up a Huawei IdeaHub S2', alt: 'A man setting up a Huawei IdeaHub S2 on a mobile stand in an office' },
-        'team-training': { caption: "Training a client's team", alt: "A man presenting to a client's team in a meeting room" },
+        setup: { caption: 'Installing a Huawei IdeaHub S2', alt: 'A man setting up a Huawei IdeaHub S2 on a mobile stand in an office' },
+        'team-training': { caption: 'Team training', alt: "A man presenting to a client's team in a meeting room" },
       },
     },
     stepsHeading: 'How we work',
@@ -296,7 +296,7 @@ export const en: Dict = {
     sectors: ['Energy', 'Insurance', 'Healthcare', 'Public sector', 'Hospitality', 'Mining', 'Aviation', 'Agriculture and dairy'],
   },
   events: {
-    heading: 'At industry events',
+    heading: 'Events and meetings',
     lead: 'We attend industry conferences and partner events, in Georgia and abroad.',
     previous: 'Previous photo',
     next: 'Next photo',
@@ -326,7 +326,7 @@ export const en: Dict = {
   contact: {
     heading: 'Contact us',
     lead: 'Tell us your company and what you need - we’ll get back to you.',
-    bandHeading: 'Need licences or IT equipment?',
+    bandHeading: 'Need advice?',
     detailsTitle: 'Contact details',
     entity: 'Legal entity',
     location: 'Location',
@@ -355,7 +355,7 @@ export const en: Dict = {
     selectPlaceholder: 'Choose',
     groups: { microsoft: 'Microsoft', equipment: 'IT equipment', company: 'BUZ Tech' },
     next: {
-      heading: 'What happens next',
+      heading: 'Next steps',
       steps: [
         'We review your request.',
         'We contact you by phone or email to agree the details.',
@@ -377,7 +377,7 @@ export const en: Dict = {
     },
     mailSubject: { price: 'Price request', audit: 'Request for a free audit', documents: 'Request for documents' },
     documentsCta: 'Request documents',
-    priceCta: 'Get a price',
+    priceCta: 'Request a quote',
     thanks: {
       heading: 'Thank you - your request is in',
       text: 'We’ll call or email you to clarify the details.',

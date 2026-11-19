@@ -394,9 +394,15 @@ test('one CTA wording in each language', () => {
   assert.ok(html('index.html').includes('შეთავაზების მიღება'), 'Georgian home lacks შეთავაზების მიღება')
   assert.ok(html('contact/index.html').includes('შეთავაზების მოთხოვნა'), 'the Georgian form button lacks შეთავაზების მოთხოვნა')
   for (const file of pages()) assert.ok(!readFileSync(file, 'utf8').includes('მიიღეთ ფასი'), `${rel(file)} still says მიიღეთ ფასი`)
-  assert.ok(html('en/index.html').includes('Get a price'), 'English home lacks Get a price')
-  assert.ok(html('az/index.html').includes('Qiymət alın'), 'Azerbaijani home lacks Qiymət alın')
-  assert.ok(html('ru/index.html').includes('Получить цену'), 'Russian home lacks Получить цену')
+  // English, Azerbaijani and Russian follow the Georgian change (owner, 19 November 2026: "whatever sounds more native")
+  for (const [lang, cta, formButton] of [['en/', 'Get a quote', 'Request a quote'], ['az/', 'Təklif alın', 'Təklif istəyin'], ['ru/', 'Получить предложение', 'Запросить предложение']]) {
+    assert.ok(html(`${lang}index.html`).includes(cta), `${lang}home lacks ${cta}`)
+    assert.ok(html(`${lang}contact/index.html`).includes(formButton), `${lang}contact: the form button lacks ${formButton}`)
+  }
+  for (const file of pages()) {
+    const page = readFileSync(file, 'utf8')
+    for (const old of ['Get a price', 'Qiymət alın', 'Получить цену']) assert.ok(!page.includes(old), `${rel(file)} still says ${old}`)
+  }
 })
 
 test('headings never skip a level', () => {
@@ -765,8 +771,8 @@ test('Home: the price button leads the Microsoft 365 teaser, and the people sect
   }
 })
 
-test('the teal price band has its own heading, and "Get a price" only on its button', () => {
-  for (const [lang, cta] of [['', 'შეთავაზების მიღება'], ['en/', 'Get a price'], ['az/', 'Qiymət alın'], ['ru/', 'Получить цену']]) {
+test('the teal price band has its own heading, and the call to action only on its button', () => {
+  for (const [lang, cta] of [['', 'შეთავაზების მიღება'], ['en/', 'Get a quote'], ['az/', 'Təklif alın'], ['ru/', 'Получить предложение']]) {
     const heading = html(`${lang}index.html`).match(/id="contact-band-title"[^>]*>([^<]*)</)?.[1] ?? ''
     assert.ok(heading && heading !== cta, `${lang}home: the band heading is "${heading}"`)
   }

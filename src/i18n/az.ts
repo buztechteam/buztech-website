@@ -33,7 +33,7 @@ export const az: Dict = {
     about: 'Haqqımızda',
     contact: 'Əlaqə',
   },
-  cta: 'Qiymət alın',
+  cta: 'Təklif alın',
   hero: {
     title: 'Microsoft 365 lisenziyaları ən sərfəli qiymətlərlə',
     lead: 'Lisenziyalar, quraşdırma və dəstək - rəsmi Microsoft CSP partnyorundan.',
@@ -105,11 +105,11 @@ export const az: Dict = {
       ],
     },
     onRequest: {
-      heading: 'Qalan hər şey - sorğu əsasında',
+      heading: 'Digər IT həlləri - sorğu əsasında',
       lead: 'Noutbuklar, server və ya iclas otağı üçün lövhə də lazımdır? Nəyə ehtiyacınız olduğunu bizə bildirin - biz tədarük edəcəyik.',
     },
     friends: {
-      heading: 'Satışdan sonra dost qalırıq',
+      heading: 'Əməkdaşlığımız alışla bitmir',
       lead: 'Bizə ehtiyacınız olanda birbaşa zəng edin və ya yazın.',
       people: {
         irakli: { name: 'İrakli Mçedlişvili', role: 'Baş direktor' },
@@ -212,20 +212,20 @@ export const az: Dict = {
   },
   equipment: {
     lead: 'Avadanlıq da lazımdır? Bizə spesifikasiyanı göndərin, ən sərfəli şərtlərlə tədarük edəcəyik.',
-    heading: 'Nələri tədarük edə bilərik',
+    heading: 'Nə təklif edirik',
     items: {
       laptops: 'Biznes noutbukları, stolüstü kompüterlər və monitorlar - bir əməkdaş və ya bütün ofis üçün.',
       servers: 'Serverlər, məlumat saxlama və ehtiyat nüsxələmə sistemləri, şirkətinizin ölçüsünə uyğun.',
       networking: 'Kommutatorlar, Wi-Fi giriş nöqtələri, routerlər və firewall-lar.',
       printers: 'Printerlər, periferiya, aksesuarlar - və ofisinizə lazım olan hər şey.',
     },
-    howHeading: 'Tədarük necə işləyir',
+    howHeading: 'Sifariş necə işləyir',
     how: [
       {
         title: 'Nə lazım olduğunu deyin',
         text: 'Model, texniki göstəricilər və ya sadəcə avadanlığın görəcəyi iş. Zəng edin, WhatsApp-da yazın və ya formu göndərin.',
       },
-      { title: 'Ən yaxşı qiyməti tapırıq', text: 'Təchizatçılarımızdan qiymət sorğulayır və sizə təkliflə qayıdırıq.' },
+      { title: 'Optimal təklifi seçirik', text: 'Təchizatçılarımızdan qiymət sorğulayır və sizə təkliflə qayıdırıq.' },
       {
         title: 'Ofisinizə çatdırılma',
         text: 'Avadanlıq istehsalçı zəmanəti ilə ofisinizə çatdırılır.',
@@ -238,17 +238,17 @@ export const az: Dict = {
     ask: 'Otağınıza hansı ölçünün uyğun olduğunu bilmirsiniz? Bizimlə əlaqə saxlayın, kömək edək.',
     photoAlt: 'Ofis divarında Huawei IdeaHub S2',
     installed: {
-      heading: 'Otağınızda quraşdırırıq',
+      heading: 'Ofisinizdə quraşdırma',
       lead: 'Lövhəni çatdırır, yerində quraşdırır və komandanıza ondan necə istifadə etməyi göstəririk.',
       photos: {
         setup: { caption: 'Müştəri ofisində IdeaHub S2\u2011nin quraşdırılması', alt: 'Ofisdə mobil dayaq üzərində Huawei IdeaHub S2 quraşdıran kişi' },
-        training: { caption: 'Müştəri komandasına təlim', alt: 'İşə düşən Huawei IdeaHub S2 qarşısında iki kişi' },
+        training: { caption: 'Komanda təlimi', alt: 'İşə düşən Huawei IdeaHub S2 qarşısında iki kişi' },
       },
     },
   },
   services: {
     heading: 'Xidmətlər',
-    lead: 'Alışdan əvvəl - pulsuz lisenziya auditi. Sonra - quraşdırma, dəstək və yenilənmə xatırlatmaları. Əlaqədə qalırıq.',
+    lead: 'Alışdan əvvəl - pulsuz lisenziya auditi. Sonra - quraşdırma, yenilənmə xatırlatmaları və davamlı dəstək.',
     audit: {
       title: 'Pulsuz lisenziya auditi',
       text: 'Mövcud Microsoft lisenziyalarınızı yoxlayır və hansını saxlamaq, dəyişmək və ya ləğv etmək lazım olduğunu göstəririk. Pulsuz və heç bir öhdəlik olmadan.',
@@ -278,12 +278,12 @@ export const az: Dict = {
       },
     ],
     inPerson: {
-      heading: 'Sizə gəlirik',
+      heading: 'Yerində xidmət',
       lead: 'Müştərilərlə şəxsən görüşür, hər şeyi yerində quraşdırır və komandalarına təlim keçirik.',
       photos: {
         meeting: { caption: 'Müştəri ilə görüş', alt: 'Noutbuklu masa arxasında üç nəfər' },
         setup: { caption: 'Huawei IdeaHub S2\u2011nin quraşdırılması', alt: 'Ofisdə mobil dayaq üzərində Huawei IdeaHub S2 quraşdıran kişi' },
-        'team-training': { caption: 'Müştəri komandasına təlim', alt: 'İclas otağında müştəri komandasına təqdimat edən kişi' },
+        'team-training': { caption: 'Komanda təlimi', alt: 'İclas otağında müştəri komandasına təqdimat edən kişi' },
       },
     },
     stepsHeading: 'Necə işləyirik',
@@ -302,7 +302,7 @@ export const az: Dict = {
     sectors: ['Energetika', 'Sığorta', 'Səhiyyə', 'Dövlət sektoru', 'Otel biznesi', 'Mədən sənayesi', 'Aviasiya', 'Kənd təsərrüfatı və süd istehsalı'],
   },
   events: {
-    heading: 'Sənaye tədbirlərində',
+    heading: 'Tədbirlər və görüşlər',
     lead: 'Sənaye konfranslarında və tərəfdaş tədbirlərində iştirak edirik - müxtəlif ölkələrdə.',
     previous: 'Əvvəlki foto',
     next: 'Növbəti foto',
@@ -332,7 +332,7 @@ export const az: Dict = {
   contact: {
     heading: 'Bizimlə əlaqə',
     lead: 'Şirkətinizi və nəyə ehtiyacınız olduğunu bildirin - sizinlə əlaqə saxlayacağıq.',
-    bandHeading: 'Lisenziya və ya IT avadanlığı lazımdır?',
+    bandHeading: 'Məsləhət lazımdır?',
     detailsTitle: 'Əlaqə məlumatları',
     entity: 'Hüquqi şəxs',
     location: 'Ünvan',
@@ -360,7 +360,7 @@ export const az: Dict = {
     selectPlaceholder: 'Seçin',
     groups: { microsoft: 'Microsoft', equipment: 'IT avadanlığı', company: 'BUZ Tech' },
     next: {
-      heading: 'Bundan sonra nə olur',
+      heading: 'Növbəti addımlar',
       steps: [
         'Sorğunuza baxırıq.',
         'Təfərrüatları razılaşdırmaq üçün sizinlə telefon və ya e-poçt vasitəsilə əlaqə saxlayırıq.',
@@ -382,7 +382,7 @@ export const az: Dict = {
     },
     mailSubject: { price: 'Qiymət sorğusu', audit: 'Pulsuz audit sorğusu', documents: 'Sənəd sorğusu' },
     documentsCta: 'Sənədləri tələb edin',
-    priceCta: 'Qiymət alın',
+    priceCta: 'Təklif istəyin',
     thanks: {
       heading: 'Təşəkkür edirik - sorğunuz qəbul olundu',
       text: 'Detalları dəqiqləşdirmək üçün sizə zəng edəcəyik və ya yazacağıq.',
