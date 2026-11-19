@@ -5,10 +5,14 @@ import { revealProps } from '../motion/reveal';
 import { inquireHref, pagePath } from '../routes';
 import { BoardIllustration } from './BoardIllustration';
 import { ContactActions } from './ContactBand';
-import { ArrowRight } from './icons';
-import { btn, cardArrow, cardLink, h2Class, leadClass } from './ui';
+import { ArrowRight, ClipboardCheck } from './icons';
+import { SpecList } from './SpecList';
+import { btn, cardArrow, cardLink, cardStatic, h2Class, leadClass } from './ui';
 
-/** Home page: Microsoft 365 leads, so it gets the dark panel and the plan line-up before anything else. */
+/**
+ * Home page: Microsoft 365 leads, so it gets the dark panel and the plan line-up before anything else,
+ * then the free licence audit that belongs to it.
+ */
 export function M365Teaser() {
   const { lang, t } = useLang();
   const m = t.home.m365;
@@ -40,8 +44,38 @@ export function M365Teaser() {
             ))}
           </ul>
         </div>
+        <AuditTeaser />
       </div>
     </section>
+  );
+}
+
+/**
+ * Home page: the free licence audit, under the Microsoft 365 panel and laid out like it (same columns and padding).
+ * It uses the Services audit card's words (t.services.audit), so it adds no claim of its own. It is the quieter
+ * action: the price request above stays the one filled button. A white card on the light section, not a second
+ * Navy panel, so the two don't read as one heavy block.
+ */
+function AuditTeaser() {
+  const { lang, t } = useLang();
+  const a = t.services.audit;
+  return (
+    <article
+      {...revealProps(0)}
+      aria-labelledby="home-audit"
+      className={`mt-6 grid grid-cols-[minmax(0,1fr)] gap-8 rounded-[1.25rem] border border-navy/12 bg-white p-5 sm:p-8 lg:grid-cols-[1fr_1.1fr] lg:gap-14 lg:p-12 ${cardStatic}`}
+    >
+      <div className="flex flex-col items-start">
+        <ClipboardCheck className="size-9 text-deep-teal" />
+        <h2 id="home-audit" className="mt-5 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">{a.title}</h2>
+        <p className="mt-3 max-w-[32rem] text-lg text-pretty text-navy/85">{a.text}</p>
+        {/* Tighter sides on phones keep the Georgian label on one line from 354px; narrower, it may wrap rather than overflow. */}
+        <a href={inquireHref('audit', lang)} className={`${btn('outlineOnLight')} mt-8 text-center max-sm:px-4 max-sm:whitespace-normal`}>
+          {a.cta}
+        </a>
+      </div>
+      <SpecList specs={a.points} iconClass="text-deep-teal" className="self-center text-lg font-extrabold" />
+    </article>
   );
 }
 

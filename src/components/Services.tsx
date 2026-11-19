@@ -19,14 +19,14 @@ export function Services() {
         <article
           id="audit"
           {...revealProps(0)}
-          className="grid scroll-mt-24 grid-cols-[minmax(0,1fr)] gap-8 rounded-[1.25rem] bg-navy p-6 text-light sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:p-10"
+          className="grid scroll-mt-24 grid-cols-[minmax(0,1fr)] gap-8 rounded-[1.25rem] bg-navy p-5 text-light sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:p-10"
         >
           <div className="flex flex-col items-start">
             <ClipboardCheck className="size-9 text-brand-teal" />
             <h2 className="mt-5 text-3xl leading-tight font-extrabold text-balance text-white sm:text-4xl">{a.title}</h2>
             <p className="mt-3 max-w-[32rem] text-lg text-pretty text-light/85">{a.text}</p>
-            {/* On a 320px phone the Georgian label is wider than the card: there it may wrap rather than overflow. */}
-            <a href={inquireHref('audit', lang)} className={`${btn('primary')} mt-8 text-center max-sm:whitespace-normal`}>
+            {/* Tighter sides on phones keep the Georgian label on one line from 354px; narrower, it may wrap rather than overflow. */}
+            <a href={inquireHref('audit', lang)} className={`${btn('primary')} mt-8 text-center max-sm:px-4 max-sm:whitespace-normal`}>
               {a.cta}
             </a>
           </div>

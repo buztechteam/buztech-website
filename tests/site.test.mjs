@@ -771,6 +771,29 @@ test('Home: the price button leads the Microsoft 365 teaser, and the people sect
   }
 })
 
+test('Home: the free licence audit sits under the Microsoft 365 panel, in the Services words, as the quieter button', () => {
+  for (const lang of LANG_DIRS) {
+    const page = html(`${lang}index.html`)
+    const at = page.indexOf('id="home-audit"')
+    assert.ok(at > 0, `${lang}home has no free audit block`)
+    const teaser = page.lastIndexOf('?product=m365')
+    assert.ok(teaser < at, `${lang}home: the audit block comes before the Microsoft 365 panel`)
+    assert.equal(page.lastIndexOf('<section', at), page.lastIndexOf('<section', teaser), `${lang}home: the audit block is not in the Microsoft 365 section`)
+    const block = page.slice(page.lastIndexOf('<article', at), page.indexOf('</article>', at))
+    const button = block.match(new RegExp(`<a href="/${lang}contact/\\?product=audit"[^>]*>`))?.[0] ?? ''
+    assert.ok(button, `${lang}home: the audit block has no audit request button`)
+    assert.doesNotMatch(button, /bg-brand-teal/, `${lang}home: the audit button competes with the price button`)
+    // The same words as the Services audit card, so Home makes no claim of its own.
+    const services = html(`${lang}services/index.html`)
+    const card = services.slice(services.indexOf('id="audit"'), services.indexOf('</article>', services.indexOf('id="audit"')))
+    const title = card.match(/<h2[^>]*>([^<]+)<\/h2>/)?.[1]
+    assert.ok(title && block.includes(`>${title}</h2>`), `${lang}home: the audit title differs from Services`)
+    const points = [...card.matchAll(/<span class="min-w-0 break-words">([^<]+)<\/span>/g)].map((m) => m[1])
+    assert.equal(points.length, 4, `${lang}services: expected 4 audit points`)
+    for (const point of points) assert.ok(block.includes(`>${point}</span>`), `${lang}home: the audit block lacks "${point}"`)
+  }
+})
+
 test('the teal price band has its own heading, and the call to action only on its button', () => {
   for (const [lang, cta] of [['', 'შეთავაზების მიღება'], ['en/', 'Get a quote'], ['az/', 'Təklif alın'], ['ru/', 'Получить предложение']]) {
     const heading = html(`${lang}index.html`).match(/id="contact-band-title"[^>]*>([^<]*)</)?.[1] ?? ''
