@@ -166,7 +166,7 @@ export function AfterSale() {
           <h2 {...revealProps(0)} className={h2Class}>{t.home.friends.heading}</h2>
           <p {...revealProps(1)} className={`${leadClass} text-navy/85`}>{t.home.friends.lead}</p>
           <div {...revealProps(2)}>
-            <ContactActions onLight className="mt-8" />
+            <ContactActions onLight mail className="mt-8" />
           </div>
         </div>
         <ul {...revealProps(3)} className="grid grid-cols-2 gap-4 sm:gap-5 lg:order-first">

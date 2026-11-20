@@ -2,14 +2,23 @@ import { officeFor } from '../config/site';
 import { useLang } from '../i18n/LanguageContext';
 import { pagePath } from '../routes';
 import { revealProps } from '../motion/reveal';
-import { Phone, WhatsApp } from './icons';
+import { Mail, Phone, WhatsApp } from './icons';
 import { btn } from './ui';
 
 /**
  * The price request, WhatsApp and the phone, as buttons. On the teal band by default; `onLight` for a light
- * section (Home's people, who ask visitors to contact them directly).
+ * section (Home's people, who ask visitors to contact them directly). `mail` adds the office's email after the
+ * phone (Home's people, owner's request of 20 November 2026); the band keeps three buttons, so it stays one row.
  */
-export function ContactActions({ onLight = false, className = '' }: { onLight?: boolean; className?: string }) {
+export function ContactActions({
+  onLight = false,
+  mail = false,
+  className = '',
+}: {
+  onLight?: boolean;
+  mail?: boolean;
+  className?: string;
+}) {
   const { lang, t } = useLang();
   const office = officeFor(lang);
   const outline = btn(onLight ? 'outlineOnLight' : 'outlineOnTeal');
@@ -26,6 +35,12 @@ export function ContactActions({ onLight = false, className = '' }: { onLight?: 
         <Phone className="size-5" />
         {office.phone}
       </a>
+      {mail && (
+        <a href={`mailto:${office.email}`} className={`${outline} gap-2`}>
+          <Mail className="size-5" />
+          {office.email}
+        </a>
+      )}
     </div>
   );
 }

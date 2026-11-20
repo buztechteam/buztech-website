@@ -864,3 +864,16 @@ test('phones: scroll reveals never leave empty boxes, and the phone bar slides i
   assert.match(bar, /motion-safe:transition-\[translate,opacity,visibility\]/, 'the phone bar does not slide')
   assert.match(bar, /\[data-cta-in-view=true\]\]:translate-y-full/, 'the phone bar does not rest below the screen')
 })
+
+test("Home: the people section has a mail button after the phone, with the office's address (20 November 2026)", () => {
+  for (const lang of LANG_DIRS) {
+    const email = lang === 'az/' || lang === 'ru/' ? 'info@buz-cloud.com' : 'info-ge@buz-cloud.com'
+    const link = `href="mailto:${email}"`
+    const home = html(`${lang}index.html`)
+    const phone = home.indexOf('href="tel:', home.indexOf('https://wa.me/'))
+    assert.ok(phone > 0 && home.indexOf(link) > phone, `${lang}home: no mail button after the people section's phone`)
+    // footer + the people section; the teal band on other pages keeps three buttons, so it stays one row
+    assert.equal(count(home, new RegExp(link, 'g')), 2, `${lang}home: the mail link is not in the people section`)
+    assert.equal(count(html(`${lang}services/index.html`), new RegExp(link, 'g')), 1, `${lang}services: the band got a mail button`)
+  }
+})
